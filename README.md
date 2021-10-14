@@ -12,6 +12,6 @@
 
 ## Credit & Inspiration
 
-https://github.com/scottcorgan/tap-spec
-https://github.com/derhuerst/tap-min
-https://github.com/namuol/tap-difflet
+- https://github.com/scottcorgan/tap-spec
+- https://github.com/derhuerst/tap-min
+- https://github.com/namuol/tap-difflet
