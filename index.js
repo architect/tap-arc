@@ -20,6 +20,10 @@ module.exports = function () {
 		output.push(`  ${pico.green("✔")} ${pico.dim(pass.name)}\n`);
 	});
 
+	tap.on("fail", (fail) => {
+		output.push(`  ${pico.red("✖")} ${pico.dim(fail.name)}\n`);
+	});
+
 	tap.on("complete", (result) => {
 		stream.count = result.count;
 		stream.failures = result.failures;
