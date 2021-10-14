@@ -2,10 +2,10 @@
 
 ## Objectives
 
-[x] minimal but informative spec-like output for all assertions
-[x] minimal, maintained dependencies -- can't be shipping React to CI
-[x] streaming
-[ ] helpful diffing for failures
+- [x] minimal but informative spec-like output for all assertions
+- [x] minimal, maintained dependencies -- can't be shipping React to CI
+- [x] streaming
+- [ ] helpful diffing for failures
 
 ## Credit & Inspiration
 
