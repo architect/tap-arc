@@ -1,19 +1,22 @@
 {
-  "name": "tap-spek",
-  "description": "spec-like TAP reporter",
-  "author": "tbeseda",
-  "version": "0.0.1",
-  "license": "ISC",
-  "main": "index.js",
-  "scripts": {
-    "test:combined": "cat test/fixtures/combined.tap | bin/tap-spek",
-    "test:pass": "cat test/fixtures/pass.tap | bin/tap-spek",
-    "test:mixed": "cat test/fixtures/mixed.tap | bin/tap-spek"
-  },
-  "dependencies": {
-    "duplexer3": "^0.1.4",
-    "picocolors": "^1.0.0",
-    "tap-parser": "^10.1.0",
-    "through2": "^4.0.2"
-  }
+	"name": "tap-spek",
+	"description": "spec-like TAP reporter",
+	"author": "tbeseda",
+	"version": "0.0.1",
+	"license": "ISC",
+	"main": "index.js",
+	"bin": {
+		"tap-spek": "bin/tap-spek"
+	},
+	"scripts": {
+		"test:combined": "cat test/fixtures/combined.tap | bin/tap-spek",
+		"test:mixed": "cat test/fixtures/mixed.tap | bin/tap-spek",
+		"test:pass": "cat test/fixtures/pass.tap | bin/tap-spek"
+	},
+	"dependencies": {
+		"duplexer3": "^0.1.4",
+		"picocolors": "^1.0.0",
+		"tap-parser": "^10.1.0",
+		"through2": "^4.0.2"
+	}
 }

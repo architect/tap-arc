@@ -3,7 +3,7 @@ const Parser = require("tap-parser");
 const pico = require("picocolors");
 const through = require("through2");
 
-const RESULT_COMMENTS = ["# tests ", "# pass ", "# fail ", "# failed ", "# ok"];
+const RESULT_COMMENTS = ["tests ", "pass ", "skip", "todo", "fail ", "failed ", "ok"];
 
 module.exports = function () {
 	const start = new Date();
@@ -12,7 +12,7 @@ module.exports = function () {
 	const stream = duplexer(tap, output);
 
 	tap.on("comment", (comment) => {
-		if (!RESULT_COMMENTS.some((c) => comment.includes(c, 0)))
+		if (!RESULT_COMMENTS.some((c) => comment.includes(c, 2)))
 			output.push(`\n${pico.underline(comment.replace(/^(# )/, ""))}\n`);
 	});
 
@@ -27,9 +27,9 @@ module.exports = function () {
 		if (result.fail > 0) {
 			let failureSummary = "\n\n";
 			failureSummary += pico.red("Failed tests:");
-			failureSummary += " There were ";
+			failureSummary += ` There ${result.fail > 1 ? "were" : "was"} `;
 			failureSummary += pico.red(result.fail);
-			failureSummary += " failures\n\n";
+			failureSummary += ` failure${result.fail > 1 ? "s" : ""}\n\n`;
 
 			output.push(failureSummary);
 

@@ -6,6 +6,9 @@
 - [x] minimal, maintained dependencies -- can't be shipping React to CI
 - [x] streaming
 - [ ] helpful diffing for failures
+- [ ] handle nested tests
+- [ ] module snapshot tests
+- [ ] TAP kitchen sink testing
 
 ## Credit & Inspiration
 
