@@ -9,9 +9,12 @@
 		"tap-spek": "bin/tap-spek"
 	},
 	"scripts": {
-		"test:combined": "cat test/fixtures/combined.tap | bin/tap-spek",
-		"test:mixed": "cat test/fixtures/mixed.tap | bin/tap-spek",
-		"test:pass": "cat test/fixtures/pass.tap | bin/tap-spek"
+		"test": "npm run try:arc-pass && npm run try:arc-fail",
+		"try:arc-pass": "cat test/fixtures/architect-create-pass.tap | bin/tap-spek",
+		"try:arc-fail": "cat test/fixtures/architect-create-fail.tap | bin/tap-spek",
+		"try:combined": "cat test/fixtures/combined.tap | bin/tap-spek",
+		"try:mixed": "cat test/fixtures/mixed.tap | bin/tap-spek",
+		"try:pass": "cat test/fixtures/pass.tap | bin/tap-spek"
 	},
 	"dependencies": {
 		"duplexer3": "^0.1.4",
