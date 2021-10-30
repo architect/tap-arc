@@ -1,3 +1,4 @@
+const Diff = require("diff");
 const duplexer = require("duplexer3");
 const Parser = require("tap-parser");
 const pico = require("picocolors");
@@ -19,7 +20,7 @@ module.exports = function spek() {
 	tap.on("comment", (comment) => {
 		// Log test group name
 		if (!RESULT_COMMENTS.some((c) => comment.startsWith(c, 2)))
-			output.push(`\n${pad()}${pico.underline(comment.replace(/^(# )/, ""))}\n`);
+			output.push(`\n${pad()}${pico.underline(comment.trim().replace(/^(# )/, ""))}\n`);
 	});
 
 	tap.on("pass", (pass) => {
@@ -27,18 +28,29 @@ module.exports = function spek() {
 	});
 
 	tap.on("fail", (fail) => {
-		output.push(`\n${pad(2)}${pico.red(`✖ ${fail.name}`)}\n`);
+		output.push(`${pad(2)}${pico.red(`✖ ${fail.name}`)}\n`);
 
 		if (fail.diag) {
 			const { actual, at, expected, operator } = fail.diag;
 			const failure = [];
 
 			if (["equal", "deepEqual"].includes(operator)) {
-				// TODO: diff
-				// failure.push(pico.white(pico.bgMagenta("need diff\n")));
-				failure.push(`operator: ${pico.red(operator)}\n`);
-				failure.push(`expected: ${pico.green(expected)}\n`);
-				failure.push(`actual: ${pico.red(actual)}\n\n`);
+				// TODO: better diff for parsable objects
+				if (typeof expected === "string" && typeof actual === "string") {
+					const changes = Diff.diffChars(expected, actual);
+					let diff = [];
+					for (const part of changes) {
+						let color = "reset";
+						if (part.added) color = "bgGreen";
+						if (part.removed) color = "bgRed";
+						diff.push(`${pico[color](part.value)}`);
+					}
+					failure.push(diff.join("") + "\n");
+				} else {
+					failure.push(`operator: ${pico.red(operator)}\n`);
+					failure.push(`expected: ${pico.green(expected)}\n`);
+					failure.push(`actual: ${pico.red(actual)}\n\n`);
+				}
 			} else if (["notEqual", "notDeepEqual"].includes(operator)) {
 				failure.push("Expected values to differ\n");
 			} else if (operator === "ok") {
@@ -66,9 +78,9 @@ module.exports = function spek() {
 				failure.push(`actual: ${pico.red(actual)}\n\n`);
 			}
 
-			if (at) failure.push(`${pico.dim(`At: ${at}`)}`);
+			if (at) failure.push(`${pad()}${pico.dim(`At: ${at}`)}`);
 
-			failure.push("\n\n");
+			failure.push("\n");
 
 			output.push(pad(3) + failure.join(pad(3)));
 		}

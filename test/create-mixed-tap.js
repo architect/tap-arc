@@ -44,7 +44,7 @@ test("create deepEqual, notDeepEqual, comment, and a log", (t) => {
 
 	t.deepEqual(paul, { ...paul }, "Begun, the clone wars have."); // pass
 	console.log("Wrong universe");
-	t.same(duncan, paul, "Samesies!"); // fail
+	t.same(duncan.physical, paul.physical, "Samesies!"); // fail
 	t.notDeepEqual(gurney, duncan, "but Gurney isn't Duncan"); // pass
 	t.notSame(vladimir, vladimir, "I am Vlad"); // fail
 

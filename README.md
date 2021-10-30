@@ -6,7 +6,7 @@
 - [x] minimal, maintained dependencies -- can't be shipping React to CI
 - [x] streaming
 - [ ] group failure summary by comment
-- [ ] helpful diffing for failures
+- [x] helpful diffing for failures
 - [ ] handle nested tests
 - [ ] test tap-spek with snapshot tests
 - [x] TAP kitchen sink testing

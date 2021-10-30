@@ -16,6 +16,7 @@
 		"try": "npm run --silent tape:mixed | bin/tap-spek"
 	},
 	"dependencies": {
+		"diff": "^5.0.0",
 		"duplexer3": "^0.1.4",
 		"picocolors": "^1.0.0",
 		"tap-parser": "^10.1.0",
