@@ -1,5 +1,7 @@
 # `tap-spek`
 
+> A small (<12kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, string diffing, and ~~support for nested tests~~.
+
 ## Objectives
 
 - [x] minimal but informative spec-like output for all assertions
