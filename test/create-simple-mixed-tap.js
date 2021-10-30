@@ -14,9 +14,17 @@ test("deep equality", function (t) {
 	t.plan(4);
 
 	t.deepEqual([3, 4, 5], [3, 4, 2 + 3], "An Array pass");
-	t.deepEqual({ a: 7, b: [8, 9] }, { a: 3 + 4, b: [4 * 2].concat(3 * 3) }, "And Object pass");
+	t.deepEqual(
+		{ a: 7, b: [8, 9] },
+		{ a: 3 + 4, b: [4 * 2].concat(3 * 3) },
+		"And Object pass"
+	);
 	t.deepEqual([3, 4, 6], [3, 4, 2 + 3], "An Array failure");
-	t.deepEqual({ a: 7, b: [8, 9] }, { a: 3 + 4, b: [4 * 3].concat(3 * 3) }, "An Object failure");
+	t.deepEqual(
+		{ a: 7, b: [8, 9] },
+		{ a: 3 + 4, b: [4 * 3].concat(3 * 3) },
+		"An Object failure"
+	);
 });
 
 test("comparing booleans", function (t) {

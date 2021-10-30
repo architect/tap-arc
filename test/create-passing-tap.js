@@ -15,7 +15,11 @@ test("create ok and notOk, some without messages", (t) => {
 test("create equal, notEqual, and pass", (t) => {
 	t.plan(3);
 	t.equal(paul.house, duncan.house, "Atreides bros");
-	t.notEqual(paul.physical.height, duncan.physical.height, "Different statures");
+	t.notEqual(
+		paul.physical.height,
+		duncan.physical.height,
+		"Different statures"
+	);
 	t.pass("the spice");
 });
 

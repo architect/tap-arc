@@ -9,6 +9,7 @@
 		"tap-spek": "bin/tap-spek"
 	},
 	"scripts": {
+		"lint": "prettier --write .",
 		"test": ":",
 		"tape:mixed": "tape test/create-mixed-tap.js",
 		"tape:pass": "tape test/create-passing-tap.js",
@@ -23,6 +24,7 @@
 		"through2": "^4.0.2"
 	},
 	"devDependencies": {
+		"prettier": "^2.4.1",
 		"tape": "^5.3.1"
 	}
 }

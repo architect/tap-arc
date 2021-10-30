@@ -22,7 +22,11 @@ test("create equal, notEqual, and pass", (t) => {
 
 	t.equal(paul.house, duncan.house, "Atreides bros"); // pass
 	t.is(paul.title, duncan.title, "Same stations in their house"); // fail
-	t.notEqual(paul.physical.height, duncan.physical.height, "Different statures"); // pass
+	t.notEqual(
+		paul.physical.height,
+		duncan.physical.height,
+		"Different statures"
+	); // pass
 	t.isNot(duncan.house, gurney.house, "Not great roommates"); // fail
 	t.pass("the spice");
 
