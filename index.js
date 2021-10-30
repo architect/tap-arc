@@ -5,35 +5,86 @@ const through = require("through2");
 
 const RESULT_COMMENTS = ["tests ", "pass ", "skip", "todo", "fail ", "failed ", "ok"];
 
-function indent(count) {
+function pad(count = 1) {
 	const INDENT = "  ";
 	return INDENT.repeat(count);
 }
 
 module.exports = function spek() {
-	const start = new Date();
+	const start = Date.now();
 	const tap = new Parser();
 	const output = through();
 	const stream = duplexer(tap, output);
 
 	tap.on("comment", (comment) => {
-		if (!RESULT_COMMENTS.some((c) => comment.includes(c, 2)))
-			output.push(`\n${indent(1)}${pico.underline(comment.replace(/^(# )/, ""))}\n`);
+		// Log test group name
+		if (!RESULT_COMMENTS.some((c) => comment.startsWith(c, 2)))
+			output.push(`\n${pad()}${pico.underline(comment.replace(/^(# )/, ""))}\n`);
 	});
 
 	tap.on("pass", (pass) => {
-		output.push(`${indent(2)}${pico.green("✔")} ${pico.dim(pass.name)}\n`);
+		output.push(`${pad(2)}${pico.green("✔")} ${pico.dim(pass.name)}\n`);
 	});
 
 	tap.on("fail", (fail) => {
-		output.push(`${indent(2)}${pico.red(`✖ ${fail.name}`)}\n`);
+		output.push(`\n${pad(2)}${pico.red(`✖ ${fail.name}`)}\n`);
 
 		if (fail.diag) {
-			output.push(`${indent(3)}operator: ${pico.red(fail.diag.operator)}\n`);
-			output.push(`${indent(3)}expected: ${pico.red(fail.diag.expected)}\n`);
-			output.push(`${indent(3)}actual: ${pico.red(fail.diag.actual)}\n`);
-			output.push(`${indent(3)}${pico.dim(fail.diag.at)}\n\n`);
+			const { actual, at, expected, operator } = fail.diag;
+			const failure = [];
+
+			if (["equal", "deepEqual"].includes(operator)) {
+				// TODO: diff
+				// failure.push(pico.white(pico.bgMagenta("need diff\n")));
+				failure.push(`operator: ${pico.red(operator)}\n`);
+				failure.push(`expected: ${pico.green(expected)}\n`);
+				failure.push(`actual: ${pico.red(actual)}\n\n`);
+			} else if (["notEqual", "notDeepEqual"].includes(operator)) {
+				failure.push("Expected values to differ\n");
+			} else if (operator === "ok") {
+				failure.push(`Expected ${pico.green("truthy")} but got ${pico.red(actual)}\n`);
+			} else if (operator === "match") {
+				failure.push(`Expected ${pico.red(actual)} to match ${pico.blue(expected)}\n`);
+			} else if (operator === "doesNotMatch") {
+				failure.push(`Expected ${pico.red(actual)} to not match ${pico.blue(expected)}\n`);
+			} else if (operator === "throws" && actual && actual !== "undefined") {
+				// this combination is ~doesNotThrow
+				failure.push(`Expected to not throw, received ${pico.red(actual)}\n`);
+			} else if (operator === "throws") {
+				failure.push("Expected to throw\n");
+			} else if (expected && !actual) {
+				failure.push(`Expected ${pico.red(operator)} but got nothing\n`);
+			} else if (actual && !expected) {
+				failure.push(`Expected ${pico.green("nothing")} but got ${pico.red(actual)}\n`);
+			} else if (expected && actual) {
+				failure.push(`Expected ${pico.green(expected)} but got ${pico.red(actual)}\n`);
+			} else if (!expected && !actual) {
+				failure.push(`operator: ${pico.red(operator)}\n`);
+			} else {
+				failure.push(`operator: ${pico.red(operator)}\n`);
+				failure.push(`expected: ${pico.green(expected)}\n`);
+				failure.push(`actual: ${pico.red(actual)}\n\n`);
+			}
+
+			if (at) failure.push(`${pico.dim(`At: ${at}`)}`);
+
+			failure.push("\n\n");
+
+			output.push(pad(3) + failure.join(pad(3)));
 		}
+	});
+
+	tap.on("skip", (skip) => {
+		output.push(`${pad(2)}${pico.dim(`SKIP ${skip.name}`)}\n`);
+	});
+
+	tap.on("todo", (todo) => {
+		const color = todo.ok ? "green" : "red";
+		output.push(`${pad(2)}${pico[color]("TODO")} ${pico.dim(todo.name)}\n`);
+	});
+
+	tap.on("extra", (extra) => {
+		output.push(`${pad(2)}${pico.yellow(`> ${extra}`)}`);
 	});
 
 	tap.on("complete", (result) => {
@@ -42,7 +93,7 @@ module.exports = function spek() {
 
 		if (result.fail > 0) {
 			let failureSummary = "\n\n";
-			failureSummary += `${indent(1)}${pico.red("Failed tests:")}`;
+			failureSummary += `${pad()}${pico.red("Failed tests:")}`;
 			failureSummary += ` There ${result.fail > 1 ? "were" : "was"} `;
 			failureSummary += pico.red(result.fail);
 			failureSummary += ` failure${result.fail > 1 ? "s" : ""}\n\n`;
@@ -50,18 +101,18 @@ module.exports = function spek() {
 			output.push(failureSummary);
 
 			for (const failure of result.failures) {
-				output.push(`${indent(2)}${pico.red("✖")} ${pico.dim(failure.name)}\n`);
+				output.push(`${pad(2)}${pico.red("✖")} ${pico.dim(failure.name)}\n`);
 			}
 		}
 
-		output.push(`\n${indent(1)}total:     ${result.count}\n`);
-		if (result.pass > 0) output.push(pico.green(`${indent(1)}passing:   ${result.pass}\n`));
-		if (result.fail > 0) output.push(pico.red(`${indent(1)}failing:   ${result.fail}\n`));
-		if (result.skip > 0) output.push(`${indent(1)}skipped:   ${result.skip}\n`);
-		if (result.todo > 0) output.push(`${indent(1)}todo:      ${result.todo}\n`);
-		if (result.bailout) output.push(`${indent(1)}BAILED!\n`);
+		output.push(`\n${pad()}total:     ${result.count}\n`);
+		if (result.pass > 0) output.push(pico.green(`${pad()}passing:   ${result.pass}\n`));
+		if (result.fail > 0) output.push(pico.red(`${pad()}failing:   ${result.fail}\n`));
+		if (result.skip > 0) output.push(`${pad()}skipped:   ${result.skip}\n`);
+		if (result.todo > 0) output.push(`${pad()}todo:      ${result.todo}\n`);
+		if (result.bailout) output.push(`${pad()}BAILED!\n`);
 
-		output.end(`${indent(1)}duration:  ${new Date() - start} ms\n\n`);
+		output.end(`${pad()}duration:  ${Date.now() - start} ms\n\n`);
 	});
 
 	return stream;

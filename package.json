@@ -2,24 +2,26 @@
 	"name": "tap-spek",
 	"description": "spec-like TAP reporter",
 	"author": "tbeseda",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"license": "ISC",
 	"main": "index.js",
 	"bin": {
 		"tap-spek": "bin/tap-spek"
 	},
 	"scripts": {
-		"test": "npm run try:arc-pass && npm run try:arc-fail",
-		"try:arc-pass": "cat test/fixtures/architect-create-pass.tap | bin/tap-spek",
-		"try:arc-fail": "cat test/fixtures/architect-create-fail.tap | bin/tap-spek",
-		"try:combined": "cat test/fixtures/combined.tap | bin/tap-spek",
-		"try:mixed": "cat test/fixtures/mixed.tap | bin/tap-spek",
-		"try:pass": "cat test/fixtures/pass.tap | bin/tap-spek"
+		"test": ":",
+		"tape:mixed": "tape test/create-mixed-tap.js",
+		"tape:pass": "tape test/create-passing-tap.js",
+		"try:pass": "npm run --silent tape:pass | bin/tap-spek",
+		"try": "npm run --silent tape:mixed | bin/tap-spek"
 	},
 	"dependencies": {
 		"duplexer3": "^0.1.4",
 		"picocolors": "^1.0.0",
 		"tap-parser": "^10.1.0",
 		"through2": "^4.0.2"
+	},
+	"devDependencies": {
+		"tape": "^5.3.1"
 	}
 }
