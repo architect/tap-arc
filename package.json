@@ -24,10 +24,13 @@
 	"scripts": {
 		"lint": "prettier --write .",
 		"test": ":",
+		"tape": "tape test/create-tap.js",
 		"tape:mixed": "tape test/create-mixed-tap.js",
 		"tape:pass": "tape test/create-passing-tap.js",
+		"tape:object": "tape test/create-object-tap.js",
+		"try": "npm run --silent tape:mixed | bin/tap-spek",
 		"try:pass": "npm run --silent tape:pass | bin/tap-spek",
-		"try": "npm run --silent tape:mixed | bin/tap-spek"
+		"try:object": "npm run --silent tape:object | bin/tap-spek"
 	},
 	"dependencies": {
 		"diff": "^5.0.0",

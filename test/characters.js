@@ -7,9 +7,6 @@ exports.paul = {
 		hair: "black",
 		height: 178,
 	},
-	fight() {
-		throw "pound sand";
-	},
 };
 exports.duncan = {
 	name: "Duncan Idaho",
@@ -21,20 +18,18 @@ exports.duncan = {
 		height: 193,
 	},
 	died: "10191 AG", // spoilers!
-	fight() {
-		throw new Error("⚔️");
-	},
 };
 exports.vladimir = {
 	house: "Harkonnen",
 	title: "Baron",
 	died: null,
-	async fight() {
+	async float() {
 		return Promise.resolve("👻");
 	},
 };
 exports.gurney = {
 	house: "Atreides",
+	died: undefined,
 	fight() {
 		return "👊";
 	},

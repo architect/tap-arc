@@ -16,6 +16,35 @@ function prettyMs(start) {
 	return ms < 1000 ? `${ms} ms` : `${ms / 1000} s`;
 }
 
+function diffString(actual, expected) {
+	const stringDiff = Diff.diffChars(actual, expected);
+	const diff = [];
+
+	for (const part of stringDiff) {
+		let color = "reset";
+		if (part.added) color = "bgGreen";
+		if (part.removed) color = "bgRed";
+		diff.push(`${black(pc[color](part.value))}`);
+	}
+
+	return diff;
+}
+
+function diffJson(actual, expected) {
+	const changes = Diff.diffJson(actual, expected);
+	const diff = [];
+
+	for (const part of changes) {
+		const leadingSpace = part.value.match(/^[\s]+/) || "";
+		let color = "reset";
+		if (part.added) color = "bgGreen";
+		if (part.removed) color = "bgRed";
+		diff.push([leadingSpace, black(pc[color](part.value.trim())), "\n"].join(""));
+	}
+
+	return diff;
+}
+
 module.exports = function spek() {
 	const start = Date.now();
 	const tap = new Parser();
@@ -45,31 +74,26 @@ module.exports = function spek() {
 
 			if (["equal", "deepEqual"].includes(operator)) {
 				if (typeof expected === "string" && typeof actual === "string") {
-					// TODO: test for parsable JSON
-					const changes = Diff.diffChars(actual, expected);
-					let diff = [];
-
-					for (const part of changes) {
-						let color = "reset";
-						if (part.added) color = "bgGreen";
-						if (part.removed) color = "bgRed";
-						diff.push(`${black(pc[color](part.value))}`);
+					let isJson = true;
+					let actualJson = actual;
+					let expectedJson = expected;
+					try {
+						actualJson = eval(`(${actual})`);
+						expectedJson = eval(`(${expected})`);
+					} catch (e) {
+						isJson = false;
 					}
 
-					msg.push(diff.join("") + "\n");
+					if (isJson) {
+						const jsonDiff = diffJson(actualJson, expectedJson);
+						msg.push(`${jsonDiff.join("").replace(/\n/g, `\n${pad(3)}`)}\n`);
+					} else {
+						const stringDiff = diffString(actual, expected);
+						msg.push(stringDiff.join("") + "\n");
+					}
 				} else if (typeof expected === "object" && typeof actual === "object") {
 					// probably an array
-					const changes = Diff.diffJson(actual, expected);
-					let diff = [];
-
-					for (const part of changes) {
-						const leadingSpace = part.value.match(/^[\s]+/) || "";
-						let color = "reset";
-						if (part.added) color = "bgGreen";
-						if (part.removed) color = "bgRed";
-						diff.push([leadingSpace, black(pc[color](part.value.trim())), "\n"].join(""));
-					}
-
+					const diff = diffJson(actual, expected);
 					msg.push(`${diff.join("").replace(/\n/g, `\n${pad(3)}`)}\n`);
 				} else if (typeof expected === "number" || typeof actual === "number") {
 					msg.push(`Expected ${green(expected)} but got ${red(actual)}\n`);
