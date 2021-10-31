@@ -23,15 +23,23 @@ module.exports = function spek() {
 	const output = through();
 	const stream = duplexer(tap, output);
 
+	tap.on("pass", (p) => output.push(`${pad(2)}${green("✔")} ${dim(p.name)}\n`));
+	tap.on("extra", (e) => output.push(`${pad(2)}${yellow(`> ${e}`)}`));
+	tap.on("skip", (s) => output.push(`${pad(2)}${dim(`SKIP ${s.name}`)}\n`));
+
 	tap.on("comment", (comment) => {
 		// Log test-group name
-		if (!RESULT_COMMENTS.some((c) => c.startsWith(c, 2)))
+		if (!RESULT_COMMENTS.some((c) => comment.startsWith(c, 2)))
 			output.push(
-				`\n${pad()}${underline(comment.trim().replace(/^(# )/, ""))}\n`
+				`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ""))}\n`
 			);
 	});
 
-	tap.on("pass", (p) => output.push(`${pad(2)}${green("✔")} ${dim(p.name)}\n`));
+	tap.on("todo", (t) =>
+		output.push(
+			`${pad(2)}${pc[t.ok ? "green" : "red"]("TODO")} ${dim(t.name)}\n`
+		)
+	);
 
 	tap.on("fail", (fail) => {
 		output.push(`${pad(2)}${red(`✖ ${fail.name}`)}\n`);
@@ -53,13 +61,30 @@ module.exports = function spek() {
 						diff.push(`${black(pc[color](part.value))}`);
 					}
 
-					msg.push(diff.join("") + "\n\n");
+					msg.push(diff.join("") + "\n");
+				} else if (typeof expected === "object" && typeof actual === "object") {
+					// probably an array
+					const changes = Diff.diffJson(expected, actual);
+					let diff = [];
+
+					for (const part of changes) {
+						const leadingSpace = part.value.match(/^[\s]+/) || "";
+						let color = "reset";
+						if (part.added) color = "bgGreen";
+						if (part.removed) color = "bgRed";
+						diff.push(
+							[leadingSpace, black(pc[color](part.value.trim())), "\n"].join("")
+						);
+					}
+
+					msg.push(`${diff.join("").replace(/\n/g, `\n${pad(3)}`)}\n`);
 				} else if (typeof expected === "number" || typeof actual === "number") {
-					msg.push(`Expected ${green(expected)} but got ${red(actual)}\n\n`);
+					msg.push(`Expected ${green(expected)} but got ${red(actual)}\n`);
 				} else {
+					// mixed types
 					msg.push(`operator: ${red(operator)}\n`);
 					msg.push(`expected: ${green(expected)} <${typeof expected}>\n`);
-					msg.push(`actual: ${red(actual)} <${typeof actual}>\n\n`);
+					msg.push(`actual: ${red(actual)} <${typeof actual}>\n`);
 				}
 			} else if (["notEqual", "notDeepEqual"].includes(operator)) {
 				msg.push("Expected values to differ\n");
@@ -85,26 +110,16 @@ module.exports = function spek() {
 			} else {
 				msg.push(`operator: ${red(operator)}\n`);
 				msg.push(`expected: ${green(expected)}\n`);
-				msg.push(`actual: ${red(actual)}\n\n`);
+				msg.push(`actual: ${red(actual)}\n`);
 			}
 
-			if (at) msg.push(`${pad()}${dim(`At: ${at}`)}`);
+			if (at) msg.push(`${dim(`At: ${at.replace(process.cwd(), "")}`)}`);
 
 			msg.push("\n\n");
 
 			output.push(pad(3) + msg.join(pad(3)));
 		}
 	});
-
-	tap.on("skip", (s) => output.push(`${pad(2)}${dim(`SKIP ${s.name}`)}\n`));
-
-	tap.on("todo", (t) =>
-		output.push(
-			`${pad(2)}${pc[t.ok ? "green" : "red"]("TODO")} ${dim(t.name)}\n`
-		)
-	);
-
-	tap.on("extra", (e) => output.push(`${pad(2)}${yellow(`> ${e}`)}`));
 
 	tap.on("complete", (result) => {
 		stream.count = result.count;

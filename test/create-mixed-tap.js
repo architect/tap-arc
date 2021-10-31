@@ -1,66 +1,70 @@
-const test = require("tape");
-const { duncan, gurney, paul, vladimir } = require("./characters.js");
+// Adapted from testling's tape guide
+// https://ci.testling.com/guide/tape
 
-test("create 'todo' tests", { todo: true }, (t) => {
-	t.plan(2);
+var test = require("tape");
 
-	t.ok(duncan.name); // pass without message
-	t.true(gurney.name); // fail without message
-});
-
-test("create ok and notOk, some without messages", (t) => {
-	t.plan(4); // correct plan count
-
-	t.ok(duncan.died); // pass without message
-	t.true(gurney.died); // fail without message
-	t.notOk(paul.died, "Sand power"); // pass
-	t.false(duncan.died, "Idaho is still kickin'"); // fail
-});
-
-test("create equal, notEqual, and pass", (t) => {
-	t.plan(6); // incorrect plan count
-
-	t.equal(paul.house, duncan.house, "Atreides bros"); // pass
-	t.is(paul.title, duncan.title, "Same stations in their house"); // fail
-	t.notEqual(
-		paul.physical.height,
-		duncan.physical.height,
-		"Different statures"
-	); // pass
-	t.isNot(duncan.house, gurney.house, "Not great roommates"); // fail
-	t.pass("the spice");
+test("basic arithmetic", function (t) {
+	t.equal(2 + 3, 5);
+	t.equal(7 * 8 + 10, 666);
 
 	t.end();
 });
 
-test("create match, doesNotMatch, and skip", (t) => {
-	t.plan(5);
-
-	t.match(duncan.title, /master|sword/, "Duncan is a master of the sword"); // pass
-	t.match(paul.physical.eyes, /[0-9]/, "Paul's eyes are a number"); // fail
-	t.skip("WIP");
-	t.doesNotMatch(gurney.house, /a+/, "A+"); // pass
-	t.doesNotMatch(vladimir.house, /^[A-Z]/, "harkonnen is not a proper noun"); // fail
-});
-
-test("create deepEqual, notDeepEqual, comment, and a log", (t) => {
+test("deep equality", function (t) {
 	t.plan(4);
 
-	t.deepEqual(paul, { ...paul }, "Begun, the clone wars have."); // pass
-	console.log("Wrong universe");
-	t.same(duncan.physical, paul.physical, "Samesies!"); // fail
-	t.notDeepEqual(gurney, duncan, "but Gurney isn't Duncan"); // pass
-	t.notSame(vladimir, vladimir, "I am Vlad"); // fail
+	t.deepEqual([3, 4, 5], [3, 4, 2 + 3], "An Array pass");
+	t.deepEqual(
+		{ a: 7, b: [8, 9] },
+		{ a: 3 + 4, b: [4 * 2].concat(3 * 3) },
+		"And Object pass"
+	);
+	t.deepEqual([3, 4, 6], [3, 4, 2 + 3], "An Array failure");
+	t.deepEqual(
+		{ a: 7, b: [8, 9] },
+		{ a: 3 + 4, b: [4 * 3].concat(3 * 3) },
+		"An Object failure"
+	);
+});
+
+test("comparing booleans", function (t) {
+	t.plan(2);
+
+	t.ok(3 > 4 || 5 > 2, "A passing Boolean");
+	t.ok(3 > 4 || 2 > 5, "A failing Boolean");
+});
+
+test("negatives", function (t) {
+	t.plan(2);
+	t.notOk(false, "A passing !Boolean");
+	t.notOk(true, "A failing !Boolean");
+});
+
+test("map with elements", function (t) {
+	t.plan(3);
+
+	[2, 3].map(function (x) {
+		t.pass("Simple pass");
+	});
+
+	[1].map(function (x) {
+		t.fail("this callback should never fire");
+	});
 
 	t.end();
 });
 
-test("create throws, doesNotThrow, and fail", async (t) => {
-	t.plan(5);
+test("nested", function (t) {
+	t.test(function (st) {
+		st.plan(1);
+		st.equal(1 + 2, 3, "Sub-test pass");
+	});
 
-	t.throws(() => paul.fight(), "Kick rocks"); // pass
-	t.throws(async () => await vladimir.fight(), "Floaty boi"); // fail
-	t.doesNotThrow(() => gurney.fight(), "Thanks other dad"); // pass
-	t.doesNotThrow(() => duncan.fight(), "Can't fight if you're dead"); // fail
-	t.fail("fin");
+	t.test(function (st) {
+		st.plan(2);
+		setTimeout(function () {
+			st.pass("Delayed sub-test pass");
+			st.fail("Delayed sub-test fail");
+		}, 100);
+	}, "Delayed sub-test");
 });

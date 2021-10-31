@@ -8,6 +8,19 @@
 	"bin": {
 		"tap-spek": "bin/tap-spek"
 	},
+	"files": [
+		"index.js",
+		"bin/tap-spek"
+	],
+	"repository": "tbeseda/tap-spek",
+	"keywords": [
+		"test",
+		"tap",
+		"spec",
+		"tap-spec",
+		"tape",
+		"reporter"
+	],
 	"scripts": {
 		"lint": "prettier --write .",
 		"test": ":",
@@ -24,6 +37,7 @@
 		"through2": "^4.0.2"
 	},
 	"devDependencies": {
+		"@types/node": "^16.11.6",
 		"prettier": "^2.4.1",
 		"tape": "^5.3.1"
 	}

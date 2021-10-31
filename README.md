@@ -1,20 +1,50 @@
 # `tap-spek`
 
-> A small (<12kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, string diffing, and ~~support for nested tests~~.
+> A small (<12kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
 
 ## Objectives
 
-- [x] minimal but informative spec-like output for all assertions
-- [x] minimal, maintained dependencies -- can't be shipping React to CI
-- [x] streaming
-- [ ] group failure summary by comment
-- [x] helpful diffing for failures
-- [ ] handle nested tests
+- minimal, informative spec-like output for all assertions
+- minimal, maintained dependencies -- can't be shipping React to CI
+- streaming in and out
+- helpful diffing for failures
+
+![tap-spek output screen shot](./screen-shot.png)
+
+## Installation & Usage
+
+Save development dependency:
+
+```sh
+npm i -D tap-spek
+```
+
+Example `npm test` script:
+
+```js
+// package.json
+"scripts": {
+  "test": "tape test/**/*.js | tap-spek"
+}
+```
+
+> ℹ️ `tap-spek` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
+
+## TODO & Improvements
+
+- [x] TAP kitchen sink (specialized output for each operator)
+- [ ] group failure summary by comment (currently just a list of names)
+- [ ] improve nested test output (indented sub-tests)
 - [ ] test tap-spek with snapshot tests
-- [x] TAP kitchen sink testing
+- [ ] combined support for ESM and CommonJS
+- [ ] options
+  - [ ] print stacktrace
+  - [ ] no colors
+  - [ ] pessimistic
+  -
 
 ## Credit & Inspiration
 
-- https://github.com/scottcorgan/tap-spec
-- https://github.com/derhuerst/tap-min
-- https://github.com/namuol/tap-difflet
+- [tap-spec](https://github.com/scottcorgan/tap-spec) ol' reliable, but a bit stale and npm vulnerabilities
+- [tap-difflet](https://github.com/namuol/tap-difflet) inspired output and diffing, also vulnerable
+- [tap-min](https://github.com/derhuerst/tap-min) helpful approaches to streaming and exit codes
