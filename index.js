@@ -5,15 +5,7 @@ const pc = require("picocolors");
 const through = require("through2");
 const { black, blue, dim, green, red, underline, yellow } = pc;
 
-const RESULT_COMMENTS = [
-	"tests ",
-	"pass ",
-	"skip",
-	"todo",
-	"fail ",
-	"failed ",
-	"ok",
-];
+const RESULT_COMMENTS = ["tests ", "pass ", "skip", "todo", "fail ", "failed ", "ok"];
 
 const pad = (count = 1) => "  ".repeat(count);
 
@@ -30,15 +22,11 @@ module.exports = function spek() {
 	tap.on("comment", (comment) => {
 		// Log test-group name
 		if (!RESULT_COMMENTS.some((c) => comment.startsWith(c, 2)))
-			output.push(
-				`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ""))}\n`
-			);
+			output.push(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ""))}\n`);
 	});
 
 	tap.on("todo", (t) =>
-		output.push(
-			`${pad(2)}${pc[t.ok ? "green" : "red"]("TODO")} ${dim(t.name)}\n`
-		)
+		output.push(`${pad(2)}${pc[t.ok ? "green" : "red"]("TODO")} ${dim(t.name)}\n`)
 	);
 
 	tap.on("fail", (fail) => {
@@ -72,9 +60,7 @@ module.exports = function spek() {
 						let color = "reset";
 						if (part.added) color = "bgGreen";
 						if (part.removed) color = "bgRed";
-						diff.push(
-							[leadingSpace, black(pc[color](part.value.trim())), "\n"].join("")
-						);
+						diff.push([leadingSpace, black(pc[color](part.value.trim())), "\n"].join(""));
 					}
 
 					msg.push(`${diff.join("").replace(/\n/g, `\n${pad(3)}`)}\n`);
@@ -96,9 +82,13 @@ module.exports = function spek() {
 				msg.push(`Expected ${red(actual)} to not match ${blue(expected)}\n`);
 			} else if (operator === "throws" && actual && actual !== "undefined") {
 				// this combination is ~doesNotThrow
-				msg.push(`Expected to not throw, received ${red(actual)}\n`);
+				msg.push(`Expected to not throw, received "${red(actual)}"\n`);
 			} else if (operator === "throws") {
 				msg.push("Expected to throw\n");
+			} else if (operator === "error") {
+				msg.push(`Expected error to be ${green("falsy")}\n`);
+			} else if (operator === "fail") {
+				msg.push("Explicit fail\n");
 			} else if (expected && !actual) {
 				msg.push(`Expected ${red(operator)} but got nothing\n`);
 			} else if (actual && !expected) {
@@ -108,6 +98,7 @@ module.exports = function spek() {
 			} else if (!expected && !actual) {
 				msg.push(`operator: ${red(operator)}\n`);
 			} else {
+				// unlikely
 				msg.push(`operator: ${red(operator)}\n`);
 				msg.push(`expected: ${green(expected)}\n`);
 				msg.push(`actual: ${red(actual)}\n`);
@@ -140,15 +131,13 @@ module.exports = function spek() {
 		}
 
 		output.push(`\n${pad()}total:     ${result.count}\n`);
-		if (result.pass > 0)
-			output.push(green(`${pad()}passing:   ${result.pass}\n`));
-		if (result.fail > 0)
-			output.push(red(`${pad()}failing:   ${result.fail}\n`));
+		if (result.pass > 0) output.push(green(`${pad()}passing:   ${result.pass}\n`));
+		if (result.fail > 0) output.push(red(`${pad()}failing:   ${result.fail}\n`));
 		if (result.skip > 0) output.push(`${pad()}skipped:   ${result.skip}\n`);
 		if (result.todo > 0) output.push(`${pad()}todo:      ${result.todo}\n`);
 		if (result.bailout) output.push(`${pad()}BAILED!\n`);
 
-		output.end(`${pad()}duration:  ${Date.now() - start} ms\n\n`);
+		output.end(`${dim(`${pad()}${Date.now() - start} ms`)}\n\n`);
 	});
 
 	return stream;

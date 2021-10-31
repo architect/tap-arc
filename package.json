@@ -40,5 +40,10 @@
 		"@types/node": "^16.11.6",
 		"prettier": "^2.4.1",
 		"tape": "^5.3.1"
+	},
+	"prettier": {
+		"tabWidth": 2,
+		"useTabs": true,
+		"printWidth": 100
 	}
 }
