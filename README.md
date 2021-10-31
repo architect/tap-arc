@@ -37,6 +37,7 @@ Example `npm test` script:
 - [ ] improve nested test output (indented sub-tests)
 - [ ] test tap-spek with snapshot tests
 - [ ] combined support for ESM and CommonJS
+- [ ] remove `duplexer3` dep
 - [ ] options
   - [ ] print stacktrace
   - [ ] no colors

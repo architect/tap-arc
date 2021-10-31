@@ -7,7 +7,7 @@ test("basic arithmetic without messages", function (t) {
 	t.end();
 });
 
-test.only("deep equality", function (t) {
+test("deep equality", function (t) {
 	t.plan(4);
 
 	t.deepEqual([3, 4, 5], [3, 4, 2 + 3], "An Array pass");
@@ -53,7 +53,7 @@ test("nested", function (t) {
 		setTimeout(function () {
 			st.pass("Delayed sub-test pass");
 			st.fail("Delayed sub-test fail");
-		}, 100);
+		}, 1100);
 	}, "Delayed sub-test");
 });
 

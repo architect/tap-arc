@@ -3,11 +3,17 @@ const duplexer = require("duplexer3");
 const Parser = require("tap-parser");
 const pc = require("picocolors");
 const through = require("through2");
-const { black, blue, dim, green, red, underline, yellow } = pc;
+const { black, blue, bold, dim, green, red, reset, underline, yellow } = pc;
 
 const RESULT_COMMENTS = ["tests ", "pass ", "skip", "todo", "fail ", "failed ", "ok"];
 
 const pad = (count = 1) => "  ".repeat(count);
+
+const prettyMs = (start) => {
+	const ms = Date.now() - start;
+	if (ms < 1000) return `${ms} ms`;
+	else return `${ms / 1000} s`;
+};
 
 module.exports = function spek() {
 	const start = Date.now();
@@ -30,7 +36,7 @@ module.exports = function spek() {
 	);
 
 	tap.on("fail", (fail) => {
-		output.push(`${pad(2)}${red(`✖ ${fail.name}`)}\n`);
+		output.push(`${pad(2)}${red("✖")} #${fail.id} ${red(fail.name)}\n`);
 
 		if (fail.diag) {
 			const { actual, at, expected, operator } = fail.diag;
@@ -116,7 +122,7 @@ module.exports = function spek() {
 		stream.count = result.count;
 		stream.failures = result.failures;
 
-		if (result.fail > 0) {
+		if (!result.ok && result.fail > 0) {
 			let failureSummary = "\n\n";
 			failureSummary += `${pad()}${red("Failed tests:")}`;
 			failureSummary += ` There ${result.fail > 1 ? "were" : "was"} `;
@@ -125,8 +131,8 @@ module.exports = function spek() {
 
 			output.push(failureSummary);
 
-			for (const failure of result.failures) {
-				output.push(`${pad(2)}${red("✖")} ${dim(failure.name)}\n`);
+			for (const fail of result.failures) {
+				output.push(`${pad(2)}${red("✖")} #${fail.id} ${dim(fail.name)}\n`);
 			}
 		}
 
@@ -135,9 +141,9 @@ module.exports = function spek() {
 		if (result.fail > 0) output.push(red(`${pad()}failing:   ${result.fail}\n`));
 		if (result.skip > 0) output.push(`${pad()}skipped:   ${result.skip}\n`);
 		if (result.todo > 0) output.push(`${pad()}todo:      ${result.todo}\n`);
-		if (result.bailout) output.push(`${pad()}BAILED!\n`);
+		if (result.bailout) output.push(`${pad()}${bold(underline(red("BAILED")))}!\n`);
 
-		output.end(`${dim(`${pad()}${Date.now() - start} ms`)}\n\n`);
+		output.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`);
 	});
 
 	return stream;

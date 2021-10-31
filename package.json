@@ -37,6 +37,7 @@
 		"through2": "^4.0.2"
 	},
 	"devDependencies": {
+		"@types/duplexer3": "^0.1.1",
 		"@types/node": "^16.11.6",
 		"prettier": "^2.4.1",
 		"tape": "^5.3.1"
