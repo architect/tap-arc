@@ -2,7 +2,7 @@
 	"name": "tap-spek",
 	"description": "spec-like TAP reporter",
 	"author": "tbeseda",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"license": "ISC",
 	"main": "index.js",
 	"bin": {
