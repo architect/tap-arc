@@ -37,7 +37,7 @@ module.exports = function spek() {
 	);
 
 	tap.on("fail", (fail) => {
-		output.push(`${pad(2)}${red("✖")} #${fail.id} ${red(fail.name)}\n`);
+		output.push(`${pad(2)}${red("✖")} ${dim(`#${fail.id}`)} ${red(fail.name)}\n`);
 
 		if (fail.diag) {
 			const { actual, at, expected, operator } = fail.diag;
@@ -46,7 +46,7 @@ module.exports = function spek() {
 			if (["equal", "deepEqual"].includes(operator)) {
 				if (typeof expected === "string" && typeof actual === "string") {
 					// TODO: test for parsable JSON
-					const changes = Diff.diffChars(expected, actual);
+					const changes = Diff.diffChars(actual, expected);
 					let diff = [];
 
 					for (const part of changes) {
@@ -59,7 +59,7 @@ module.exports = function spek() {
 					msg.push(diff.join("") + "\n");
 				} else if (typeof expected === "object" && typeof actual === "object") {
 					// probably an array
-					const changes = Diff.diffJson(expected, actual);
+					const changes = Diff.diffJson(actual, expected);
 					let diff = [];
 
 					for (const part of changes) {
@@ -94,14 +94,14 @@ module.exports = function spek() {
 				msg.push("Expected to throw\n");
 			} else if (operator === "error") {
 				msg.push(`Expected error to be ${green("falsy")}\n`);
-			} else if (operator === "fail") {
-				msg.push("Explicit fail\n");
 			} else if (expected && !actual) {
 				msg.push(`Expected ${red(operator)} but got nothing\n`);
 			} else if (actual && !expected) {
 				msg.push(`Expected ${green("nothing")} but got ${red(actual)}\n`);
 			} else if (expected && actual) {
 				msg.push(`Expected ${green(expected)} but got ${red(actual)}\n`);
+			} else if (operator === "fail") {
+				msg.push("Explicit fail\n");
 			} else if (!expected && !actual) {
 				msg.push(`operator: ${red(operator)}\n`);
 			} else {
@@ -133,7 +133,7 @@ module.exports = function spek() {
 			output.push(failureSummary);
 
 			for (const fail of result.failures) {
-				output.push(`${pad(2)}${red("✖")} #${fail.id} ${dim(fail.name)}\n`);
+				output.push(`${pad(2)}${red("✖")} ${dim(`#${fail.id} ${fail.name}`)}\n`);
 			}
 		}
 
