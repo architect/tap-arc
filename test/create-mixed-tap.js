@@ -1,54 +1,39 @@
-// Adapted from testling's tape guide
-// https://ci.testling.com/guide/tape
+const test = require("tape");
 
-var test = require("tape");
-
-test("basic arithmetic", function (t) {
+test("basic arithmetic without messages", function (t) {
 	t.equal(2 + 3, 5);
 	t.equal(7 * 8 + 10, 666);
 
 	t.end();
 });
 
-test("deep equality", function (t) {
+test.only("deep equality", function (t) {
 	t.plan(4);
 
 	t.deepEqual([3, 4, 5], [3, 4, 2 + 3], "An Array pass");
-	t.deepEqual(
-		{ a: 7, b: [8, 9] },
-		{ a: 3 + 4, b: [4 * 2].concat(3 * 3) },
-		"And Object pass"
-	);
+	t.deepEqual({ a: 7, b: [8, 9] }, { a: 3 + 4, b: [4 * 2].concat(3 * 3) }, "And Object pass");
 	t.deepEqual([3, 4, 6], [3, 4, 2 + 3], "An Array failure");
-	t.deepEqual(
-		{ a: 7, b: [8, 9] },
-		{ a: 3 + 4, b: [4 * 3].concat(3 * 3) },
-		"An Object failure"
-	);
+	t.deepEqual({ a: 7, b: [8, 9] }, { a: 3 + 4, b: [4 * 3].concat(3 * 3) }, "An Object failure");
 });
 
 test("comparing booleans", function (t) {
-	t.plan(2);
+	t.plan(4);
 
 	t.ok(3 > 4 || 5 > 2, "A passing Boolean");
 	t.ok(3 > 4 || 2 > 5, "A failing Boolean");
-});
-
-test("negatives", function (t) {
-	t.plan(2);
 	t.notOk(false, "A passing !Boolean");
 	t.notOk(true, "A failing !Boolean");
 });
 
-test("map with elements", function (t) {
+test("iterators", function (t) {
 	t.plan(3);
 
-	[2, 3].map(function (x) {
-		t.pass("Simple pass");
+	[1, 2].map(function (x) {
+		t.ifError(x < 2, `Simple ifError ${x}`);
 	});
 
-	[1].map(function (x) {
-		t.fail("this callback should never fire");
+	[3].map(function (x) {
+		t.error(new Error(`"x" is ${x}. Halt and catch fire!`));
 	});
 
 	t.end();
@@ -56,8 +41,11 @@ test("map with elements", function (t) {
 
 test("nested", function (t) {
 	t.test(function (st) {
-		st.plan(1);
-		st.equal(1 + 2, 3, "Sub-test pass");
+		st.plan(4);
+		st.match("atreides", /^A/, "Sub-test match fail");
+		st.doesNotMatch("Hark0nnen", /[0-9]/, "Sub-test doesNotMatch fail");
+		st.match("Idaho", /^[a-zA-z]{5}$/, "Sub-test match pass");
+		st.doesNotMatch("Gurney", /^G[a-zA-Z]y$/, "Sub-test doesNotMatch pass");
 	});
 
 	t.test(function (st) {
@@ -67,4 +55,18 @@ test("nested", function (t) {
 			st.fail("Delayed sub-test fail");
 		}, 100);
 	}, "Delayed sub-test");
+});
+
+test("throws", function (t) {
+	t.plan(2);
+
+	t.throws(() => {
+		return "sand power";
+	}, "A failing throws");
+
+	t.doesNotThrow(() => {
+		throw "Spice";
+	}, "A failing doesNotThrow");
+
+	t.end();
 });

@@ -1,6 +1,6 @@
 # `tap-spek`
 
-> A small (<12kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
+> A small (<10kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
 
 ## Objectives
 
@@ -13,7 +13,7 @@
 
 ## Installation & Usage
 
-Save development dependency:
+For a JavaScript project, save `tap-spek` as a development dependency:
 
 ```sh
 npm i -D tap-spek
@@ -28,7 +28,7 @@ Example `npm test` script:
 }
 ```
 
-> ℹ️ `tap-spek` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
+> ℹ️  `tap-spek` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
 
 ## TODO & Improvements
 
@@ -41,7 +41,7 @@ Example `npm test` script:
   - [ ] print stacktrace
   - [ ] no colors
   - [ ] pessimistic
-  -
+  - others?
 
 ## Credit & Inspiration
 

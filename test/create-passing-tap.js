@@ -1,7 +1,7 @@
 // Adapted from testling's tape guide
 // https://ci.testling.com/guide/tape
 
-var test = require("tape");
+const test = require("tape");
 
 test("basic arithmetic", function (t) {
 	t.equal(2 + 3, 5);
