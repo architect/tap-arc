@@ -31,13 +31,13 @@
 	},
 	"dependencies": {
 		"diff": "^5.0.0",
-		"duplexer3": "^0.1.4",
+		"duplexify": "^4.1.2",
 		"picocolors": "^1.0.0",
 		"tap-parser": "^10.1.0",
 		"through2": "^4.0.2"
 	},
 	"devDependencies": {
-		"@types/duplexer3": "^0.1.1",
+		"@types/duplexify": "^3.6.0",
 		"@types/node": "^16.11.6",
 		"prettier": "^2.4.1",
 		"tape": "^5.3.1"

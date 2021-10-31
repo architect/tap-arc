@@ -19,6 +19,7 @@ For a JavaScript project, save `tap-spek` as a development dependency:
 npm i -D tap-spek
 ```
 
+Simply pipe tap output to `tap-spek`.  
 Example `npm test` script:
 
 ```js
@@ -28,7 +29,7 @@ Example `npm test` script:
 }
 ```
 
-> ℹ️  `tap-spek` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
+> 💁  `tap-spek` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
 
 ## TODO & Improvements
 
@@ -37,7 +38,7 @@ Example `npm test` script:
 - [ ] improve nested test output (indented sub-tests)
 - [ ] test tap-spek with snapshot tests
 - [ ] combined support for ESM and CommonJS
-- [ ] remove `duplexer3` dep
+- [x] remove `duplexer3` dep
 - [ ] options
   - [ ] print stacktrace
   - [ ] no colors

@@ -1,25 +1,26 @@
 const Diff = require("diff");
-const duplexer = require("duplexer3");
+const duplexify = require("duplexify");
 const Parser = require("tap-parser");
 const pc = require("picocolors");
 const through = require("through2");
-const { black, blue, bold, dim, green, red, reset, underline, yellow } = pc;
+const { black, blue, bold, dim, green, red, underline, yellow } = pc;
 
 const RESULT_COMMENTS = ["tests ", "pass ", "skip", "todo", "fail ", "failed ", "ok"];
 
-const pad = (count = 1) => "  ".repeat(count);
+function pad(count = 1) {
+	return "  ".repeat(count);
+}
 
-const prettyMs = (start) => {
+function prettyMs(start) {
 	const ms = Date.now() - start;
-	if (ms < 1000) return `${ms} ms`;
-	else return `${ms / 1000} s`;
-};
+	return ms < 1000 ? `${ms} ms` : `${ms / 1000} s`;
+}
 
 module.exports = function spek() {
 	const start = Date.now();
 	const tap = new Parser();
 	const output = through();
-	const stream = duplexer(tap, output);
+	const stream = duplexify(tap, output);
 
 	tap.on("pass", (p) => output.push(`${pad(2)}${green("✔")} ${dim(p.name)}\n`));
 	tap.on("extra", (e) => output.push(`${pad(2)}${yellow(`> ${e}`)}`));
@@ -32,7 +33,7 @@ module.exports = function spek() {
 	});
 
 	tap.on("todo", (t) =>
-		output.push(`${pad(2)}${pc[t.ok ? "green" : "red"]("TODO")} ${dim(t.name)}\n`)
+		output.push(`${pad(2)}${pc[t.ok ? "yellow" : "red"]("TODO")} ${dim(t.name)}\n`)
 	);
 
 	tap.on("fail", (fail) => {

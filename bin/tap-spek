@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 const { pipeline } = require("stream");
-const spek = require("..")();
+const tapSpek = require("..")();
 
-pipeline(process.stdin, spek, process.stdout, (err) => {
+pipeline(process.stdin, tapSpek, process.stdout, (err) => {
 	if (err) console.error("Pipeline failed.", err);
 });
 
-spek.on("end", function () {
-	if (spek.count < 1) process.exit(1);
-	if (spek.failures.length > 0) process.exit(1);
+tapSpek.on("end", function () {
+	if (tapSpek.count < 1) process.exit(1);
+	if (tapSpek.failures.length > 0) process.exit(1);
 });

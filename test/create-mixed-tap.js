@@ -8,10 +8,11 @@ test("basic arithmetic without messages", function (t) {
 });
 
 test("deep equality", function (t) {
-	t.plan(4);
+	t.plan(5);
 
 	t.deepEqual([3, 4, 5], [3, 4, 2 + 3], "An Array pass");
 	t.deepEqual({ a: 7, b: [8, 9] }, { a: 3 + 4, b: [4 * 2].concat(3 * 3) }, "And Object pass");
+	t.skip("Skipping an arbitrary test");
 	t.deepEqual([3, 4, 6], [3, 4, 2 + 3], "An Array failure");
 	t.deepEqual({ a: 7, b: [8, 9] }, { a: 3 + 4, b: [4 * 3].concat(3 * 3) }, "An Object failure");
 });
@@ -68,5 +69,11 @@ test("throws", function (t) {
 		throw "Spice";
 	}, "A failing doesNotThrow");
 
+	t.end();
+});
+
+test("some TODO tests", { todo: true }, (t) => {
+	t.ok(true, "Tests todo aren't really tests");
+	t.fail("Test the actual library");
 	t.end();
 });
