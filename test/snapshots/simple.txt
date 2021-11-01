@@ -1,0 +1,64 @@
+
+  Sample passing tests
+    ✔ Sub-test match pass
+    > Arbitrary logs supported
+    ✔ Sub-test doesNotMatch pass
+    ✔ A deeply equal array
+    SKIP A skipped test
+    ✔ A deeply equal object
+
+  Some failing tests
+    ✖ #6 should be strictly equal
+      Expected 666 but got 66
+      At: Test.<anonymous> (/test/create-simple-tap.js:17:4)      
+
+    ✖ #7 An small object deepEqual failure
+      {
+        "a": "foo",
+        "a": "bar",
+        "b": [
+          11,
+          12,
+          9
+        ]
+      }
+      
+      At: Test.<anonymous> (/test/create-simple-tap.js:18:4)      
+
+    > Large object diff: WIP
+
+  Nested tests
+    ✖ #8 Sub-test match fail
+      Expected atreides to match /^A/
+      At: Test.<anonymous> (/test/create-simple-tap.js:26:6)      
+
+    ✖ #9 An array failure
+      [
+        "foo",
+        "bar",
+        "baz"
+        "foobar baz"
+      ]
+      
+      At: Test.<anonymous> (/test/create-simple-tap.js:27:6)      
+
+
+  TODO Nested todo tests
+    TODO Passing TODOs are yellow
+    TODO Failing TODOs are red
+
+
+  Failed tests: There were 5 failures
+
+    ✖ #6 should be strictly equal
+    ✖ #7 An small object deepEqual failure
+    ✖ #8 Sub-test match fail
+    ✖ #9 An array failure
+
+  total:     11
+  passing:   6
+  failing:   5
+  skipped:   1
+  todo:      2
+  175 ms
+

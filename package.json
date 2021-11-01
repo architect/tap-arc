@@ -23,14 +23,19 @@
 	],
 	"scripts": {
 		"lint": "prettier --write .",
-		"test": ":",
-		"tape": "tape test/create-tap.js",
+		"test": "tape test/index.js | bin/tap-spek",
+		"snap:simple": "npm run --silent spek:simple > test/snapshots/simple.txt",
+		"snap:mixed": "npm run --silent spek:mixed > test/snapshots/mixed.txt",
+		"snap:object": "npm run --silent spek:object > test/snapshots/object.txt",
+		"snap:passing": "npm run --silent spek:passing > test/snapshots/passing.txt",
+		"tape:simple": "tape test/create-simple-tap.js",
 		"tape:mixed": "tape test/create-mixed-tap.js",
-		"tape:pass": "tape test/create-passing-tap.js",
 		"tape:object": "tape test/create-object-tap.js",
-		"try": "npm run --silent tape:mixed | bin/tap-spek",
-		"try:pass": "npm run --silent tape:pass | bin/tap-spek",
-		"try:object": "npm run --silent tape:object | bin/tap-spek"
+		"tape:passing": "tape test/create-passing-tap.js",
+		"spek:simple": "npm run --silent tape:simple | bin/tap-spek",
+		"spek:mixed": "npm run --silent tape:mixed | bin/tap-spek",
+		"spek:object": "npm run --silent tape:object | bin/tap-spek",
+		"spek:passing": "npm run --silent tape:passing | bin/tap-spek"
 	},
 	"dependencies": {
 		"diff": "^5.0.0",

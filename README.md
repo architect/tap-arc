@@ -31,12 +31,28 @@ Example `npm test` script:
 
 > 💁  `tap-spek` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
 
+## Development
+
+The bulk of the lib lives in `./index.js`.  
+`./bin/tap-spek` pipes stdin (from a TAP reporter) to `tap-spek` and then to stdout. The bin also handles exit code for a failing run.
+
+When building `tap-spek`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "spek:*" commands to test passing and failing TAP.
+
+```sh
+npm run spek:simple # used to create the screen shot above
+```
+
+The main library is snapshot tested (`npm test` loads all snapshots to compare to current output). Create snapshots with the "snap:*" commands.
+
 ## TODO & Improvements
 
+> These should be moved to the issue tracker
+
 - [x] TAP kitchen sink (specialized output for each operator)
+- [ ] improved object diffing
 - [ ] group failure summary by comment (currently just a list of names)
 - [ ] improve nested test output (indented sub-tests)
-- [ ] test tap-spek with snapshot tests
+- [x] test tap-spek with snapshot tests
 - [ ] combined support for ESM and CommonJS
 - [x] remove `duplexer3` dep
 - [ ] options
