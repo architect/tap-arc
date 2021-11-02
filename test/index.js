@@ -1,5 +1,6 @@
 const { exec } = require("child_process");
 const fs = require("fs");
+const ansiRegex = require("./util/ansi-regex.js");
 const test = require("tape");
 
 function trimNLines(text, n) {
@@ -16,7 +17,8 @@ for (const snapshot of ["mixed", "object", "passing", "simple"]) {
 		exec(
 			`node ${__dirname}/create-${snapshot}-tap.js | ${__dirname}/../bin/tap-spek`,
 			(error, stdout, stderr) => {
-				const [trimmedOut, durationLines] = trimNLines(stdout, 3);
+				const strippedOut = stdout.replace(ansiRegex(), "");
+				const [trimmedOut, durationLines] = trimNLines(strippedOut, 3);
 
 				if (error) t.equal(error.code, 1, `exit code 1 for "${snapshot}" tests`);
 				t.notOk(stderr, "stderr should be empty");
@@ -33,9 +35,10 @@ test("passing tests do not error", (t) => {
 	exec(
 		`node ${__dirname}/create-passing-tap.js | ${__dirname}/../bin/tap-spek`,
 		(error, stdout, stderr) => {
+			const strippedOut = stdout.replace(ansiRegex(), "");
 			t.notOk(error, "error should be undefined");
 			t.notOk(stderr, "stderror should be empty");
-			t.ok(stdout.indexOf("fail") < 0, '"fail" should not occur in output');
+			t.ok(strippedOut.indexOf("fail") < 0, '"fail" should not occur in output');
 			t.end();
 		}
 	);
