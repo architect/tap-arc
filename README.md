@@ -1,6 +1,6 @@
 # `tap-spek`
 
-> A small (<10kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
+> A small (~10kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
 
 ## Objectives
 
@@ -43,23 +43,6 @@ npm run spek:simple # used to create the screen shot above
 ```
 
 The main library is snapshot tested (`npm test` loads all snapshots to compare to current output). Create snapshots with the "snap:*" commands.
-
-## TODO & Improvements
-
-> These should be moved to the issue tracker
-
-- [x] TAP kitchen sink (specialized output for each operator)
-- [ ] improved object diffing
-- [ ] group failure summary by comment (currently just a list of names)
-- [ ] improve nested test output (indented sub-tests)
-- [x] test tap-spek with snapshot tests
-- [ ] combined support for ESM and CommonJS
-- [x] remove `duplexer3` dep
-- [ ] options
-  - [ ] print stacktrace
-  - [ ] no colors
-  - [ ] pessimistic
-  - others?
 
 ## Credit & Inspiration
 
