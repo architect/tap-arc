@@ -6,6 +6,8 @@ const through = require("through2");
 const { black, blue, bold, dim, green, red, underline, yellow } = pc;
 
 const RESULT_COMMENTS = ["tests ", "pass ", "skip", "todo", "fail ", "failed ", "ok"];
+const OKAY = green("✔");
+const FAIL = red("✖");
 
 function pad(count = 1) {
 	return "  ".repeat(count);
@@ -51,8 +53,10 @@ module.exports = function spek() {
 	const output = through();
 	const stream = duplexify(tap, output);
 
-	tap.on("pass", (p) => output.push(`${pad(2)}${green("✔")} ${dim(p.name)}\n`));
-	tap.on("extra", (e) => output.push(`${pad(2)}${yellow(`> ${e}`)}`));
+	tap.on("pass", (p) => output.push(`${pad(2)}${OKAY} ${dim(p.name)}\n`));
+	tap.on("extra", (e) => {
+		if (e.trim().length > 0) output.push(`${pad(2)}${yellow(`> ${e}`)}`);
+	});
 	tap.on("skip", (s) => output.push(`${pad(2)}${dim(`SKIP ${s.name}`)}\n`));
 
 	tap.on("comment", (comment) => {
@@ -66,7 +70,7 @@ module.exports = function spek() {
 	);
 
 	tap.on("fail", (fail) => {
-		output.push(`${pad(2)}${red("✖")} ${dim(`#${fail.id}`)} ${red(fail.name)}\n`);
+		output.push(`${pad(2)}${FAIL} ${dim(`#${fail.id}`)} ${red(fail.name)}\n`);
 
 		if (fail.diag) {
 			const { actual, at, expected, operator } = fail.diag;
@@ -78,8 +82,8 @@ module.exports = function spek() {
 					let actualJson = actual;
 					let expectedJson = expected;
 					try {
-						actualJson = eval(`(${actual})`);
-						expectedJson = eval(`(${expected})`);
+						actualJson = JSON.parse(`(${actual})`);
+						expectedJson = JSON.parse(`(${expected})`);
 					} catch (e) {
 						isJson = false;
 					}
@@ -121,7 +125,7 @@ module.exports = function spek() {
 			} else if (expected && !actual) {
 				msg.push(`Expected ${red(operator)} but got nothing\n`);
 			} else if (actual && !expected) {
-				msg.push(`Expected ${green("nothing")} but got ${red(actual)}\n`);
+				msg.push(`Expected ${green("falsy")} but got ${red(actual)}\n`);
 			} else if (expected && actual) {
 				msg.push(`Expected ${green(expected)} but got ${red(actual)}\n`);
 			} else if (operator === "fail") {
@@ -157,7 +161,7 @@ module.exports = function spek() {
 			output.push(failureSummary);
 
 			for (const fail of result.failures) {
-				output.push(`${pad(2)}${red("✖")} ${dim(`#${fail.id} ${fail.name}`)}\n`);
+				output.push(`${pad(2)}${FAIL} ${dim(`#${fail.id}`)} ${fail.name}\n`);
 			}
 		}
 
