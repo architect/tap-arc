@@ -21,15 +21,7 @@
       At: Test.<anonymous> (/test/create-mixed-tap.js:16:4)      
 
     ✖ #7 An Object failure
-      {
-        "a": 7,
-        "b": [
-          8,
-          12,
-          9
-        ]
-      }
-      
+      { a: 7, b: [ 812, 9 ] }
       At: Test.<anonymous> (/test/create-mixed-tap.js:17:4)      
 
 
@@ -112,5 +104,5 @@
   failing:   13
   skipped:   1
   todo:      2
-  1.278 s
+  1.381 s
 

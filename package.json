@@ -23,10 +23,7 @@
 	],
 	"scripts": {
 		"lint": "prettier --write .",
-		"snap:mixed": "npm run --silent spek:mixed > test/snapshots/mixed.txt",
-		"snap:object": "npm run --silent spek:object > test/snapshots/object.txt",
-		"snap:passing": "npm run --silent spek:passing > test/snapshots/passing.txt",
-		"snap:simple": "npm run --silent spek:simple > test/snapshots/simple.txt",
+		"make-snapshots": "node scripts/make-snapshots.js",
 		"spek:mixed": "npm run --silent tape:mixed | bin/tap-spek",
 		"spek:object": "npm run --silent tape:object | bin/tap-spek",
 		"spek:passing": "npm run --silent tape:passing | bin/tap-spek",

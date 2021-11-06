@@ -1,23 +1,7 @@
 
   Object deepEqual fail
     ✖ #1 Bros
-      {
-        "died": "10191 AG",
-        "house": "Atreides",
-        "name": "Paul Atreides",
-        "name": "Duncan Idaho",
-        "physical": {
-          "eyes": "hazel",
-          "hair": "black",
-          "height": 178
-          "eyes": "green",
-          "hair": "brown",
-          "height": 193
-        },
-        "title": "Duke"
-        "title": "Swordmaster"
-      }
-      
+      { name: 'PDuncauln AtreiIdesaho', title: 'DukSwordmaster', house: 'Atreides', physical: { eyes: 'hazgrelen', hair: 'blackrown', height: 17893 }, died: '10191 AG' }
       At: Test.<anonymous> (/test/create-object-tap.js:5:4)      
 
     ✖ #2 Not bros
@@ -33,5 +17,5 @@
 
   total:     2
   failing:   2
-  168 ms
+  265 ms
 

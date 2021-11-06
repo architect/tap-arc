@@ -13,16 +13,7 @@
       At: Test.<anonymous> (/test/create-simple-tap.js:17:4)      
 
     ✖ #7 An small object deepEqual failure
-      {
-        "a": "foo",
-        "a": "bar",
-        "b": [
-          11,
-          12,
-          9
-        ]
-      }
-      
+      { a: 'foobar', b: [ 112, 9 ] }
       At: Test.<anonymous> (/test/create-simple-tap.js:18:4)      
 
     > Large object diff: WIP
@@ -60,5 +51,5 @@
   failing:   5
   skipped:   1
   todo:      2
-  175 ms
+  269 ms
 

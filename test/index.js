@@ -1,7 +1,12 @@
 const { exec } = require("child_process");
 const fs = require("fs");
-const ansiRegex = require("./util/ansi-regex.js");
 const test = require("tape");
+const ansiRegex = require("./util/ansi-regex.js");
+const { scripts } = require("../package.json");
+
+const taps = Object.keys(scripts)
+	.filter((k) => k.indexOf("spek:") === 0)
+	.map((c) => c.split(":")[1]);
 
 function trimNLines(text, n) {
 	const lines = text.split("\n");
@@ -9,7 +14,7 @@ function trimNLines(text, n) {
 	return [lines.join("\n"), trimmed];
 }
 
-for (const snapshot of ["mixed", "object", "passing", "simple"]) {
+for (const snapshot of taps) {
 	test(`"${snapshot}" tap-spek output matches "${snapshot}" snapshot`, (t) => {
 		const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/${snapshot}.txt`);
 		const [trimmedSnapshot] = trimNLines(fullSnapshot.toString(), 3);
