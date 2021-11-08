@@ -15,7 +15,7 @@ test("Some failing tests", function (t) {
 	t.plan(4);
 
 	t.equal(7 * 8 + 10, 666);
-	t.equal("foo bar baz", "foobar baz");
+	t.equal("Bad dog", "Good dog");
 	t.match("atreides", /^A/, "Sub-test match fail");
 
 	t.test(function (st) {
@@ -25,8 +25,8 @@ test("Some failing tests", function (t) {
 			"Sub-test partial array failure"
 		);
 		st.deepEqual(
-			{ a: "foo", b: [11, 9], c: "foobar" },
-			{ a: "bar", b: [12, 9] },
+			{ a: "foo", b: [42], c: "baz" },
+			{ a: "bar", b: [42] },
 			"A small object deepEqual failure"
 		);
 		st.end();

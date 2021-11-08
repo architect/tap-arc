@@ -31,25 +31,28 @@ function prettyMs(start) {
 	return ms < 1000 ? `${ms} ms` : `${ms / 1000} s`;
 }
 
-function makeDiff(actual, expected) {
-	const diff = fastdiff(JSON.stringify(actual, null, "··"), JSON.stringify(expected, null, "··"));
+function makeDiff(actual, expected, indent = "  ") {
+	const diff = fastdiff(
+		JSON.stringify(actual, null, indent),
+		JSON.stringify(expected, null, indent)
+	);
 	const msg = [];
 
 	for (const part of diff) {
-		const str = part[1].split("\n");
+		const lines = part[1].split("\n");
 
-		if (part[0] === 1) msg.push(str.map((s) => `${black(bgGreen(s))}`).join("\n"));
-		else if (part[0] === -1) msg.push(str.map((s) => `${black(bgRed(s))}`).join("\n"));
-		else msg.push(str.map((s) => dim(s)).join("\n"));
+		if (part[0] === 1) msg.push(lines.map((s) => black(bgGreen(s))).join("\n"));
+		else if (part[0] === -1) msg.push(lines.map((s) => black(bgRed(s))).join("\n"));
+		else msg.push(lines.map((s) => s.replace(new RegExp(indent, "g"), dim(indent))).join("\n"));
 	}
 
 	return msg.join("").split(/\n/); // lines
 }
 
-module.exports = function spek(options = { spacer: "  " }) {
+module.exports = function spek(options = { indent: "··", spacer: "  " }) {
 	const start = Date.now();
 
-	let { spacer } = options;
+	let { indent, spacer } = options;
 	if (spacer === "dot") spacer = "··";
 
 	const tap = new Parser();
@@ -82,7 +85,7 @@ module.exports = function spek(options = { spacer: "  " }) {
 	});
 
 	tap.on("fail", (fail) => {
-		output.push(`${pad(2)}${FAIL} ${dim(`#${fail.id}`)} ${red(fail.name)}\n`);
+		output.push(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${red(fail.name)}\n`);
 
 		if (fail.diag) {
 			const { actual, at, expected, operator } = fail.diag;
@@ -101,15 +104,15 @@ module.exports = function spek(options = { spacer: "  " }) {
 					}
 
 					if (isJson) {
-						const objectDiff = makeDiff(actualJson, expectedJson);
+						const objectDiff = makeDiff(actualJson, expectedJson, indent);
 						msg = [...msg, ...objectDiff];
 					} else {
-						const stringDiff = makeDiff(actual, expected);
+						const stringDiff = makeDiff(actual, expected, indent);
 						msg = [...msg, ...stringDiff];
 					}
 				} else if (typeof expected === "object" && typeof actual === "object") {
 					// probably an array
-					const diff = makeDiff(actual, expected);
+					const diff = makeDiff(actual, expected, indent);
 					msg = [...msg, ...diff];
 				} else if (typeof expected === "number" || typeof actual === "number") {
 					msg.push(`Expected ${green(expected)} but got ${red(actual)}`);
@@ -153,9 +156,9 @@ module.exports = function spek(options = { spacer: "  " }) {
 
 			if (at) msg.push(`${dim(`At: ${at.replace(cwd, "")}`)}`);
 
-			msg = msg.map((line) => `${pad(3)}${line}\n`);
+			msg.push("");
 
-			msg.push("\n\n");
+			msg = msg.map((line) => `${pad(3)}${line}\n`);
 
 			output.push(msg.join(""));
 		}
@@ -175,7 +178,7 @@ module.exports = function spek(options = { spacer: "  " }) {
 			output.push(failureSummary);
 
 			for (const fail of result.failures) {
-				output.push(`${pad(2)}${FAIL} ${dim(`#${fail.id}`)} ${fail.name}\n`);
+				output.push(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${fail.name}\n`);
 			}
 		}
 
