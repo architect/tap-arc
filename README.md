@@ -42,7 +42,7 @@ When building `tap-spek`, it's helpful to try various TAP outputs. See `package.
 npm run spek:simple # used to create the screen shot above
 ```
 
-The main library is snapshot tested (`npm test` loads all snapshots to compare to current output). Create snapshots with the "snap:*" commands.
+The main library is snapshot tested (`npm test` loads all snapshots to compare to current output). Create snapshots with the `npm run make-snapshots` commands.
 
 ## Credit & Inspiration
 

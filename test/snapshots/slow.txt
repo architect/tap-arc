@@ -21,7 +21,7 @@
     > ------
     ✔ Slept 5s. Going to next group immediately
 
-  Nested todo tests
+  More nested tests
     ✔ 2 more immediate passing
     ✔ Then a line, then sleep 3s...
     > ------
@@ -31,5 +31,5 @@
 
   total:     14
   passing:   14
-  24.302 s
+  24.263 s
 

@@ -1,0 +1,42 @@
+
+  Object deepEqual fail
+    ✖ #1 Single dimension array failure
+      [
+      ··"foo",
+      ··"bar",
+      ··"foobar baz",
+      ··"thing"
+      ]
+      At: Test.<anonymous> (/test/create-diff-tap.js:4:4)
+
+
+    ✖ #2 A small object deepEqual failure
+      {
+      ··"a": "foobar",
+      ··"b": [
+      ····112,
+      ····9
+      ··],
+      ··"c": {
+      ····"foo": "bar"
+      ··}
+      }
+      At: Test.<anonymous> (/test/create-diff-tap.js:9:4)
+
+
+    ✖ #3 Object with fn deepEqual failure will be diffed as a string
+      "{ name: 'GDurneycan', house: 'Atreides', playfight: [Function: playfight] }"
+      At: Test.<anonymous> (/test/create-diff-tap.js:14:4)
+
+
+
+  Failed tests: There were 3 failures
+
+    ✖ #1 Single dimension array failure
+    ✖ #2 A small object deepEqual failure
+    ✖ #3 Object with fn deepEqual failure will be diffed as a string
+
+  total:     3
+  failing:   3
+  279 ms
+

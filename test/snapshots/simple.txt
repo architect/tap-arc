@@ -10,46 +10,59 @@
   Some failing tests
     ✖ #6 should be strictly equal
       Expected 666 but got 66
-      At: Test.<anonymous> (/test/create-simple-tap.js:17:4)      
+      At: Test.<anonymous> (/test/create-simple-tap.js:17:4)
 
-    ✖ #7 An small object deepEqual failure
-      { a: 'foobar', b: [ 112, 9 ] }
-      At: Test.<anonymous> (/test/create-simple-tap.js:18:4)      
 
-    > Large object diff: WIP
+    ✖ #7 should be strictly equal
+      "foo bar baz"
+      At: Test.<anonymous> (/test/create-simple-tap.js:18:4)
 
-  Nested tests
+
     ✖ #8 Sub-test match fail
       Expected atreides to match /^A/
-      At: Test.<anonymous> (/test/create-simple-tap.js:26:6)      
+      At: Test.<anonymous> (/test/create-simple-tap.js:19:4)
 
-    ✖ #9 An array failure
+
+
+  Nested tests
+    ✖ #9 Sub-test partial array failure
       [
-        "foo",
-        "bar",
-        "baz"
-        "foobar baz"
+      ··"foo",
+      ··"bar",
+      ··"foobar baz"
       ]
-      
-      At: Test.<anonymous> (/test/create-simple-tap.js:27:6)      
+      At: Test.<anonymous> (/test/create-simple-tap.js:22:6)
 
 
-  TODO Nested todo tests
+    ✖ #10 A small object deepEqual failure
+      {
+      ··"a": "foobar",
+      ··"b": [
+      ····112,
+      ····9
+      ··],
+      ··"c": "foobar"
+      }
+      At: Test.<anonymous> (/test/create-simple-tap.js:27:6)
+
+
+
+  TODO Some tests marked as "todo"
     TODO Passing TODOs are yellow
     TODO Failing TODOs are red
 
-
-  Failed tests: There were 5 failures
+  Failed tests: There were 6 failures
 
     ✖ #6 should be strictly equal
-    ✖ #7 An small object deepEqual failure
+    ✖ #7 should be strictly equal
     ✖ #8 Sub-test match fail
-    ✖ #9 An array failure
+    ✖ #9 Sub-test partial array failure
+    ✖ #10 A small object deepEqual failure
 
-  total:     11
+  total:     12
   passing:   6
-  failing:   5
+  failing:   6
   skipped:   1
   todo:      2
-  269 ms
+  282 ms
 

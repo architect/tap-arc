@@ -58,5 +58,5 @@ test("Some nested sleepy tests", async function (t) {
 
 		st.pass("Slept 5s. Going to next group immediately");
 		st.end();
-	}, "Nested todo tests");
+	}, "More nested tests");
 });
