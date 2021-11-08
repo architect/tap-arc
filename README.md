@@ -13,6 +13,8 @@
 
 ## Installation & Usage
 
+> Requires Node.js 14+
+
 For a JavaScript project, save `tap-spek` as a development dependency:
 
 ```sh
@@ -30,6 +32,12 @@ Example `npm test` script:
 ```
 
 > 💁  `tap-spek` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
+
+Alternatively, use `tap-spek` globally:
+
+```sh
+npm i -g tap-spek
+```
 
 ### `tap-spek --help`
 
