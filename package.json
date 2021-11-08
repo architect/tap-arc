@@ -6,11 +6,10 @@
 	"license": "ISC",
 	"main": "index.js",
 	"bin": {
-		"tap-spek": "bin/tap-spek"
+		"tap-spek": "index.js"
 	},
 	"files": [
-		"index.js",
-		"bin/tap-spek"
+		"index.js"
 	],
 	"repository": "tbeseda/tap-spek",
 	"keywords": [
@@ -24,20 +23,19 @@
 	"scripts": {
 		"lint": "prettier --write .",
 		"make-snapshots": "node scripts/make-snapshots.js",
-		"spek:mixed": "npm run --silent tape:mixed | bin/tap-spek",
-		"spek:diff": "npm run --silent tape:diff | bin/tap-spek",
-		"spek:passing": "npm run --silent tape:passing | bin/tap-spek",
-		"spek:simple": "npm run --silent tape:simple | bin/tap-spek",
-		"spek:slow": "npm run --silent tape:slow | bin/tap-spek",
+		"spek:mixed": "npm run --silent tape:mixed | ./index.js",
+		"spek:diff": "npm run --silent tape:diff | ./index.js",
+		"spek:passing": "npm run --silent tape:passing | ./index.js",
+		"spek:simple": "npm run --silent tape:simple | ./index.js",
+		"spek:slow": "npm run --silent tape:slow | ./index.js",
 		"tape:mixed": "tape test/create-mixed-tap.js",
 		"tape:diff": "tape test/create-diff-tap.js",
 		"tape:passing": "tape test/create-passing-tap.js",
 		"tape:simple": "tape test/create-simple-tap.js",
 		"tape:slow": "tape test/create-slow-tap.js",
-		"test": "tape test/index.js | bin/tap-spek"
+		"test": "tape test/index.js | ./index.js"
 	},
 	"dependencies": {
-		"duplexify": "^4.1.2",
 		"fast-diff": "^1.2.0",
 		"json5": "^2.2.0",
 		"picocolors": "^1.0.0",
