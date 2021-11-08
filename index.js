@@ -50,17 +50,85 @@ function makeDiff(actual, expected, indent = "  ") {
 	return msg.join("").split(/\n/); // lines
 }
 
-const options = { indent: "··", spacer: "  " };
+function usage() {
+	console.log(`
+Usage:
+  tap-spek <options>
 
-const start = Date.now();
+Parses TAP data from stdin, and outputs a "spec-like" formatted result.
 
-let { indent, spacer } = options;
-if (spacer === "dot") spacer = "··";
+Options:
 
-const parser = new Parser();
+	-v | --verbose
+		Output full stack trace
+
+	-p | --pessimistic | --bail
+		Immediately exit upon encountering a failure
+		example: tap-spek -p
+
+	--padding [space, dot, <custom characters>]
+		String to use when padding output (default="  ")
+		example: tap-spek --padding "••"
+		example: tap-spek --padding dot
+
+	--indent [space, dot, <custom characters>]
+		String to use when indenting Object diffs (default="··")
+		example: tap-spek --indent ">>"
+		example: tap-spek --indent space
+	`);
+	process.exit();
+}
+
+const options = { pessimistic: false, verbose: false, indent: "··", padding: "  " };
+const args = process.argv.slice(2);
+
+for (let i = 0; i < args.length; i++) {
+	const arg = args[i];
+
+	if (arg === "-v" || arg === "--verbose") options.verbose = true;
+	else if (arg === "-p" || arg === "--pessimistic" || arg === "--bail") options.pessimistic = true;
+	else if (arg === "-h" || arg === "--help") usage();
+	else if (arg === "--indent") {
+		let val = args[i + 1];
+		switch (val) {
+			case "dot":
+				options.indent = "··";
+				break;
+			case "space":
+				options.indent = "  ";
+				break;
+			default:
+				options.indent = val;
+				break;
+		}
+		i += 1;
+	} else if (arg === "--padding") {
+		let val = args[i + 1];
+		switch (val) {
+			case "dot":
+				options.padding = "··";
+				break;
+			case "space":
+				options.padding = "  ";
+				break;
+			default:
+				options.padding = val;
+				break;
+		}
+		i += 1;
+	} else {
+		console.error(`Unrecognized arg: ${arg}`);
+		process.exit(1);
+	}
+}
+
+let { indent, pessimistic, padding, verbose } = options;
+
+const parser = new Parser({ bail: pessimistic });
 const tapSpek = through();
-const pad = createPad(spacer);
+const pad = createPad(padding);
 const cwd = process.cwd();
+const start = Date.now();
 
 parser.on("pass", (pass) => {
 	tapSpek.push(`${pad(2)}${OKAY} ${dim(pass.name)}\n`);
@@ -89,7 +157,7 @@ parser.on("fail", (fail) => {
 	tapSpek.push(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${red(fail.name)}\n`);
 
 	if (fail.diag) {
-		const { actual, at, expected, operator } = fail.diag;
+		const { actual, at, expected, operator, stack } = fail.diag;
 		let msg = [];
 
 		if (["equal", "deepEqual"].includes(operator)) {
@@ -157,6 +225,13 @@ parser.on("fail", (fail) => {
 
 		if (at) msg.push(`${dim(`At: ${at.replace(cwd, "")}`)}`);
 
+		if (verbose && stack) {
+			msg.push("");
+			stack.split("\n").forEach((s) => {
+				msg.push(dim(s.trim().replace(cwd, "")));
+			});
+		}
+
 		msg.push("");
 
 		msg = msg.map((line) => `${pad(3)}${line}\n`);
@@ -185,7 +260,7 @@ parser.on("complete", (result) => {
 	if (result.fail > 0) tapSpek.push(red(`${pad()}failing:   ${result.fail}\n`));
 	if (result.skip > 0) tapSpek.push(`${pad()}skipped:   ${result.skip}\n`);
 	if (result.todo > 0) tapSpek.push(`${pad()}todo:      ${result.todo}\n`);
-	if (result.bailout) tapSpek.push(`${pad()}${bold(underline(red("BAILED")))}!\n`);
+	if (result.bailout) tapSpek.push(`${pad()}${bold(underline(red("BAILED!")))}\n`);
 
 	tapSpek.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`);
 

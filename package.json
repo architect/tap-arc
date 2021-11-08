@@ -27,12 +27,14 @@
 		"spek:diff": "npm run --silent tape:diff | ./index.js",
 		"spek:passing": "npm run --silent tape:passing | ./index.js",
 		"spek:simple": "npm run --silent tape:simple | ./index.js",
-		"spek:slow": "npm run --silent tape:slow | ./index.js",
+		"spek:simple:-p": "npm run --silent tape:simple | ./index.js -p",
+		"spek:simple:-v": "npm run --silent tape:simple | ./index.js -v",
 		"tape:mixed": "tape test/create-mixed-tap.js",
 		"tape:diff": "tape test/create-diff-tap.js",
 		"tape:passing": "tape test/create-passing-tap.js",
 		"tape:simple": "tape test/create-simple-tap.js",
-		"tape:slow": "tape test/create-slow-tap.js",
+		"tape:slow-pass": "tape test/create-slow-passing-tap.js",
+		"slow": "npm run --silent tape:slow-pass | ./index.js",
 		"test": "tape test/index.js | ./index.js"
 	},
 	"dependencies": {

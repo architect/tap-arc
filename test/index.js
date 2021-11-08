@@ -4,9 +4,9 @@ const test = require("tape");
 const ansiRegex = require("./util/ansi-regex.js");
 const { scripts } = require("../package.json");
 
-const taps = Object.keys(scripts)
+const commands = Object.keys(scripts)
 	.filter((k) => k.indexOf("spek:") === 0)
-	.map((c) => c.split(":")[1]);
+	.map((c) => c.split(":").slice(1));
 
 function trimNLines(text, n) {
 	const lines = text.split("\n");
@@ -14,21 +14,27 @@ function trimNLines(text, n) {
 	return [lines.join("\n"), trimmed];
 }
 
-for (const snapshot of taps) {
-	test(`"${snapshot}" tap-spek output matches "${snapshot}" snapshot`, (t) => {
-		const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/${snapshot}.txt`);
+for (const c of commands) {
+	const [command, flags = ""] = c;
+	const name = `${command}${flags ? ` ${flags}` : ""}`;
+
+	test(`"${name}" tap-spek output matches "${name}" snapshot`, (t) => {
+		const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/${command}${flags}.txt`);
 		const [trimmedSnapshot] = trimNLines(fullSnapshot.toString(), 3);
 
 		exec(
-			`node ${__dirname}/create-${snapshot}-tap.js | ${__dirname}/../index.js`,
+			`node ${__dirname}/create-${command}-tap.js | ${__dirname}/../index.js ${flags}`,
 			(error, stdout, stderr) => {
 				const strippedOut = stdout.replace(ansiRegex(), "");
 				const [trimmedOut, durationLines] = trimNLines(strippedOut, 3);
 
-				if (error) t.equal(error.code, 1, `exit code 1 for "${snapshot}" tests`);
 				t.notOk(stderr, "stderr should be empty");
 				t.equal(trimmedOut, trimmedSnapshot, "output matches snapshot");
 				t.match(durationLines.join(""), /[0-9]+\s[ms|s]/, "contains a duration");
+
+				if (command.indexOf("pass") < 0)
+					// expect exit code == 1 unless named with "pass"
+					t.equal(error?.code, 1, `exit code 1 for "${name}" tests`);
 
 				t.end();
 			}
