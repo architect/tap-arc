@@ -20,7 +20,7 @@ for (const snapshot of taps) {
 		const [trimmedSnapshot] = trimNLines(fullSnapshot.toString(), 3);
 
 		exec(
-			`node ${__dirname}/create-${snapshot}-tap.js | ${__dirname}/../bin/tap-spek`,
+			`node ${__dirname}/create-${snapshot}-tap.js | ${__dirname}/../index.js`,
 			(error, stdout, stderr) => {
 				const strippedOut = stdout.replace(ansiRegex(), "");
 				const [trimmedOut, durationLines] = trimNLines(strippedOut, 3);
@@ -38,7 +38,7 @@ for (const snapshot of taps) {
 
 test("passing tests do not error", (t) => {
 	exec(
-		`node ${__dirname}/create-passing-tap.js | ${__dirname}/../bin/tap-spek`,
+		`node ${__dirname}/create-passing-tap.js | ${__dirname}/../index.js`,
 		(error, stdout, stderr) => {
 			const strippedOut = stdout.replace(ansiRegex(), "");
 			t.notOk(error, "error should be undefined");

@@ -166,8 +166,6 @@ parser.on("fail", (fail) => {
 });
 
 parser.on("complete", (result) => {
-	// stream.ok = result.ok;
-
 	if (!result.ok && result.fail > 0) {
 		let failureSummary = "\n";
 		failureSummary += `${pad()}${red("Failed tests:")}`;
@@ -190,7 +188,8 @@ parser.on("complete", (result) => {
 	if (result.bailout) tapSpek.push(`${pad()}${bold(underline(red("BAILED")))}!\n`);
 
 	tapSpek.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`);
-	process.exit(parser.ok ? 0 : 1);
+
+	process.exit(result.ok ? 0 : 1);
 });
 
 process.stdin.pipe(parser).pipe(tapSpek).pipe(process.stdout);
