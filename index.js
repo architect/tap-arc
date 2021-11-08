@@ -59,25 +59,27 @@ Parses TAP data from stdin, and outputs a "spec-like" formatted result.
 
 Options:
 
-	-v | --verbose
+	-v | --verbose | --bail
 		Output full stack trace
 
 	-p | --pessimistic
 		Immediately exit upon encountering a failure
 		example: tap-spek -p
 
-	--spacer [space, dot, <custom characters>]
+	--padding [space, dot, <custom characters>]
 		String to use when padding output (default="  ")
-		example: tap-spek --spacer "••"
+		example: tap-spek --padding "••"
+		example: tap-spek --padding dot
 
 	--indent [space, dot, <custom characters>]
 		String to use when indenting Object diffs (default="··")
 		example: tap-spek --indent ">>"
+		example: tap-spek --indent space
 	`);
 	process.exit();
 }
 
-const options = { pessimistic: false, verbose: false, indent: "··", spacer: "  " };
+const options = { pessimistic: false, verbose: false, indent: "··", padding: "  " };
 const args = process.argv.slice(2);
 
 for (let i = 0; i < args.length; i++) {
@@ -100,17 +102,17 @@ for (let i = 0; i < args.length; i++) {
 				break;
 		}
 		i += 1;
-	} else if (arg === "--spacer") {
+	} else if (arg === "--padding") {
 		let val = args[i + 1];
 		switch (val) {
 			case "dot":
-				options.spacer = "··";
+				options.padding = "··";
 				break;
 			case "space":
-				options.spacer = "  ";
+				options.padding = "  ";
 				break;
 			default:
-				options.spacer = val;
+				options.padding = val;
 				break;
 		}
 		i += 1;
@@ -120,11 +122,11 @@ for (let i = 0; i < args.length; i++) {
 	}
 }
 
-let { indent, pessimistic, spacer, verbose } = options;
+let { indent, pessimistic, padding, verbose } = options;
 
 const parser = new Parser({ bail: pessimistic });
 const tapSpek = through();
-const pad = createPad(spacer);
+const pad = createPad(padding);
 const cwd = process.cwd();
 const start = Date.now();
 
@@ -258,7 +260,7 @@ parser.on("complete", (result) => {
 	if (result.fail > 0) tapSpek.push(red(`${pad()}failing:   ${result.fail}\n`));
 	if (result.skip > 0) tapSpek.push(`${pad()}skipped:   ${result.skip}\n`);
 	if (result.todo > 0) tapSpek.push(`${pad()}todo:      ${result.todo}\n`);
-	if (result.bailout) tapSpek.push(`${pad()}${bold(underline(red("BAILED")))}!\n`);
+	if (result.bailout) tapSpek.push(`${pad()}${bold(underline(red("BAILED!")))}\n`);
 
 	tapSpek.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`);
 

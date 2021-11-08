@@ -1,6 +1,6 @@
 # `tap-spek`
 
-> A small (~10kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
+> A small (~12kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
 
 ## Objectives
 
@@ -30,6 +30,34 @@ Example `npm test` script:
 ```
 
 > 💁  `tap-spek` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
+
+### `tap-spek --help`
+
+```sh
+Usage:
+  tap-spek <options>
+
+Parses TAP data from stdin, and outputs a "spec-like" formatted result.
+
+Options:
+
+	-v | --verbose | --bail
+		Output full stack trace
+
+	-p | --pessimistic
+		Immediately exit upon encountering a failure
+		example: tap-spek -p
+
+	--padding [space, dot, <custom characters>]
+		String to use when padding output (default="  ")
+		example: tap-spek --padding "••"
+		example: tap-spek --padding dot
+
+	--indent [space, dot, <custom characters>]
+		String to use when indenting Object diffs (default="··")
+		example: tap-spek --indent ">>"
+		example: tap-spek --indent space
+```
 
 ## Development
 
