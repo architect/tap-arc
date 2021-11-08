@@ -41,10 +41,10 @@ Parses TAP data from stdin, and outputs a "spec-like" formatted result.
 
 Options:
 
-	-v | --verbose | --bail
+	-v | --verbose
 		Output full stack trace
 
-	-p | --pessimistic
+	-p | --pessimistic | --bail
 		Immediately exit upon encountering a failure
 		example: tap-spek -p
 
