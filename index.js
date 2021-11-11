@@ -33,13 +33,26 @@ function prettyMs(start) {
 }
 
 function makeDiff(actual, expected, indent = "  ") {
+	let msg = [];
+	let isJson = true;
+	let actualJson = actual;
+	let expectedJson = expected;
+
+	try {
+		actualJson = JSON5.parse(actual);
+		expectedJson = JSON5.parse(expected);
+	} catch (e) {
+		isJson = false;
+	}
+
 	const diff = fastdiff(
-		JSON.stringify(actual, null, indent),
-		JSON.stringify(expected, null, indent)
+		JSON.stringify(isJson ? actualJson : actual, null, indent),
+		JSON.stringify(isJson ? expectedJson : expected, null, indent)
 	);
-	const msg = [];
 
 	for (const part of diff) {
+		// the diff objects can span lines
+		// separate lines before styling for tidier output
 		const lines = part[1].split("\n");
 
 		if (part[0] === 1) msg.push(lines.map((s) => black(bgGreen(s))).join("\n"));
@@ -47,7 +60,7 @@ function makeDiff(actual, expected, indent = "  ") {
 		else msg.push(lines.map((s) => s.replace(new RegExp(indent, "g"), dim(indent))).join("\n"));
 	}
 
-	return msg.join("").split(/\n/); // lines
+	return msg.join("").split(/\n/); // as separate lines
 }
 
 function usage() {
@@ -148,9 +161,9 @@ parser.on("comment", (comment) => {
 		tapSpek.push(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ""))}\n`);
 });
 
-parser.on("todo", (t) => {
-	if (t.ok) tapSpek.push(`${pad(2)}${yellow("TODO")} ${dim(t.name)}\n`);
-	else tapSpek.push(`${pad(2)}${red("TODO")} ${dim(t.name)}\n`);
+parser.on("todo", (todo) => {
+	if (todo.ok) tapSpek.push(`${pad(2)}${yellow("TODO")} ${dim(todo.name)}\n`);
+	else tapSpek.push(`${pad(2)}${red("TODO")} ${dim(todo.name)}\n`);
 });
 
 parser.on("fail", (fail) => {
@@ -158,31 +171,14 @@ parser.on("fail", (fail) => {
 
 	if (fail.diag) {
 		const { actual, at, expected, operator, stack } = fail.diag;
-		let msg = [];
+		let msg = []; // individual lines of output
 
 		if (["equal", "deepEqual"].includes(operator)) {
 			if (typeof expected === "string" && typeof actual === "string") {
-				let isJson = true;
-				let actualJson = actual;
-				let expectedJson = expected;
-				try {
-					actualJson = JSON5.parse(actual);
-					expectedJson = JSON5.parse(expected);
-				} catch (e) {
-					isJson = false;
-				}
-
-				if (isJson) {
-					const objectDiff = makeDiff(actualJson, expectedJson, indent);
-					msg = [...msg, ...objectDiff];
-				} else {
-					const stringDiff = makeDiff(actual, expected, indent);
-					msg = [...msg, ...stringDiff];
-				}
+				msg = [...msg, ...makeDiff(actual, expected, indent)];
 			} else if (typeof expected === "object" && typeof actual === "object") {
 				// probably an array
-				const diff = makeDiff(actual, expected, indent);
-				msg = [...msg, ...diff];
+				msg = [...msg, ...makeDiff(actual, expected, indent)];
 			} else if (typeof expected === "number" || typeof actual === "number") {
 				msg.push(`Expected ${green(expected)} but got ${red(actual)}`);
 			} else {
@@ -234,6 +230,7 @@ parser.on("fail", (fail) => {
 
 		msg.push("");
 
+		// final formatting, each entry must be a single line
 		msg = msg.map((line) => `${pad(3)}${line}\n`);
 
 		tapSpek.push(msg.join(""));
@@ -241,7 +238,7 @@ parser.on("fail", (fail) => {
 });
 
 parser.on("complete", (result) => {
-	if (!result.ok && result.fail > 0) {
+	if (!result.ok) {
 		let failureSummary = "\n";
 		failureSummary += `${pad()}${red("Failed tests:")}`;
 		failureSummary += ` There ${result.fail > 1 ? "were" : "was"} `;
