@@ -7,7 +7,7 @@
       ··"foobar baz",
       ··"thing"
       ]
-      At: Test.<anonymous> (/test/create-diff-tap.js:4:4)
+      At: Test.<anonymous> (/test/create-diff-tap.js:4:5)
       
     ✖ 2) A small object deepEqual failure
       {
@@ -20,11 +20,11 @@
       ····"foo": "bar"
       ··}
       }
-      At: Test.<anonymous> (/test/create-diff-tap.js:9:4)
+      At: Test.<anonymous> (/test/create-diff-tap.js:9:5)
       
     ✖ 3) Object with fn deepEqual failure will be diffed as a string
       "{ name: 'GDurneycan', house: 'Atreides', playfight: [Function: playfight] }"
-      At: Test.<anonymous> (/test/create-diff-tap.js:14:4)
+      At: Test.<anonymous> (/test/create-diff-tap.js:14:5)
       
 
   Failed tests: There were 3 failures
@@ -35,5 +35,5 @@
 
   total:     3
   failing:   3
-  267 ms
+  625 ms
 

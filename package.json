@@ -1,58 +1,56 @@
 {
-	"name": "tap-spek",
-	"description": "spec-like TAP reporter",
-	"author": "tbeseda",
-	"version": "0.0.11",
-	"license": "ISC",
-	"main": "index.js",
-	"bin": {
-		"tap-spek": "index.js"
-	},
-	"files": [
-		"index.js"
-	],
-	"repository": "tbeseda/tap-spek",
-	"keywords": [
-		"test",
-		"tap",
-		"spec",
-		"tap-spec",
-		"tape",
-		"reporter"
-	],
-	"scripts": {
-		"lint": "prettier --write .",
-		"make-snapshots": "node scripts/make-snapshots.js",
-		"spek:mixed": "npm run --silent tape:mixed | ./index.js",
-		"spek:diff": "npm run --silent tape:diff | ./index.js",
-		"spek:passing": "npm run --silent tape:passing | ./index.js",
-		"spek:simple": "npm run --silent tape:simple | ./index.js",
-		"spek:simple:-p": "npm run --silent tape:simple | ./index.js -p",
-		"spek:simple:-v": "npm run --silent tape:simple | ./index.js -v",
-		"tape:mixed": "tape test/create-mixed-tap.js",
-		"tape:diff": "tape test/create-diff-tap.js",
-		"tape:passing": "tape test/create-passing-tap.js",
-		"tape:simple": "tape test/create-simple-tap.js",
-		"tape:slow-pass": "tape test/create-slow-passing-tap.js",
-		"slow": "npm run --silent tape:slow-pass | ./index.js",
-		"test": "tape test/index.js | ./index.js"
-	},
-	"dependencies": {
-		"fast-diff": "^1.2.0",
-		"json5": "^2.2.0",
-		"picocolors": "^1.0.0",
-		"tap-parser": "^10.1.0",
-		"through2": "^4.0.2"
-	},
-	"devDependencies": {
-		"@types/duplexify": "^3.6.0",
-		"@types/node": "^16.11.6",
-		"prettier": "^2.4.1",
-		"tape": "^5.3.1"
-	},
-	"prettier": {
-		"tabWidth": 2,
-		"useTabs": true,
-		"printWidth": 100
-	}
+  "name": "tap-spek",
+  "description": "spec-like TAP reporter",
+  "author": "tbeseda",
+  "version": "0.0.11",
+  "license": "ISC",
+  "main": "index.js",
+  "bin": {
+    "tap-spek": "index.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "repository": "tbeseda/tap-spek",
+  "keywords": [
+    "test",
+    "tap",
+    "spec",
+    "tap-spec",
+    "tape",
+    "reporter"
+  ],
+  "scripts": {
+    "lint": "eslint . --fix",
+    "make-snapshots": "node scripts/make-snapshots.js",
+    "spek:mixed": "npm run --silent tape:mixed | ./index.js",
+    "spek:diff": "npm run --silent tape:diff | ./index.js",
+    "spek:passing": "npm run --silent tape:passing | ./index.js",
+    "spek:simple": "npm run --silent tape:simple | ./index.js",
+    "spek:simple:-p": "npm run --silent tape:simple | ./index.js -p",
+    "spek:simple:-v": "npm run --silent tape:simple | ./index.js -v",
+    "tape:mixed": "tape test/create-mixed-tap.js",
+    "tape:diff": "tape test/create-diff-tap.js",
+    "tape:passing": "tape test/create-passing-tap.js",
+    "tape:simple": "tape test/create-simple-tap.js",
+    "tape:slow-pass": "tape test/create-slow-passing-tap.js",
+    "slow": "npm run --silent tape:slow-pass | ./index.js",
+    "test": "npm run lint && tape test/index.js | ./index.js"
+  },
+  "dependencies": {
+    "fast-diff": "^1.2.0",
+    "json5": "^2.2.0",
+    "picocolors": "^1.0.0",
+    "tap-parser": "^10.1.0",
+    "through2": "^4.0.2"
+  },
+  "devDependencies": {
+    "@architect/eslint-config": "^2.0.1",
+    "@types/node": "^16.11.6",
+    "eslint": "^8.2.0",
+    "tape": "^5.3.1"
+  },
+  "eslintConfig": {
+    "extends": "@architect/eslint-config"
+  }
 }
