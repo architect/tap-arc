@@ -1,4 +1,4 @@
-> ⚠️  In transition from "tap-arc" to "tap-arc"
+> ⚠️  In transition from "tap-spek" to "tap-arc"
 
 # `tap-arc`
 
