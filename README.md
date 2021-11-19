@@ -1,5 +1,3 @@
-> ⚠️  In transition from "tap-spek" to "tap-arc"
-
 # `tap-arc`
 
 > A small (~12kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
@@ -74,10 +72,10 @@ Options:
 The bulk of the lib lives in `./index.js`.  
 `./bin/tap-arc` pipes stdin (from a TAP reporter) to `tap-arc` and then to stdout. The bin also handles exit code for a failing run.
 
-When building `tap-arc`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "spek:*" commands to test passing and failing TAP.
+When building `tap-arc`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "tap-arc:*" commands to test passing and failing TAP.
 
 ```sh
-npm run spek:simple # used to create the screen shot above
+npm run tap-arc:simple # used to create the screen shot above
 ```
 
 The main library is snapshot tested (`npm test` loads all snapshots to compare to current output). Create snapshots with the `npm run make-snapshots` commands.

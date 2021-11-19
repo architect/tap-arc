@@ -67,7 +67,7 @@ function makeDiff (actual, expected, indent = '  ') {
 function usage () {
   console.log(`
 Usage:
-  tap-spek <options>
+  tap-arc <options>
 
 Parses TAP data from stdin, and outputs a "spec-like" formatted result.
 
@@ -78,17 +78,17 @@ Options:
 
 	-p | --pessimistic | --bail
 		Immediately exit upon encountering a failure
-		example: tap-spek -p
+		example: tap-arc -p
 
 	--padding [space, dot, <custom characters>]
 		String to use when padding output (default="  ")
-		example: tap-spek --padding "••"
-		example: tap-spek --padding dot
+		example: tap-arc --padding "••"
+		example: tap-arc --padding dot
 
 	--indent [space, dot, <custom characters>]
 		String to use when indenting Object diffs (default="··")
-		example: tap-spek --indent ">>"
-		example: tap-spek --indent space
+		example: tap-arc --indent ">>"
+		example: tap-arc --indent space
 	`)
   process.exit()
 }
@@ -141,36 +141,36 @@ for (let i = 0; i < args.length; i++) {
 let { indent, pessimistic, padding, verbose } = options
 
 const parser = new Parser({ bail: pessimistic })
-const tapSpek = through()
+const tapArc = through()
 const pad = createPad(padding)
 const cwd = process.cwd()
 const start = Date.now()
 
 parser.on('pass', (pass) => {
-  tapSpek.push(`${pad(2)}${OKAY} ${dim(pass.name)}\n`)
+  tapArc.push(`${pad(2)}${OKAY} ${dim(pass.name)}\n`)
 })
 
 parser.on('skip', (skip) => {
-  tapSpek.push(`${pad(2)}${dim(`SKIP ${skip.name}`)}\n`)
+  tapArc.push(`${pad(2)}${dim(`SKIP ${skip.name}`)}\n`)
 })
 
 parser.on('extra', (extra) => {
-  if (extra.trim().length > 0) tapSpek.push(`${pad(2)}${yellow(`> ${extra}`)}`)
+  if (extra.trim().length > 0) tapArc.push(`${pad(2)}${yellow(`> ${extra}`)}`)
 })
 
 parser.on('comment', (comment) => {
   // Log test-group name
   if (!RESULT_COMMENTS.some((c) => comment.startsWith(c, 2)))
-    tapSpek.push(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ''))}\n`)
+    tapArc.push(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ''))}\n`)
 })
 
 parser.on('todo', (todo) => {
-  if (todo.ok) tapSpek.push(`${pad(2)}${yellow('TODO')} ${dim(todo.name)}\n`)
-  else tapSpek.push(`${pad(2)}${red('TODO')} ${dim(todo.name)}\n`)
+  if (todo.ok) tapArc.push(`${pad(2)}${yellow('TODO')} ${dim(todo.name)}\n`)
+  else tapArc.push(`${pad(2)}${red('TODO')} ${dim(todo.name)}\n`)
 })
 
 parser.on('fail', (fail) => {
-  tapSpek.push(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${red(fail.name)}\n`)
+  tapArc.push(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${red(fail.name)}\n`)
 
   if (fail.diag) {
     const { actual, at, expected, operator, stack } = fail.diag
@@ -252,7 +252,7 @@ parser.on('fail', (fail) => {
     // final formatting, each entry must be a single line
     msg = msg.map((line) => `${pad(3)}${line}\n`)
 
-    tapSpek.push(msg.join(''))
+    tapArc.push(msg.join(''))
   }
 })
 
@@ -264,23 +264,23 @@ parser.on('complete', (result) => {
     failureSummary += red(result.fail)
     failureSummary += ` failure${result.fail > 1 ? 's' : ''}\n\n`
 
-    tapSpek.push(failureSummary)
+    tapArc.push(failureSummary)
 
     for (const fail of result.failures) {
-      tapSpek.push(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${fail.name}\n`)
+      tapArc.push(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${fail.name}\n`)
     }
   }
 
-  tapSpek.push(`\n${pad()}total:     ${result.count}\n`)
-  if (result.pass > 0) tapSpek.push(green(`${pad()}passing:   ${result.pass}\n`))
-  if (result.fail > 0) tapSpek.push(red(`${pad()}failing:   ${result.fail}\n`))
-  if (result.skip > 0) tapSpek.push(`${pad()}skipped:   ${result.skip}\n`)
-  if (result.todo > 0) tapSpek.push(`${pad()}todo:      ${result.todo}\n`)
-  if (result.bailout) tapSpek.push(`${pad()}${bold(underline(red('BAILED!')))}\n`)
+  tapArc.push(`\n${pad()}total:     ${result.count}\n`)
+  if (result.pass > 0) tapArc.push(green(`${pad()}passing:   ${result.pass}\n`))
+  if (result.fail > 0) tapArc.push(red(`${pad()}failing:   ${result.fail}\n`))
+  if (result.skip > 0) tapArc.push(`${pad()}skipped:   ${result.skip}\n`)
+  if (result.todo > 0) tapArc.push(`${pad()}todo:      ${result.todo}\n`)
+  if (result.bailout) tapArc.push(`${pad()}${bold(underline(red('BAILED!')))}\n`)
 
-  tapSpek.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`)
+  tapArc.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`)
 
   process.exit(result.ok ? 0 : 1)
 })
 
-process.stdin.pipe(parser).pipe(tapSpek).pipe(process.stdout)
+process.stdin.pipe(parser).pipe(tapArc).pipe(process.stdout)
