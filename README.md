@@ -41,7 +41,7 @@ npm i -g tap-arc
 
 ### `tap-arc --help`
 
-```sh
+```
 Usage:
   tap-arc <options>
 
