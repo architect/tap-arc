@@ -1,4 +1,6 @@
-# `tap-spek`
+> ⚠️  In transition from "tap-arc" to "tap-arc"
+
+# `tap-arc`
 
 > A small (~12kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
 
@@ -9,41 +11,41 @@
 - streaming in and out
 - helpful diffing for failures
 
-![tap-spek output screen shot](./screen-shot.png)
+![tap-arc output screen shot](./screen-shot.png)
 
 ## Installation & Usage
 
 > Requires Node.js 14+
 
-For a JavaScript project, save `tap-spek` as a development dependency:
+For a JavaScript project, save `tap-arc` as a development dependency:
 
 ```sh
-npm i -D tap-spek
+npm i -D tap-arc
 ```
 
-Simply pipe tap output to `tap-spek`.  
+Simply pipe tap output to `tap-arc`.  
 Example `npm test` script:
 
 ```js
 // package.json
 "scripts": {
-  "test": "tape test/**/*.js | tap-spek"
+  "test": "tape test/**/*.js | tap-arc"
 }
 ```
 
-> 💁  `tap-spek` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
+> 💁  `tap-arc` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
 
-Alternatively, use `tap-spek` globally:
+Alternatively, use `tap-arc` globally:
 
 ```sh
-npm i -g tap-spek
+npm i -g tap-arc
 ```
 
-### `tap-spek --help`
+### `tap-arc --help`
 
 ```sh
 Usage:
-  tap-spek <options>
+  tap-arc <options>
 
 Parses TAP data from stdin, and outputs a "spec-like" formatted result.
 
@@ -54,25 +56,25 @@ Options:
 
 	-p | --pessimistic | --bail
 		Immediately exit upon encountering a failure
-		example: tap-spek -p
+		example: tap-arc -p
 
 	--padding [space, dot, <custom characters>]
 		String to use when padding output (default="  ")
-		example: tap-spek --padding "••"
-		example: tap-spek --padding dot
+		example: tap-arc --padding "••"
+		example: tap-arc --padding dot
 
 	--indent [space, dot, <custom characters>]
 		String to use when indenting Object diffs (default="··")
-		example: tap-spek --indent ">>"
-		example: tap-spek --indent space
+		example: tap-arc --indent ">>"
+		example: tap-arc --indent space
 ```
 
 ## Development
 
 The bulk of the lib lives in `./index.js`.  
-`./bin/tap-spek` pipes stdin (from a TAP reporter) to `tap-spek` and then to stdout. The bin also handles exit code for a failing run.
+`./bin/tap-arc` pipes stdin (from a TAP reporter) to `tap-arc` and then to stdout. The bin also handles exit code for a failing run.
 
-When building `tap-spek`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "spek:*" commands to test passing and failing TAP.
+When building `tap-arc`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "spek:*" commands to test passing and failing TAP.
 
 ```sh
 npm run spek:simple # used to create the screen shot above
