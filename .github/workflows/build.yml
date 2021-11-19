@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         node-version: [ 14.x ] # TODO: add Node 16
-        os: [ windows-latest, ubuntu-latest, macOS-latest ]
+        os: [ ubuntu-latest, macOS-latest ] # TODO: add windows-latest
 
     # Go
     steps:
