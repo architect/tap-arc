@@ -3,7 +3,7 @@
   "description": "spec-like TAP reporter",
   "author": "tbeseda",
   "version": "0.0.11",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "main": "index.js",
   "bin": {
     "tap-spek": "index.js"
@@ -11,7 +11,13 @@
   "files": [
     "index.js"
   ],
-  "repository": "tbeseda/tap-spek",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/architect/tap-arc.git"
+  },
+  "engines": {
+    "node": ">=14"
+  },
   "keywords": [
     "test",
     "tap",
