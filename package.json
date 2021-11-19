@@ -1,12 +1,12 @@
 {
-  "name": "tap-spek",
+  "name": "tap-arc",
   "description": "spec-like TAP reporter",
   "author": "tbeseda",
   "version": "0.0.11",
   "license": "Apache-2.0",
   "main": "index.js",
   "bin": {
-    "tap-spek": "index.js"
+    "tap-arc": "index.js"
   },
   "files": [
     "index.js"
