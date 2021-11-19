@@ -5,7 +5,7 @@ const ansiRegex = require('./util/ansi-regex.js')
 const { scripts } = require('../package.json')
 
 const commands = Object.keys(scripts)
-  .filter((k) => k.indexOf('spek:') === 0)
+  .filter((k) => k.indexOf('tap-arc:') === 0)
   .map((c) => c.split(':').slice(1))
 
 function trimNLines (text, n) {
@@ -18,7 +18,7 @@ for (const c of commands) {
   const [ command, flags = '' ] = c
   const name = `${command}${flags ? ` ${flags}` : ''}`
 
-  test(`"${name}" tap-spek output matches "${name}" snapshot`, (t) => {
+  test(`"${name}" tap-arc output matches "${name}" snapshot`, (t) => {
     const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/${command}${flags}.txt`)
     const [ trimmedSnapshot ] = trimNLines(fullSnapshot.toString(), 3)
 

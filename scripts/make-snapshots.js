@@ -1,7 +1,7 @@
 const { exec } = require('child_process')
 const { scripts } = require('../package.json')
 
-const commands = Object.keys(scripts).filter((key) => key.indexOf('spek:') === 0)
+const commands = Object.keys(scripts).filter((key) => key.indexOf('tap-arc:') === 0)
 
 for (const command of commands) {
   const [ name, args = '' ] = command.split(':').slice(1)
