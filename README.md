@@ -69,8 +69,7 @@ Options:
 
 ## Development
 
-The bulk of the lib lives in `./index.js`.  
-`./bin/tap-arc` pipes stdin (from a TAP reporter) to `tap-arc` and then to stdout. The bin also handles exit code for a failing run.
+The entirety of the reporter lives in `./index.js`.
 
 When building `tap-arc`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "tap-arc:*" commands to test passing and failing TAP.
 
