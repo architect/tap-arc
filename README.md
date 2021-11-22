@@ -13,7 +13,7 @@
 
 ## Installation & Usage
 
-> Requires Node.js 14+
+> Compatible with Node.js 12+.
 
 For a JavaScript project, save `tap-arc` as a development dependency:
 

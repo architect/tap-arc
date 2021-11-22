@@ -16,9 +16,9 @@ function trimNLines (text, n) {
 
 for (const c of commands) {
   const [ command, flags = '' ] = c
-  const name = `${command}${flags ? ` ${flags}` : ''}`
+  const fullCommand = `${command}${flags ? ` ${flags}` : ''}`
 
-  test(`"${name}" tap-arc output matches "${name}" snapshot`, (t) => {
+  test(`"${fullCommand}" tap-arc output matches "${fullCommand}" snapshot`, (t) => {
     const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/${command}${flags}.txt`)
     const [ trimmedSnapshot ] = trimNLines(fullSnapshot.toString(), 3)
 
@@ -27,14 +27,17 @@ for (const c of commands) {
       (error, stdout, stderr) => {
         const strippedOut = stripAnsi(stdout)
         const [ trimmedOut, durationLines ] = trimNLines(strippedOut, 3)
+        if (command.indexOf('pass') >= 0)
+          t.notOk(error, `"${fullCommand}" does not create an error`)
+        else {
+          // expect exit code == 1 unless named with "pass"
+          t.ok(error, `"${fullCommand}" creates an error`)
+          t.equal(error.code, 1, 'exit code is 1')
+        }
 
         t.notOk(stderr, 'stderr should be empty')
         t.equal(trimmedOut, trimmedSnapshot, 'output matches snapshot')
         t.match(durationLines.join(''), /[0-9]+\s[ms|s]/, 'contains a duration')
-
-        if (command.indexOf('pass') < 0)
-        // expect exit code == 1 unless named with "pass"
-          t.equal(error?.code, 1, `exit code 1 for "${name}" tests`)
 
         t.end()
       }

@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 14.x ] # TODO: add Node 16
+        node-version: [ 14.x ] # TODO: add Node 12.x and 16.x
         os: [ ubuntu-latest, macOS-latest ] # TODO: add windows-latest
 
     # Go
