@@ -56,6 +56,10 @@ Options:
 		Immediately exit upon encountering a failure
 		example: tap-arc -p
 
+  --no-color
+    Output without ANSI escape sequences for colors
+    example: tap-arc --no-color
+
 	--padding [space, dot, <custom characters>]
 		String to use when padding output (default="  ")
 		example: tap-arc --padding "••"
@@ -84,4 +88,3 @@ The main library is snapshot tested (`npm test` loads all snapshots to compare t
 - [tap-spec](https://github.com/scottcorgan/tap-spec) ol' reliable, but a bit stale and npm vulnerabilities
 - [tap-difflet](https://github.com/namuol/tap-difflet) inspired output and diffing, also vulnerable
 - [tap-min](https://github.com/derhuerst/tap-min) helpful approaches to streaming and exit codes
-- [ansi-regex](https://github.com/chalk/ansi-regex) copied regex pattern for ansi

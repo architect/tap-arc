@@ -3,6 +3,7 @@
 const fastdiff = require('fast-diff')
 const JSON5 = require('json5')
 const Parser = require('tap-parser')
+const stripAnsi = require('strip-ansi')
 const through = require('through2')
 const {
   bgGreen,
@@ -17,7 +18,6 @@ const {
   yellow,
 } = require('picocolors')
 
-const RESULT_COMMENTS = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok' ]
 const OKAY = green('✔')
 const FAIL = red('✖')
 
@@ -80,6 +80,10 @@ Options:
 		Immediately exit upon encountering a failure
 		example: tap-arc -p
 
+  --no-color
+    Output without ANSI escape sequences for colors
+    example: tap-arc --no-color
+
 	--padding [space, dot, <custom characters>]
 		String to use when padding output (default="  ")
 		example: tap-arc --padding "••"
@@ -93,7 +97,7 @@ Options:
   process.exit()
 }
 
-const options = { pessimistic: false, verbose: false, indent: '··', padding: '  ' }
+const options = { pessimistic: false, verbose: false, indent: '··', padding: '  ', noColor: false }
 const args = process.argv.slice(2)
 
 for (let i = 0; i < args.length; i++) {
@@ -102,6 +106,7 @@ for (let i = 0; i < args.length; i++) {
   if (arg === '-v' || arg === '--verbose') options.verbose = true
   else if (arg === '-p' || arg === '--pessimistic' || arg === '--bail') options.pessimistic = true
   else if (arg === '-h' || arg === '--help') usage()
+  else if (arg === '--no-color') options.noColor = true
   else if (arg === '--indent') {
     let val = args[i + 1]
     switch (val) {
@@ -138,39 +143,42 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
-let { indent, pessimistic, padding, verbose } = options
-
-const parser = new Parser({ bail: pessimistic })
+const parser = new Parser({ bail: options.pessimistic })
 const tapArc = through()
-const pad = createPad(padding)
+const pad = createPad(options.padding)
 const cwd = process.cwd()
 const start = Date.now()
 
+function print (msg) {
+  tapArc.push(options.noColor ? stripAnsi(msg) : msg)
+}
+
 parser.on('pass', (pass) => {
-  tapArc.push(`${pad(2)}${OKAY} ${dim(pass.name)}\n`)
+  print(`${pad(2)}${OKAY} ${dim(pass.name)}\n`)
 })
 
 parser.on('skip', (skip) => {
-  tapArc.push(`${pad(2)}${dim(`SKIP ${skip.name}`)}\n`)
+  print(`${pad(2)}${dim(`SKIP ${skip.name}`)}\n`)
 })
 
 parser.on('extra', (extra) => {
-  if (extra.trim().length > 0) tapArc.push(`${pad(2)}${yellow(`> ${extra}`)}`)
+  if (extra.trim().length > 0) print(`${pad(2)}${yellow(`> ${extra}`)}`)
 })
 
 parser.on('comment', (comment) => {
   // Log test-group name
+  const RESULT_COMMENTS = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok' ]
   if (!RESULT_COMMENTS.some((c) => comment.startsWith(c, 2)))
-    tapArc.push(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ''))}\n`)
+    print(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ''))}\n`)
 })
 
 parser.on('todo', (todo) => {
-  if (todo.ok) tapArc.push(`${pad(2)}${yellow('TODO')} ${dim(todo.name)}\n`)
-  else tapArc.push(`${pad(2)}${red('TODO')} ${dim(todo.name)}\n`)
+  if (todo.ok) print(`${pad(2)}${yellow('TODO')} ${dim(todo.name)}\n`)
+  else print(`${pad(2)}${red('TODO')} ${dim(todo.name)}\n`)
 })
 
 parser.on('fail', (fail) => {
-  tapArc.push(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${red(fail.name)}\n`)
+  print(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${red(fail.name)}\n`)
 
   if (fail.diag) {
     const { actual, at, expected, operator, stack } = fail.diag
@@ -178,11 +186,11 @@ parser.on('fail', (fail) => {
 
     if ([ 'equal', 'deepEqual' ].includes(operator)) {
       if (typeof expected === 'string' && typeof actual === 'string') {
-        msg = [ ...msg, ...makeDiff(actual, expected, indent) ]
+        msg = [ ...msg, ...makeDiff(actual, expected, options.indent) ]
       }
       else if (typeof expected === 'object' && typeof actual === 'object') {
         // probably an array
-        msg = [ ...msg, ...makeDiff(actual, expected, indent) ]
+        msg = [ ...msg, ...makeDiff(actual, expected, options.indent) ]
       }
       else if (typeof expected === 'number' || typeof actual === 'number') {
         msg.push(`Expected ${green(expected)} but got ${red(actual)}`)
@@ -240,7 +248,7 @@ parser.on('fail', (fail) => {
 
     if (at) msg.push(`${dim(`At: ${at.replace(cwd, '')}`)}`)
 
-    if (verbose && stack) {
+    if (options.verbose && stack) {
       msg.push('')
       stack.split('\n').forEach((s) => {
         msg.push(dim(s.trim().replace(cwd, '')))
@@ -252,7 +260,7 @@ parser.on('fail', (fail) => {
     // final formatting, each entry must be a single line
     msg = msg.map((line) => `${pad(3)}${line}\n`)
 
-    tapArc.push(msg.join(''))
+    print(msg.join(''))
   }
 })
 
@@ -264,19 +272,19 @@ parser.on('complete', (result) => {
     failureSummary += red(result.fail)
     failureSummary += ` failure${result.fail > 1 ? 's' : ''}\n\n`
 
-    tapArc.push(failureSummary)
+    print(failureSummary)
 
     for (const fail of result.failures) {
-      tapArc.push(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${fail.name}\n`)
+      print(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${fail.name}\n`)
     }
   }
 
-  tapArc.push(`\n${pad()}total:     ${result.count}\n`)
-  if (result.pass > 0) tapArc.push(green(`${pad()}passing:   ${result.pass}\n`))
-  if (result.fail > 0) tapArc.push(red(`${pad()}failing:   ${result.fail}\n`))
-  if (result.skip > 0) tapArc.push(`${pad()}skipped:   ${result.skip}\n`)
-  if (result.todo > 0) tapArc.push(`${pad()}todo:      ${result.todo}\n`)
-  if (result.bailout) tapArc.push(`${pad()}${bold(underline(red('BAILED!')))}\n`)
+  print(`\n${pad()}total:     ${result.count}\n`)
+  if (result.pass > 0) print(green(`${pad()}passing:   ${result.pass}\n`))
+  if (result.fail > 0) print(red(`${pad()}failing:   ${result.fail}\n`))
+  if (result.skip > 0) print(`${pad()}skipped:   ${result.skip}\n`)
+  if (result.todo > 0) print(`${pad()}todo:      ${result.todo}\n`)
+  if (result.bailout) print(`${pad()}${bold(underline(red('BAILED!')))}\n`)
 
   tapArc.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`)
 

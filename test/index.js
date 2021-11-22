@@ -1,7 +1,7 @@
 const { exec } = require('child_process')
 const fs = require('fs')
+const stripAnsi = require('strip-ansi')
 const test = require('tape')
-const ansiRegex = require('./util/ansi-regex.js')
 const { scripts } = require('../package.json')
 
 const commands = Object.keys(scripts)
@@ -25,7 +25,7 @@ for (const c of commands) {
     exec(
       `node ${__dirname}/create-${command}-tap.js | ${__dirname}/../index.js ${flags}`,
       (error, stdout, stderr) => {
-        const strippedOut = stdout.replace(ansiRegex(), '')
+        const strippedOut = stripAnsi(stdout)
         const [ trimmedOut, durationLines ] = trimNLines(strippedOut, 3)
 
         t.notOk(stderr, 'stderr should be empty')
@@ -46,7 +46,7 @@ test('passing tests do not error', (t) => {
   exec(
     `node ${__dirname}/create-passing-tap.js | ${__dirname}/../index.js`,
     (error, stdout, stderr) => {
-      const strippedOut = stdout.replace(ansiRegex(), '')
+      const strippedOut = stripAnsi(stdout)
       t.notOk(error, 'error should be undefined')
       t.notOk(stderr, 'stderror should be empty')
       t.ok(strippedOut.indexOf('fail') < 0, '"fail" should not occur in output')
