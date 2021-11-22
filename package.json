@@ -46,6 +46,7 @@
   "dependencies": {
     "fast-diff": "^1.2.0",
     "json5": "^2.2.0",
+    "minimist": "~1.2.5",
     "picocolors": "^1.0.0",
     "strip-ansi": "^6.0.1",
     "tap-parser": "^10.1.0",

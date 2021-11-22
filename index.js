@@ -2,6 +2,7 @@
 
 const fastdiff = require('fast-diff')
 const JSON5 = require('json5')
+const minimist = require('minimist')
 const Parser = require('tap-parser')
 const stripAnsi = require('strip-ansi')
 const through = require('through2')
@@ -18,18 +19,72 @@ const {
   yellow,
 } = require('picocolors')
 
+const alias = {
+  help: [ 'h', 'help' ],
+  pessimistic: [ 'p', 'pessimistic', 'bail' ],
+  verbose: [ 'v', 'verbose' ],
+}
+const options = {
+  color: true,
+  help: false,
+  indent: 'dot',
+  padding: 'space',
+  pessimistic: false,
+  verbose: false,
+  ...minimist(process.argv.slice(2), { alias })
+}
+
+if (options.help) {
+  console.log(`
+Usage:
+  tap-arc <options>
+
+Parses TAP data from stdin, and outputs a "spec-like" formatted result.
+
+Options:
+
+  -v | --verbose
+    Output full stack trace
+
+  -p | --pessimistic | --bail
+    Immediately exit upon encountering a failure
+    example: tap-arc -p
+
+  --no-color
+    Output without ANSI escape sequences for colors
+    example: tap-arc --no-color
+
+  --padding [space, dot, <custom characters>]
+    String to use when padding output (default="  ")
+    example: tap-arc --padding "••"
+    example: tap-arc --padding dot
+
+  --indent [space, dot, <custom characters>]
+    String to use when indenting Object diffs (default="··")
+    example: tap-arc --indent ">>"
+    example: tap-arc --indent space`)
+  process.exit()
+}
+
+switch (options.indent) {
+case 'dot': options.indent = '··'; break
+case 'space': options.indent = '  '; break
+}
+
+switch (options.padding) {
+case 'dot':options.padding = '··'; break
+case 'space':options.padding = '  '; break
+}
+
+const parser = new Parser({ bail: options.pessimistic })
+const tapArc = through()
+const cwd = process.cwd()
+const start = Date.now()
 const OKAY = green('✔')
 const FAIL = red('✖')
 
-function createPad (character) {
-  return (count = 1, char) => {
-    return dim(char || character).repeat(count)
-  }
-}
-
-function prettyMs (start) {
-  const ms = Date.now() - start
-  return ms < 1000 ? `${ms} ms` : `${ms / 1000} s`
+function pad (count = 1, char) {
+  return dim(char || options.padding).repeat(count)
 }
 
 function makeDiff (actual, expected, indent = '  ') {
@@ -64,93 +119,13 @@ function makeDiff (actual, expected, indent = '  ') {
   return msg.join('').split(/\n/) // as separate lines
 }
 
-function usage () {
-  console.log(`
-Usage:
-  tap-arc <options>
-
-Parses TAP data from stdin, and outputs a "spec-like" formatted result.
-
-Options:
-
-	-v | --verbose
-		Output full stack trace
-
-	-p | --pessimistic | --bail
-		Immediately exit upon encountering a failure
-		example: tap-arc -p
-
-  --no-color
-    Output without ANSI escape sequences for colors
-    example: tap-arc --no-color
-
-	--padding [space, dot, <custom characters>]
-		String to use when padding output (default="  ")
-		example: tap-arc --padding "••"
-		example: tap-arc --padding dot
-
-	--indent [space, dot, <custom characters>]
-		String to use when indenting Object diffs (default="··")
-		example: tap-arc --indent ">>"
-		example: tap-arc --indent space
-	`)
-  process.exit()
-}
-
-const options = { pessimistic: false, verbose: false, indent: '··', padding: '  ', noColor: false }
-const args = process.argv.slice(2)
-
-for (let i = 0; i < args.length; i++) {
-  const arg = args[i]
-
-  if (arg === '-v' || arg === '--verbose') options.verbose = true
-  else if (arg === '-p' || arg === '--pessimistic' || arg === '--bail') options.pessimistic = true
-  else if (arg === '-h' || arg === '--help') usage()
-  else if (arg === '--no-color') options.noColor = true
-  else if (arg === '--indent') {
-    let val = args[i + 1]
-    switch (val) {
-    case 'dot':
-      options.indent = '··'
-      break
-    case 'space':
-      options.indent = '  '
-      break
-    default:
-      options.indent = val
-      break
-    }
-    i += 1
-  }
-  else if (arg === '--padding') {
-    let val = args[i + 1]
-    switch (val) {
-    case 'dot':
-      options.padding = '··'
-      break
-    case 'space':
-      options.padding = '  '
-      break
-    default:
-      options.padding = val
-      break
-    }
-    i += 1
-  }
-  else {
-    console.error(`Unrecognized arg: ${arg}`)
-    process.exit(1)
-  }
-}
-
-const parser = new Parser({ bail: options.pessimistic })
-const tapArc = through()
-const pad = createPad(options.padding)
-const cwd = process.cwd()
-const start = Date.now()
-
 function print (msg) {
-  tapArc.push(options.noColor ? stripAnsi(msg) : msg)
+  tapArc.push(options.color ? msg : stripAnsi(msg))
+}
+
+function prettyMs (start) {
+  const ms = Date.now() - start
+  return ms < 1000 ? `${ms} ms` : `${ms / 1000} s`
 }
 
 parser.on('pass', (pass) => {
