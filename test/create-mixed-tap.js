@@ -7,6 +7,13 @@ test('basic arithmetic without messages', function (t) {
   t.end()
 })
 
+test('logging inside a test', function (t) {
+  console.log('Logging from a test can be helpful')
+  console.log('\u001B[?25l') // should not print
+
+  t.end()
+})
+
 test('deep equality', function (t) {
   t.plan(5)
 

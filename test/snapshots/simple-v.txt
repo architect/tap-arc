@@ -1,7 +1,7 @@
 
   Sample passing tests
     ✔ Sub-test match pass
-    > Arbitrary logs supported
+    Arbitrary logs supported
     ✔ Sub-test doesNotMatch pass
     ✔ A deeply equal array
     SKIP A skipped test
