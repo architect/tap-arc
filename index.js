@@ -137,7 +137,9 @@ parser.on('skip', (skip) => {
 })
 
 parser.on('extra', (extra) => {
-  if (extra.trim().length > 0) print(`${pad(2)}${yellow(`> ${extra}`)}`)
+  const stripped = stripAnsi(extra).trim()
+  const justAnsi = stripped.length === 0 && extra.length > 0
+  if (!justAnsi) print(`${pad(2)}${extra}`)
 })
 
 parser.on('comment', (comment) => {
