@@ -8,7 +8,7 @@ test('Object deepEqual fail', function (t) {
   )
   t.deepEqual(
     { a: 'foo', b: [ 11, 9 ], c: { foo: 'bar' } },
-    { a: 'bar', b: [ 12, 9 ], c: 'foobar' },
+    { b: [ 12, 9 ], a: 'bar', c: 'foobar' },
     'A small object deepEqual failure'
   )
   t.deepEqual(

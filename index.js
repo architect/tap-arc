@@ -2,6 +2,7 @@
 
 const fastdiff = require('fast-diff')
 const JSON5 = require('json5')
+const stringify = require('json-stable-stringify')
 const minimist = require('minimist')
 const Parser = require('tap-parser')
 const stripAnsi = require('strip-ansi')
@@ -102,8 +103,8 @@ function makeDiff (actual, expected, indent = '  ') {
   }
 
   const diff = fastdiff(
-    JSON.stringify(isJson ? actualJson : actual, null, indent),
-    JSON.stringify(isJson ? expectedJson : expected, null, indent)
+    stringify(isJson ? actualJson : actual, { space: indent }),
+    stringify(isJson ? expectedJson : expected, { space: indent })
   )
 
   for (const part of diff) {
