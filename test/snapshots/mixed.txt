@@ -110,5 +110,5 @@
   failing:   13
   skipped:   1
   todo:      2
-  1.693 s
+  1.673 s
 

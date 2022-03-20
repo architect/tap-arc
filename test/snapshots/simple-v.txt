@@ -13,14 +13,14 @@
       At: Test.<anonymous> (/test/create-simple-tap.js:17:5)
       
       Error: should be strictly equal
-      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:311:54)
-      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:96:32)
-      at Test.strictEqual (/node_modules/tape/lib/test.js:475:10)
-      at Test.bound [as equal] (/node_modules/tape/lib/test.js:96:32)
+      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:314:54)
+      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:99:32)
+      at Test.strictEqual (/node_modules/tape/lib/test.js:478:10)
+      at Test.bound [as equal] (/node_modules/tape/lib/test.js:99:32)
       at Test.<anonymous> (/test/create-simple-tap.js:17:5)
-      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:96:32)
-      at Test.run (/node_modules/tape/lib/test.js:114:31)
-      at Test.bound [as run] (/node_modules/tape/lib/test.js:96:32)
+      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:99:32)
+      at Test.run (/node_modules/tape/lib/test.js:117:31)
+      at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
       at Immediate.next [as _onImmediate] (/node_modules/tape/lib/results.js:88:19)
       at processImmediate (internal/timers.js:464:21)
       
@@ -29,14 +29,14 @@
       At: Test.<anonymous> (/test/create-simple-tap.js:18:5)
       
       Error: should be strictly equal
-      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:311:54)
-      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:96:32)
-      at Test.strictEqual (/node_modules/tape/lib/test.js:475:10)
-      at Test.bound [as equal] (/node_modules/tape/lib/test.js:96:32)
+      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:314:54)
+      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:99:32)
+      at Test.strictEqual (/node_modules/tape/lib/test.js:478:10)
+      at Test.bound [as equal] (/node_modules/tape/lib/test.js:99:32)
       at Test.<anonymous> (/test/create-simple-tap.js:18:5)
-      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:96:32)
-      at Test.run (/node_modules/tape/lib/test.js:114:31)
-      at Test.bound [as run] (/node_modules/tape/lib/test.js:96:32)
+      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:99:32)
+      at Test.run (/node_modules/tape/lib/test.js:117:31)
+      at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
       at Immediate.next [as _onImmediate] (/node_modules/tape/lib/results.js:88:19)
       at processImmediate (internal/timers.js:464:21)
       
@@ -45,14 +45,14 @@
       At: Test.<anonymous> (/test/create-simple-tap.js:19:5)
       
       Error: Sub-test match fail
-      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:311:54)
-      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:96:32)
-      at Test.match (/node_modules/tape/lib/test.js:720:10)
-      at Test.bound [as match] (/node_modules/tape/lib/test.js:96:32)
+      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:314:54)
+      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:99:32)
+      at Test.match (/node_modules/tape/lib/test.js:733:14)
+      at Test.bound [as match] (/node_modules/tape/lib/test.js:99:32)
       at Test.<anonymous> (/test/create-simple-tap.js:19:5)
-      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:96:32)
-      at Test.run (/node_modules/tape/lib/test.js:114:31)
-      at Test.bound [as run] (/node_modules/tape/lib/test.js:96:32)
+      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:99:32)
+      at Test.run (/node_modules/tape/lib/test.js:117:31)
+      at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
       at Immediate.next [as _onImmediate] (/node_modules/tape/lib/results.js:88:19)
       at processImmediate (internal/timers.js:464:21)
       
@@ -67,16 +67,16 @@
       At: Test.<anonymous> (/test/create-simple-tap.js:22:8)
       
       Error: Sub-test partial array failure
-      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:311:54)
-      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:96:32)
-      at Test.tapeDeepEqual (/node_modules/tape/lib/test.js:552:10)
-      at Test.bound [as deepEqual] (/node_modules/tape/lib/test.js:96:32)
+      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:314:54)
+      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:99:32)
+      at Test.tapeDeepEqual (/node_modules/tape/lib/test.js:555:10)
+      at Test.bound [as deepEqual] (/node_modules/tape/lib/test.js:99:32)
       at Test.<anonymous> (/test/create-simple-tap.js:22:8)
-      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:96:32)
-      at Test.run (/node_modules/tape/lib/test.js:114:31)
-      at Test.bound [as run] (/node_modules/tape/lib/test.js:96:32)
-      at Test._end (/node_modules/tape/lib/test.js:217:11)
-      at Test.bound [as _end] (/node_modules/tape/lib/test.js:96:32)
+      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:99:32)
+      at Test.run (/node_modules/tape/lib/test.js:117:31)
+      at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
+      at Test._end (/node_modules/tape/lib/test.js:220:11)
+      at Test.bound [as _end] (/node_modules/tape/lib/test.js:99:32)
       
     ✖ 10) A small object deepEqual failure
       {
@@ -89,16 +89,16 @@
       At: Test.<anonymous> (/test/create-simple-tap.js:27:8)
       
       Error: A small object deepEqual failure
-      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:311:54)
-      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:96:32)
-      at Test.tapeDeepEqual (/node_modules/tape/lib/test.js:552:10)
-      at Test.bound [as deepEqual] (/node_modules/tape/lib/test.js:96:32)
+      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:314:54)
+      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:99:32)
+      at Test.tapeDeepEqual (/node_modules/tape/lib/test.js:555:10)
+      at Test.bound [as deepEqual] (/node_modules/tape/lib/test.js:99:32)
       at Test.<anonymous> (/test/create-simple-tap.js:27:8)
-      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:96:32)
-      at Test.run (/node_modules/tape/lib/test.js:114:31)
-      at Test.bound [as run] (/node_modules/tape/lib/test.js:96:32)
-      at Test._end (/node_modules/tape/lib/test.js:217:11)
-      at Test.bound [as _end] (/node_modules/tape/lib/test.js:96:32)
+      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:99:32)
+      at Test.run (/node_modules/tape/lib/test.js:117:31)
+      at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
+      at Test._end (/node_modules/tape/lib/test.js:220:11)
+      at Test.bound [as _end] (/node_modules/tape/lib/test.js:99:32)
       
 
   TODO Some tests marked as "todo"
@@ -118,5 +118,5 @@
   failing:   6
   skipped:   1
   todo:      2
-  510 ms
+  478 ms
 
