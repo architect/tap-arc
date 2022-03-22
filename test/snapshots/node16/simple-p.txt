@@ -22,5 +22,5 @@
   failing:   1
   skipped:   1
   BAILED!
-  600 ms
+  235 ms
 

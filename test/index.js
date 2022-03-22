@@ -4,6 +4,8 @@ const stripAnsi = require('strip-ansi')
 const test = require('tape')
 const { scripts } = require('../package.json')
 
+const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
+
 const commands = Object.keys(scripts)
   .filter((k) => k.indexOf('tap-arc:') === 0)
   .map((c) => c.split(':').slice(1))
@@ -19,7 +21,7 @@ for (const c of commands) {
   const fullCommand = `${command}${flags ? ` ${flags}` : ''}`
 
   test(`"${fullCommand}" tap-arc output matches "${fullCommand}" snapshot`, (t) => {
-    const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/${command}${flags}.txt`)
+    const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/node${NODE_MAJOR_VERSION}/${command}${flags}.txt`)
     const [ trimmedSnapshot ] = trimNLines(fullSnapshot.toString(), 3)
 
     exec(

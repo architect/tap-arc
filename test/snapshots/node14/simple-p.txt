@@ -1,0 +1,26 @@
+
+  Sample passing tests
+    ✔ Sub-test match pass
+    Arbitrary logs supported
+    ✔ Sub-test doesNotMatch pass
+    ✔ A deeply equal array
+    SKIP A skipped test
+    ✔ A deeply equal object
+
+  Some failing tests
+    ✖ 6) should be strictly equal
+      Expected 666 but got 66
+      At: Test.<anonymous> (/test/create-simple-tap.js:17:5)
+      
+
+  Failed tests: There was 1 failure
+
+    ✖ 6) should be strictly equal
+
+  total:     6
+  passing:   5
+  failing:   1
+  skipped:   1
+  BAILED!
+  316 ms
+
