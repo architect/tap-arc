@@ -35,5 +35,5 @@
 
   total:     3
   failing:   3
-  356 ms
+  217 ms
 

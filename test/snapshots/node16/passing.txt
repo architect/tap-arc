@@ -39,5 +39,5 @@
 
   total:     16
   passing:   16
-  952 ms
+  838 ms
 
