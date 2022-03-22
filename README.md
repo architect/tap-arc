@@ -81,7 +81,13 @@ When building `tap-arc`, it's helpful to try various TAP outputs. See `package.j
 npm run tap-arc:simple # used to create the screen shot above
 ```
 
+### Snapshot tests
+
 The main library is snapshot tested (`npm test` loads all snapshots to compare to current output). Create snapshots with the `npm run make-snapshots` commands.
+
+The snapshots are versioned by Node.js' major version, ie. `node14` and `node16`. But snapshots may vary between minor and patch versions of Node. (Line numbers of Node internals shift, causing changes in stack traces.) GitHub's Actions are set to use the latest Node.js 14.x and 16.x, so when testing and creating snapshots locally, do the same.
+
+This is also why `tape` is pinned as a development dependency. Update as needed, but recreate snapshots.
 
 ## Credit & Inspiration
 

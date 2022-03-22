@@ -22,7 +22,7 @@
       at Test.run (/node_modules/tape/lib/test.js:117:31)
       at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
       at Immediate.next [as _onImmediate] (/node_modules/tape/lib/results.js:88:19)
-      at processImmediate (node:internal/timers:464:21)
+      at processImmediate (node:internal/timers:466:21)
       
     ✖ 7) should be strictly equal
       "BaGood dog"
@@ -38,7 +38,7 @@
       at Test.run (/node_modules/tape/lib/test.js:117:31)
       at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
       at Immediate.next [as _onImmediate] (/node_modules/tape/lib/results.js:88:19)
-      at processImmediate (node:internal/timers:464:21)
+      at processImmediate (node:internal/timers:466:21)
       
     ✖ 8) Sub-test match fail
       Expected atreides to match /^A/
@@ -54,7 +54,7 @@
       at Test.run (/node_modules/tape/lib/test.js:117:31)
       at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
       at Immediate.next [as _onImmediate] (/node_modules/tape/lib/results.js:88:19)
-      at processImmediate (node:internal/timers:464:21)
+      at processImmediate (node:internal/timers:466:21)
       
 
   Nested tests
@@ -118,5 +118,5 @@
   failing:   6
   skipped:   1
   todo:      2
-  233 ms
+  223 ms
 
