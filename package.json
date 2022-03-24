@@ -31,6 +31,7 @@
     "make-snapshots": "node scripts/make-snapshots.js",
     "tap-arc:mixed": "npm run --silent tape:mixed | node ./index.js",
     "tap-arc:diff": "npm run --silent tape:diff | node ./index.js",
+    "tap-arc:diff:-v": "npm run --silent tape:diff | node ./index.js -v",
     "tap-arc:passing": "npm run --silent tape:passing | node ./index.js",
     "tap-arc:simple": "npm run --silent tape:simple | node ./index.js",
     "tap-arc:simple:-p": "npm run --silent tape:simple | node ./index.js -p",

@@ -1,0 +1,103 @@
+
+  Object deepEqual fail
+    ✖ 1) Single dimension array failure
+      
+       Array [
+         "foo",
+         "bar",
+      -  "foobar baz",
+      +  "baz",
+      +  "thing",
+       ]
+      
+      At: Test.<anonymous> (/test/create-diff-tap.js:4:5)
+      
+      Error: Single dimension array failure
+      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:314:54)
+      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:99:32)
+      at Test.tapeDeepEqual (/node_modules/tape/lib/test.js:555:10)
+      at Test.bound [as deepEqual] (/node_modules/tape/lib/test.js:99:32)
+      at Test.<anonymous> (/test/create-diff-tap.js:4:5)
+      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:99:32)
+      at Test.run (/node_modules/tape/lib/test.js:117:31)
+      at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
+      at Immediate.next [as _onImmediate] (/node_modules/tape/lib/results.js:88:19)
+      at processImmediate (node:internal/timers:466:21)
+      
+    ✖ 2) A small object deepEqual failure
+      
+       Object {
+      -  "a": "bar",
+      +  "a": "foo",
+         "b": Array [
+      -    12,
+      +    11,
+           9,
+         ],
+      -  "c": "foobar",
+      +  "c": Object {
+      +    "foo": "bar",
+      +  },
+       }
+      
+      At: Test.<anonymous> (/test/create-diff-tap.js:9:5)
+      
+      Error: A small object deepEqual failure
+      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:314:54)
+      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:99:32)
+      at Test.tapeDeepEqual (/node_modules/tape/lib/test.js:555:10)
+      at Test.bound [as deepEqual] (/node_modules/tape/lib/test.js:99:32)
+      at Test.<anonymous> (/test/create-diff-tap.js:9:5)
+      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:99:32)
+      at Test.run (/node_modules/tape/lib/test.js:117:31)
+      at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
+      at Immediate.next [as _onImmediate] (/node_modules/tape/lib/results.js:88:19)
+      at processImmediate (node:internal/timers:466:21)
+      
+    ✖ 3) Object with fn deepEqual failure will be diffed as a string
+      
+      -"{ name: 'Duncan', house: 'Atreides', fight: [Function: fight] }"
+      +"{ name: 'Gurney', house: 'Atreides', play: [Function: play] }"
+      
+      At: Test.<anonymous> (/test/create-diff-tap.js:14:5)
+      
+      Error: Object with fn deepEqual failure will be diffed as a string
+      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:314:54)
+      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:99:32)
+      at Test.tapeDeepEqual (/node_modules/tape/lib/test.js:555:10)
+      at Test.bound [as deepEqual] (/node_modules/tape/lib/test.js:99:32)
+      at Test.<anonymous> (/test/create-diff-tap.js:14:5)
+      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:99:32)
+      at Test.run (/node_modules/tape/lib/test.js:117:31)
+      at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
+      at Immediate.next [as _onImmediate] (/node_modules/tape/lib/results.js:88:19)
+      at processImmediate (node:internal/timers:466:21)
+      
+    ✖ 4) Shallow TAP output cannot be diffed, but it is a failure
+      Expected did not match actual.
+      At: Test.<anonymous> (/test/create-diff-tap.js:27:5)
+      
+      Error: Shallow TAP output cannot be diffed, but it is a failure
+      at Test.assert [as _assert] (/node_modules/tape/lib/test.js:314:54)
+      at Test.bound [as _assert] (/node_modules/tape/lib/test.js:99:32)
+      at Test.tapeDeepEqual (/node_modules/tape/lib/test.js:555:10)
+      at Test.bound [as deepEqual] (/node_modules/tape/lib/test.js:99:32)
+      at Test.<anonymous> (/test/create-diff-tap.js:27:5)
+      at Test.bound [as _cb] (/node_modules/tape/lib/test.js:99:32)
+      at Test.run (/node_modules/tape/lib/test.js:117:31)
+      at Test.bound [as run] (/node_modules/tape/lib/test.js:99:32)
+      at Immediate.next [as _onImmediate] (/node_modules/tape/lib/results.js:88:19)
+      at processImmediate (node:internal/timers:466:21)
+      
+
+  Failed tests: There were 4 failures
+
+    ✖ 1) Single dimension array failure
+    ✖ 2) A small object deepEqual failure
+    ✖ 3) Object with fn deepEqual failure will be diffed as a string
+    ✖ 4) Shallow TAP output cannot be diffed, but it is a failure
+
+  total:     4
+  failing:   4
+  217 ms
+

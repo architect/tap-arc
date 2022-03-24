@@ -3,7 +3,7 @@ const test = require('tape')
 test('Object deepEqual fail', function (t) {
   t.deepEqual(
     [ 'foo', 'bar', 'baz', 'thing' ],
-    [ 'foo', 'bar', 'foobar baz', 'thing' ],
+    [ 'foo', 'bar', 'foobar baz' ],
     'Single dimension array failure'
   )
   t.deepEqual(
@@ -23,6 +23,45 @@ test('Object deepEqual fail', function (t) {
       fight: () => { '⚔️' },
     },
     'Object with fn deepEqual failure will be diffed as a string'
+  )
+  t.deepEqual(
+    {
+      id: 'Grandad',
+      children: [
+        {
+          id: 'Dad',
+          children: [
+            {
+              id: 'Me',
+              children: [ 'Daughter' ]
+            }
+          ]
+        },
+        {
+          id: 'Aunt',
+          children: []
+        }
+      ]
+    },
+    {
+      id: 'Grandad',
+      children: [
+        {
+          id: 'Dad',
+          children: [
+            {
+              id: 'Me',
+              children: []
+            }
+          ]
+        },
+        {
+          id: 'Aunt',
+          children: []
+        }
+      ]
+    },
+    'Shallow TAP output cannot be diffed, but it is a failure'
   )
   t.end()
 })

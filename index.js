@@ -5,7 +5,7 @@ const minimist = require('minimist')
 const Parser = require('tap-parser')
 const stripAnsi = require('strip-ansi')
 const through = require('through2')
-const { match } = require('tcompare')
+const { strict } = require('tcompare')
 const {
   blue,
   bold,
@@ -84,19 +84,34 @@ function makeDiff (lhs, rhs) {
     rhs = pRhs
   }
 
-  const compared = match(lhs, rhs, { pretty: true, sort: true })
-  // capture diff after line: "@@ -n,n +n,n @@"
-  const diff = compared.diff.split(/^(?:@@).*(?:@@)$/gm)[1]
+  const compared = strict(
+    lhs,
+    rhs,
+    {
+      includeEnumerable: true,
+      includeGetters: true,
+      pretty: true,
+      sort: true
+    }
+  )
 
-  for (const line of diff.split('\n')) {
-    const char0 = line.charAt(0)
+  if (!compared.match) {
+    // capture diff after line: "@@ -n,n +n,n @@"
+    const diff = compared.diff.split(/^(?:@@).*(?:@@)$/gm)[1]
 
-    if (char0 === '-')
-      msg.push(green(line))
-    else if (char0 === '+')
-      msg.push(red(line))
-    else
-      msg.push(line)
+    for (const line of diff.split('\n')) {
+      const char0 = line.charAt(0)
+
+      if (char0 === '-')
+        msg.push(green(line))
+      else if (char0 === '+')
+        msg.push(red(line))
+      else
+        msg.push(line)
+    }
+  }
+  else {
+    msg.push(`${red('Expected')} did not match ${green('actual')}.`)
   }
 
   return msg

@@ -44,6 +44,8 @@
          "b": Array [
            42,
          ],
+      +  "c": "baz",
+       }
       
       At: Test.<anonymous> (/test/create-simple-tap.js:27:8)
       
@@ -65,5 +67,5 @@
   failing:   6
   skipped:   1
   todo:      2
-  349 ms
+  389 ms
 

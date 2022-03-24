@@ -7,7 +7,7 @@
          "bar",
       -  "foobar baz",
       +  "baz",
-         "thing",
+      +  "thing",
        ]
       
       At: Test.<anonymous> (/test/create-diff-tap.js:4:5)
@@ -37,14 +37,19 @@
       
       At: Test.<anonymous> (/test/create-diff-tap.js:14:5)
       
+    ✖ 4) Shallow TAP output cannot be diffed, but it is a failure
+      Expected did not match actual.
+      At: Test.<anonymous> (/test/create-diff-tap.js:27:5)
+      
 
-  Failed tests: There were 3 failures
+  Failed tests: There were 4 failures
 
     ✖ 1) Single dimension array failure
     ✖ 2) A small object deepEqual failure
     ✖ 3) Object with fn deepEqual failure will be diffed as a string
+    ✖ 4) Shallow TAP output cannot be diffed, but it is a failure
 
-  total:     3
-  failing:   3
-  363 ms
+  total:     4
+  failing:   4
+  368 ms
 
