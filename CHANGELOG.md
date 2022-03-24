@@ -6,9 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
-### Added 
+### Fixed
 
-- Added `--no-color` option to prevent colorized output with ANSI escape sequences
+- WIP: color corrections #18
+
+### Changed
+
+- `tcompare` for improved failure diffing #2
+
+### Removed
+
+- `--padding` option
+- `--indent` option
+
+## [0.2.0] - 2022-03-22
+
+### Changed
+
+- deterministically stringify JSON for diffing, thanks @mixmix
+
+### Added
+
+- `--no-color` option to prevent colorized output with ANSI escape sequences
 
 ## [0.1.0] - 2021-11-20
 

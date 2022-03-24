@@ -59,16 +59,6 @@ Options:
   --no-color
     Output without ANSI escape sequences for colors
     example: tap-arc --no-color
-
-  --padding [space, dot, <custom characters>]
-    String to use when padding output (default="  ")
-    example: tap-arc --padding "••"
-    example: tap-arc --padding dot
-
-  --indent [space, dot, <custom characters>]
-    String to use when indenting Object diffs (default="··")
-    example: tap-arc --indent ">>"
-    example: tap-arc --indent space
 ```
 
 ## Development

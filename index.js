@@ -1,16 +1,12 @@
 #!/usr/bin/env node
 
-const fastdiff = require('fast-diff')
 const JSON5 = require('json5')
-const stringify = require('json-stable-stringify')
 const minimist = require('minimist')
 const Parser = require('tap-parser')
 const stripAnsi = require('strip-ansi')
 const through = require('through2')
+const { match } = require('tcompare')
 const {
-  bgGreen,
-  bgRed,
-  black,
   blue,
   bold,
   dim,
@@ -20,6 +16,9 @@ const {
   yellow,
 } = require('picocolors')
 
+// Log test-group name
+const RESULT_COMMENTS = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok' ]
+
 const alias = {
   help: [ 'h', 'help' ],
   pessimistic: [ 'p', 'pessimistic', 'bail' ],
@@ -28,8 +27,6 @@ const alias = {
 const options = {
   color: true,
   help: false,
-  indent: 'dot',
-  padding: 'space',
   pessimistic: false,
   verbose: false,
   ...minimist(process.argv.slice(2), { alias })
@@ -53,28 +50,8 @@ Options:
 
   --no-color
     Output without ANSI escape sequences for colors
-    example: tap-arc --no-color
-
-  --padding [space, dot, <custom characters>]
-    String to use when padding output (default="  ")
-    example: tap-arc --padding "••"
-    example: tap-arc --padding dot
-
-  --indent [space, dot, <custom characters>]
-    String to use when indenting Object diffs (default="··")
-    example: tap-arc --indent ">>"
-    example: tap-arc --indent space`)
+    example: tap-arc --no-color`)
   process.exit()
-}
-
-switch (options.indent) {
-case 'dot': options.indent = '··'; break
-case 'space': options.indent = '  '; break
-}
-
-switch (options.padding) {
-case 'dot':options.padding = '··'; break
-case 'space':options.padding = '  '; break
 }
 
 const parser = new Parser({ bail: options.pessimistic })
@@ -84,40 +61,45 @@ const start = Date.now()
 const OKAY = green('✔')
 const FAIL = red('✖')
 
-function pad (count = 1, char) {
-  return dim(char || options.padding).repeat(count)
+function pad (count = 1, char = '  ') {
+  return dim(char).repeat(count)
 }
 
-function makeDiff (actual, expected, indent = '  ') {
-  let msg = []
+function makeDiff (lhs, rhs) {
+  const msg = []
   let isJson = true
-  let actualJson = actual
-  let expectedJson = expected
+  let pLhs = lhs
+  let pRhs = rhs
 
   try {
-    actualJson = JSON5.parse(actual)
-    expectedJson = JSON5.parse(expected)
+    pLhs = JSON5.parse(lhs)
+    pRhs = JSON5.parse(rhs)
   }
   catch (e) {
     isJson = false
   }
 
-  const diff = fastdiff(
-    stringify(isJson ? actualJson : actual, { space: indent }),
-    stringify(isJson ? expectedJson : expected, { space: indent })
-  )
-
-  for (const part of diff) {
-    // the diff objects can span lines
-    // separate lines before styling for tidier output
-    const lines = part[1].split('\n')
-
-    if (part[0] === 1) msg.push(lines.map((s) => black(bgGreen(s))).join('\n'))
-    else if (part[0] === -1) msg.push(lines.map((s) => black(bgRed(s))).join('\n'))
-    else msg.push(lines.map((s) => s.replace(new RegExp(indent, 'g'), dim(indent))).join('\n'))
+  if (isJson) {
+    lhs = pLhs
+    rhs = pRhs
   }
 
-  return msg.join('').split(/\n/) // as separate lines
+  const compared = match(lhs, rhs, { pretty: true, sort: true })
+  // capture diff after line: "@@ -n,n +n,n @@"
+  const diff = compared.diff.split(/^(?:@@).*(?:@@)$/gm)[1]
+
+  for (const line of diff.split('\n')) {
+    const char0 = line.charAt(0)
+
+    if (char0 === '-')
+      msg.push(green(line))
+    else if (char0 === '+')
+      msg.push(red(line))
+    else
+      msg.push(line)
+  }
+
+  return msg
 }
 
 function print (msg) {
@@ -144,8 +126,6 @@ parser.on('extra', (extra) => {
 })
 
 parser.on('comment', (comment) => {
-  // Log test-group name
-  const RESULT_COMMENTS = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok' ]
   if (!RESULT_COMMENTS.some((c) => comment.startsWith(c, 2)))
     print(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ''))}\n`)
 })
@@ -164,11 +144,11 @@ parser.on('fail', (fail) => {
 
     if ([ 'equal', 'deepEqual' ].includes(operator)) {
       if (typeof expected === 'string' && typeof actual === 'string') {
-        msg = [ ...msg, ...makeDiff(actual, expected, options.indent) ]
+        msg = [ ...msg, ...makeDiff(actual, expected) ]
       }
       else if (typeof expected === 'object' && typeof actual === 'object') {
         // probably an array
-        msg = [ ...msg, ...makeDiff(actual, expected, options.indent) ]
+        msg = [ ...msg, ...makeDiff(actual, expected) ]
       }
       else if (typeof expected === 'number' || typeof actual === 'number') {
         msg.push(`Expected ${green(expected)} but got ${red(actual)}`)

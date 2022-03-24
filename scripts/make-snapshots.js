@@ -7,7 +7,16 @@ const snapshotFolder = `test/snapshots/node${NODE_MAJOR_VERSION}`
 const commands = Object.keys(scripts).filter((key) => key.indexOf('tap-arc:') === 0)
 
 async function main () {
-  await fs.mkdirSync(snapshotFolder)
+  try {
+    await fs.mkdirSync(snapshotFolder)
+  }
+  catch (error) {
+    if (error.code === 'EEXIST')
+      console.error('Manually delete existing snapshots first')
+    else
+      throw error
+    process.exit(1)
+  }
 
   for (const command of commands) {
     const [ name, args = '' ] = command.split(':').slice(1)
