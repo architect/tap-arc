@@ -14,21 +14,27 @@
     ✔ And Object pass
     SKIP Skipping an arbitrary test
     ✖ 6) An Array failure
-      [
-      ··3,
-      ··4,
-      ··65
-      ]
+      
+       Array [
+         3,
+         4,
+      -  5,
+      +  6,
+       ]
+      
       At: Test.<anonymous> (/test/create-mixed-tap.js:23:5)
       
     ✖ 7) An Object failure
-      {
-      ··"a": 7,
-      ··"b": [
-      ····812,
-      ····9
-      ··]
-      }
+      
+       Object {
+         "a": 7,
+         "b": Array [
+      -    12,
+      +    8,
+           9,
+         ],
+       }
+      
       At: Test.<anonymous> (/test/create-mixed-tap.js:24:5)
       
 
@@ -59,11 +65,11 @@
 
   (anonymous)
     ✖ 15) Sub-test match fail
-      Expected atreides to match /^A/
+      Expected "atreides" to match /^A/
       At: Test.<anonymous> (/test/create-mixed-tap.js:53:8)
       
     ✖ 16) Sub-test doesNotMatch fail
-      Expected 'Hark0nnen' to not match /[0-9]/
+      Expected "'Hark0nnen'" to not match /[0-9]/
       At: Test.<anonymous> (/test/create-mixed-tap.js:54:8)
       
     ✔ Sub-test match pass
@@ -110,5 +116,5 @@
   failing:   13
   skipped:   1
   todo:      2
-  1.343 s
+  1.331 s
 

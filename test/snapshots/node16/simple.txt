@@ -13,31 +13,38 @@
       At: Test.<anonymous> (/test/create-simple-tap.js:17:5)
       
     ✖ 7) should be strictly equal
-      "BaGood dog"
+      
+      -"Good dog"
+      +"Bad dog"
+      
       At: Test.<anonymous> (/test/create-simple-tap.js:18:5)
       
     ✖ 8) Sub-test match fail
-      Expected atreides to match /^A/
+      Expected "atreides" to match /^A/
       At: Test.<anonymous> (/test/create-simple-tap.js:19:5)
       
 
   Nested tests
     ✖ 9) Sub-test partial array failure
-      [
-      ··"foo",
-      ··"bar",
-      ··"foobar baz"
-      ]
+      
+       Array [
+         "foo",
+         "bar",
+      -  "foobar baz",
+      +  "baz",
+       ]
+      
       At: Test.<anonymous> (/test/create-simple-tap.js:22:8)
       
     ✖ 10) A small object deepEqual failure
-      {
-      ··"a": "foobar",
-      ··"b": [
-      ····42
-      ··],
-      ··"c": "baz"
-      }
+      
+       Object {
+      -  "a": "bar",
+      +  "a": "foo",
+         "b": Array [
+           42,
+         ],
+      
       At: Test.<anonymous> (/test/create-simple-tap.js:27:8)
       
 
@@ -58,5 +65,5 @@
   failing:   6
   skipped:   1
   todo:      2
-  200 ms
+  218 ms
 
