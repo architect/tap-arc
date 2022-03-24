@@ -11,6 +11,7 @@ const {
   bold,
   dim,
   green,
+  inverse,
   red,
   underline,
   yellow,
@@ -65,7 +66,8 @@ function pad (count = 1, char = '  ') {
   return dim(char).repeat(count)
 }
 
-function makeDiff (lhs, rhs) {
+function makeDiff (lhs, rhs, options) {
+  const { verbose } = options
   const msg = []
   let isJson = true
   let pLhs = lhs
@@ -97,15 +99,19 @@ function makeDiff (lhs, rhs) {
 
   if (!compared.match) {
     // capture diff after line: "@@ -n,n +n,n @@"
-    const diff = compared.diff.split(/^(?:@@).*(?:@@)$/gm)[1]
+    const diff = verbose
+      ? compared.diff
+      : compared.diff.split(/^(?:@@).*(?:@@)$/gm)[1]
 
     for (const line of diff.split('\n')) {
-      const char0 = line.charAt(0)
-
-      if (char0 === '-')
-        msg.push(green(line))
-      else if (char0 === '+')
+      if (line.indexOf('--- ') === 0)
+        msg.push(inverse(red(line)))
+      else if (line.indexOf('+++ ') === 0)
+        msg.push(inverse(green(line)))
+      else if (line.charAt(0) === '-')
         msg.push(red(line))
+      else if (line.charAt(0) === '+')
+        msg.push(green(line))
       else
         msg.push(line)
     }
@@ -159,11 +165,11 @@ parser.on('fail', (fail) => {
 
     if ([ 'equal', 'deepEqual' ].includes(operator)) {
       if (typeof expected === 'string' && typeof actual === 'string') {
-        msg = [ ...msg, ...makeDiff(actual, expected) ]
+        msg = [ ...msg, ...makeDiff(actual, expected, options) ]
       }
       else if (typeof expected === 'object' && typeof actual === 'object') {
         // probably an array
-        msg = [ ...msg, ...makeDiff(actual, expected) ]
+        msg = [ ...msg, ...makeDiff(actual, expected, options) ]
       }
       else if (typeof expected === 'number' || typeof actual === 'number') {
         msg.push(`Expected ${red(expected)} but got ${green(actual)}`)

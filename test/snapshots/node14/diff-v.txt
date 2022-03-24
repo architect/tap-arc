@@ -1,7 +1,9 @@
 
   Object deepEqual fail
     ✖ 1) Single dimension array failure
-      
+      --- expected
+      +++ actual
+      @@ -1,5 +1,6 @@
        Array [
          "foo",
          "bar",
@@ -25,7 +27,9 @@
       at processImmediate (internal/timers.js:464:21)
       
     ✖ 2) A small object deepEqual failure
-      
+      --- expected
+      +++ actual
+      @@ -1,8 +1,10 @@
        Object {
       -  "a": "bar",
       +  "a": "foo",
@@ -55,7 +59,9 @@
       at processImmediate (internal/timers.js:464:21)
       
     ✖ 3) Object with fn deepEqual failure will be diffed as a string
-      
+      --- expected
+      +++ actual
+      @@ -1,1 +1,1 @@
       -"{ name: 'Duncan', house: 'Atreides', fight: [Function: fight] }"
       +"{ name: 'Gurney', house: 'Atreides', play: [Function: play] }"
       
@@ -99,5 +105,5 @@
 
   total:     4
   failing:   4
-  399 ms
+  435 ms
 
