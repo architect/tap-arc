@@ -44,7 +44,7 @@
       at processImmediate (node:internal/timers:466:21)
       
     ✖ 8) Sub-test match fail
-      Expected atreides to match /^A/
+      Expected "atreides" to match /^A/
       At: Test.<anonymous> (/test/create-simple-tap.js:19:5)
       
       Error: Sub-test match fail
@@ -125,5 +125,5 @@
   failing:   6
   skipped:   1
   todo:      2
-  239 ms
+  226 ms
 
