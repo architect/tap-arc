@@ -151,55 +151,55 @@ parser.on('fail', (fail) => {
         msg = [ ...msg, ...makeDiff(actual, expected) ]
       }
       else if (typeof expected === 'number' || typeof actual === 'number') {
-        msg.push(`Expected ${green(expected)} but got ${red(actual)}`)
+        msg.push(`Expected ${red(expected)} but got ${green(actual)}`)
       }
       else {
         // mixed types
-        msg.push(`operator: ${red(operator)}`)
-        msg.push(`expected: ${green(expected)} <${typeof expected}>`)
-        msg.push(`actual: ${red(actual)} <${typeof actual}>`)
+        msg.push(`operator: ${operator}`)
+        msg.push(`expected: ${red(`- ${expected}`)} <${typeof expected}>`)
+        msg.push(`actual: ${green(`+ ${actual}`)} <${typeof actual}>`)
       }
     }
     else if ([ 'notEqual', 'notDeepEqual' ].includes(operator)) {
       msg.push('Expected values to differ')
     }
     else if (operator === 'ok') {
-      msg.push(`Expected ${green('truthy')} but got ${red(actual)}`)
+      msg.push(`Expected ${blue('truthy')} but got ${green(actual)}`)
     }
     else if (operator === 'match') {
-      msg.push(`Expected ${red(actual)} to match ${blue(expected)}`)
+      msg.push(`Expected "${actual}" to match ${blue(expected)}`)
     }
     else if (operator === 'doesNotMatch') {
-      msg.push(`Expected ${red(actual)} to not match ${blue(expected)}`)
+      msg.push(`Expected "${actual}" to not match ${blue(expected)}`)
     }
     else if (operator === 'throws' && actual && actual !== 'undefined') {
       // this combination is ~doesNotThrow
-      msg.push(`Expected to not throw, received "${red(actual)}"`)
+      msg.push(`Expected to not throw, received "${green(actual)}"`)
     }
     else if (operator === 'throws') {
       msg.push('Expected to throw')
     }
     else if (operator === 'error') {
-      msg.push(`Expected error to be ${green('falsy')}`)
+      msg.push(`Expected error to be ${blue('falsy')}`)
     }
     else if (expected && !actual) {
       msg.push(`Expected ${red(operator)} but got nothing`)
     }
     else if (actual && !expected) {
-      msg.push(`Expected ${green('falsy')} but got ${red(actual)}`)
+      msg.push(`Expected ${blue('falsy')} but got ${green(actual)}`)
     }
     else if (expected && actual) {
-      msg.push(`Expected ${green(expected)} but got ${red(actual)}`)
+      msg.push(`Expected ${red(expected)} but got ${green(actual)}`)
     }
     else if (operator === 'fail') {
       msg.push('Explicit fail')
     }
     else if (!expected && !actual) {
-      msg.push(`operator: ${red(operator)}`)
+      msg.push(`operator: ${yellow(operator)}`)
     }
     else {
       // unlikely
-      msg.push(`operator: ${red(operator)}`)
+      msg.push(`operator: ${yellow(operator)}`)
       msg.push(`expected: ${green(expected)}`)
       msg.push(`actual: ${red(actual)}`)
     }

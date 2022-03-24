@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 
-- WIP: color corrections #18
+- color corrections #18
 
 ### Changed
 
