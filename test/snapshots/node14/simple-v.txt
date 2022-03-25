@@ -25,12 +25,9 @@
       at processImmediate (internal/timers.js:464:21)
       
     ✖ 7) should be strictly equal
-      --- expected
-      +++ actual
       @@ -1,1 +1,1 @@
       -"Good dog"
       +"Bad dog"
-      
       At: Test.<anonymous> (/test/create-simple-tap.js:18:5)
       
       Error: should be strictly equal
@@ -64,8 +61,6 @@
 
   Nested tests
     ✖ 9) Sub-test partial array failure
-      --- expected
-      +++ actual
       @@ -1,5 +1,5 @@
        Array [
          "foo",
@@ -73,7 +68,6 @@
       -  "foobar baz",
       +  "baz",
        ]
-      
       At: Test.<anonymous> (/test/create-simple-tap.js:22:8)
       
       Error: Sub-test partial array failure
@@ -89,8 +83,6 @@
       at Test.bound [as _end] (/node_modules/tape/lib/test.js:99:32)
       
     ✖ 10) A small object deepEqual failure
-      --- expected
-      +++ actual
       @@ -1,6 +1,7 @@
        Object {
       -  "a": "bar",
@@ -100,7 +92,6 @@
          ],
       +  "c": "baz",
        }
-      
       At: Test.<anonymous> (/test/create-simple-tap.js:27:8)
       
       Error: A small object deepEqual failure
@@ -133,5 +124,5 @@
   failing:   6
   skipped:   1
   todo:      2
-  447 ms
+  437 ms
 

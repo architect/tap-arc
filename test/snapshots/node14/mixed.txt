@@ -14,18 +14,17 @@
     ✔ And Object pass
     SKIP Skipping an arbitrary test
     ✖ 6) An Array failure
-      
+      @@ -1,5 +1,5 @@
        Array [
          3,
          4,
       -  5,
       +  6,
        ]
-      
       At: Test.<anonymous> (/test/create-mixed-tap.js:23:5)
       
     ✖ 7) An Object failure
-      
+      @@ -1,7 +1,7 @@
        Object {
          "a": 7,
          "b": Array [
@@ -34,7 +33,6 @@
            9,
          ],
        }
-      
       At: Test.<anonymous> (/test/create-mixed-tap.js:24:5)
       
 
@@ -116,5 +114,5 @@
   failing:   13
   skipped:   1
   todo:      2
-  1.452 s
+  1.607 s
 

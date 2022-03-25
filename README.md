@@ -1,6 +1,6 @@
 # `tap-arc`
 
-> A small (~24kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
+> A small (~23kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
 
 ## Objectives
 

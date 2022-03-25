@@ -24,6 +24,7 @@ test('Object deepEqual fail', function (t) {
     },
     'Object with fn deepEqual failure will be diffed as a string'
   )
+
   t.deepEqual(
     {
       id: 'Grandad',
@@ -63,5 +64,50 @@ test('Object deepEqual fail', function (t) {
     },
     'Shallow TAP output cannot be diffed, but it is a failure'
   )
+
+  t.end()
+})
+
+test('Deeply nested object failures', { objectPrintDepth: 10 }, function (t) {
+  t.deepEqual(
+    {
+      id: 'Grandad',
+      children: [
+        {
+          id: 'Dad',
+          children: [
+            {
+              id: 'Me',
+              children: [ 'Daughter' ]
+            }
+          ]
+        },
+        {
+          id: 'Aunt',
+          children: []
+        }
+      ]
+    },
+    {
+      id: 'Grandad',
+      children: [
+        {
+          id: 'Dad',
+          children: [
+            {
+              id: 'Me',
+              children: []
+            }
+          ]
+        },
+        {
+          id: 'Aunt',
+          children: [ 'Son' ]
+        }
+      ]
+    },
+    'Nested JSON diffs are expressed as (c)hunks'
+  )
+
   t.end()
 })
