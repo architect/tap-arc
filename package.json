@@ -29,29 +29,29 @@
   "scripts": {
     "lint": "eslint . --fix",
     "make-snapshots": "node scripts/make-snapshots.js",
-    "tap-arc:mixed": "npm run --silent tape:mixed | node ./index.js",
-    "tap-arc:diff": "npm run --silent tape:diff | node ./index.js",
-    "tap-arc:diff:-v": "npm run --silent tape:diff | node ./index.js -v",
-    "tap-arc:passing": "npm run --silent tape:passing | node ./index.js",
-    "tap-arc:simple": "npm run --silent tape:simple | node ./index.js",
-    "tap-arc:simple:-p": "npm run --silent tape:simple | node ./index.js -p",
-    "tap-arc:simple:-v": "npm run --silent tape:simple | node ./index.js -v",
-    "tape:mixed": "tape test/create-mixed-tap.js",
+    "slow": "npm run --silent tape:slow-pass | ./index.js",
+    "tap-arc:diff:-v": "npm run --silent tape:diff | ./index.js -v",
+    "tap-arc:diff": "npm run --silent tape:diff | ./index.js",
+    "tap-arc:mixed": "npm run --silent tape:mixed | ./index.js",
+    "tap-arc:passing": "npm run --silent tape:passing | ./index.js",
+    "tap-arc:simple:-p": "npm run --silent tape:simple | ./index.js -p",
+    "tap-arc:simple:-v": "npm run --silent tape:simple | ./index.js -v",
+    "tap-arc:simple": "npm run --silent tape:simple | ./index.js",
     "tape:diff": "tape test/create-diff-tap.js",
+    "tape:mixed": "tape test/create-mixed-tap.js",
     "tape:passing": "tape test/create-passing-tap.js",
     "tape:simple": "tape test/create-simple-tap.js",
     "tape:slow-pass": "tape test/create-slow-passing-tap.js",
-    "slow": "npm run --silent tape:slow-pass | node ./index.js",
-    "test": "npm run lint && tape test/index.js | node ./index.js"
+    "test": "npm run lint && tape test/index.js | ./index.js"
   },
   "dependencies": {
     "json5": "^2.2.1",
     "minimist": "^1.2.6",
+    "minipass": "~3.1.6",
     "picocolors": "^1.0.0",
     "strip-ansi": "^6.0.1",
     "tap-parser": "^11.0.1",
-    "tcompare": "^5.0.7",
-    "through2": "^4.0.2"
+    "tcompare": "^5.0.7"
   },
   "devDependencies": {
     "@architect/eslint-config": "^2.0.1",

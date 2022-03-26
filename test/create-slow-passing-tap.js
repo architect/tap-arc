@@ -5,58 +5,36 @@ function sleep (ms) {
 }
 
 test('Immediate assertions', function (t) {
-  t.plan(2)
-
   t.pass('The first one')
   t.pass('Number 2')
-})
-
-test('Some sleepy tests', async function (t) {
-  t.pass('2 more immediate passing')
-  t.pass('Then a line, then sleep 2s...')
-
-  console.log('------')
-  await sleep(2000)
-
-  t.pass('2s has passed. Sleeping 4s')
-
-  console.log('------')
-  await sleep(4000)
-
-  t.pass('Slept 4s. Going to next group immediately')
   t.end()
 })
 
-test('Some nested sleepy tests', async function (t) {
-  t.test(async function (st) {
-    st.pass('2 more immediate passing')
-    st.pass('Then a line, then sleep 2s...')
+test('Some sleepy tests', async function (t) {
+  t.pass('|‾| 3 immediate passing')
+  t.pass('| |')
+  t.pass('|_| This shape should print immediately!')
 
-    console.log('------')
-    await sleep(2000)
+  await sleep(2000)
 
-    st.pass('2s has passed. Sleeping 4s')
+  t.pass('[-] 2s has passed. Sleeping 4s')
 
-    console.log('------')
-    await sleep(4000)
+  await sleep(4000)
 
-    st.pass('Slept 4s. Going to next group immediately')
-    st.end()
-  }, 'Nested tests')
+  t.pass('[-] Slept 4s. Going to next group...')
+  t.end()
+})
 
-  t.test(async function (st) {
-    st.pass('2 more immediate passing')
-    st.pass('Then a line, then sleep 2s...')
+test('Some more sleepy tests', async function (t) {
+  t.pass('|‾| 2 immediate passing')
+  t.pass('|_| This shape should print immediately!')
 
-    console.log('------')
-    await sleep(2000)
+  await sleep(2000)
 
-    st.pass('2s has passed. Sleeping 4s')
+  t.pass('[-] 2s has passed. Sleeping 4s')
 
-    console.log('------')
-    await sleep(4000)
+  await sleep(4000)
 
-    st.pass('Slept 4s. Going to next group immediately')
-    st.end()
-  }, 'More nested tests')
+  t.pass('[-] Slept 4s. All done.')
+  t.end()
 })

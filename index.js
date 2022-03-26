@@ -2,9 +2,9 @@
 
 const JSON5 = require('json5')
 const minimist = require('minimist')
+const Minipass = require('minipass')
 const Parser = require('tap-parser')
 const stripAnsi = require('strip-ansi')
-const through = require('through2')
 const { strict } = require('tcompare')
 const {
   blue,
@@ -16,9 +16,6 @@ const {
   underline,
   yellow,
 } = require('picocolors')
-
-// Log test-group name
-const RESULT_COMMENTS = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok' ]
 
 const alias = {
   help: [ 'h', 'help' ],
@@ -56,11 +53,12 @@ Options:
 }
 
 const parser = new Parser({ bail: options.pessimistic })
-const tapArc = through()
+const tapArc = new Minipass({ objectMode: true })
 const cwd = process.cwd()
 const start = Date.now()
 const OKAY = green('✔')
 const FAIL = red('✖')
+const RESULT_COMMENTS = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok' ]
 
 function pad (count = 1, char = '  ') {
   return dim(char).repeat(count)
@@ -122,7 +120,7 @@ function makeDiff (lhs, rhs) {
 }
 
 function print (msg) {
-  tapArc.push(options.color ? msg : stripAnsi(msg))
+  tapArc.write(options.color ? msg : stripAnsi(msg))
 }
 
 function prettyMs (start) {
@@ -263,9 +261,10 @@ parser.on('complete', (result) => {
   if (result.todo > 0) print(`${pad()}todo:      ${result.todo}\n`)
   if (result.bailout) print(`${pad()}${bold(underline(red('BAILED!')))}\n`)
 
+  process.exitCode = result.ok ? 0 : 1
   tapArc.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`)
-
-  process.exit(result.ok ? 0 : 1)
 })
 
-process.stdin.pipe(parser).pipe(tapArc).pipe(process.stdout)
+process.stdin.pipe(parser)
+parser.pipe(tapArc)
+tapArc.pipe(process.stdout)
