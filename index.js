@@ -265,7 +265,7 @@ parser.on('complete', (result) => {
 
   tapArc.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`)
 
-  process.exit(result.ok ? 0 : 1)
+  process.exit(result.ok && result.count > 0 ? 0 : 1)
 })
 
 process.stdin.pipe(parser).pipe(tapArc).pipe(process.stdout)

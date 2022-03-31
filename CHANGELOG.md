@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 <!-- ## [Unreleased] -->
 
+## [0.3.4] - 2022-03-30
+
+## Changed
+
+- when total test count is 0, exit with code `1`. #26
+
 ## [0.3.3] - 2022-03-25
 
 ### Fixed

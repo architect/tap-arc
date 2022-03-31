@@ -23,9 +23,8 @@ async function main () {
 
     exec(
       `npm run --silent ${command} > ${snapshotFolder}/${name}${args}.txt`,
-      (_error, _stdout, stderr) => {
-        if (stderr) console.log(`Unexpected stderror: ${stderr}`)
-        console.log(`Snapped ${name} ${args} with ${command}`)
+      () => {
+        console.log(`Snapped "${command}" to ${snapshotFolder}/${name}${args}.txt`)
       }
     )
   }

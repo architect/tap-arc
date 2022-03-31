@@ -79,6 +79,8 @@ The snapshots are versioned by Node.js' major version, ie. `node14` and `node16`
 
 This is also why `tape` is pinned as a development dependency. Update as needed, but recreate snapshots.
 
+Request: please exclude updated snapshots from commits if the _only_ change is to the duration line. This variance is accounted for in the tests.
+
 ## Credit & Inspiration
 
 - [tap-spec](https://github.com/scottcorgan/tap-spec) ol' reliable, but a bit stale and npm vulnerabilities
