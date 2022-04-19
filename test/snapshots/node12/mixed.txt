@@ -1,0 +1,118 @@
+
+  basic arithmetic without messages
+    ✔ should be strictly equal
+    ✖ 2) should be strictly equal
+      Expected 666 but got 66
+      At: Test.<anonymous> (/test/create-mixed-tap.js:5:5)
+      
+
+  logging inside a test
+    Logging from a test can be helpful
+
+  deep equality
+    ✔ An Array pass
+    ✔ And Object pass
+    SKIP Skipping an arbitrary test
+    ✖ 6) An Array failure
+      @@ -1,5 +1,5 @@
+       Array [
+         3,
+         4,
+      -  5,
+      +  6,
+       ]
+      At: Test.<anonymous> (/test/create-mixed-tap.js:23:5)
+      
+    ✖ 7) An Object failure
+      @@ -1,7 +1,7 @@
+       Object {
+         "a": 7,
+         "b": Array [
+      -    12,
+      +    8,
+           9,
+         ],
+       }
+      At: Test.<anonymous> (/test/create-mixed-tap.js:24:5)
+      
+
+  comparing booleans
+    ✔ A passing Boolean
+    ✖ 9) A failing Boolean
+      Expected truthy but got false
+      At: Test.<anonymous> (/test/create-mixed-tap.js:31:5)
+      
+    ✔ A passing !Boolean
+    ✖ 11) A failing !Boolean
+      Expected falsy but got true
+      At: Test.<anonymous> (/test/create-mixed-tap.js:33:5)
+      
+
+  iterators
+    ✖ 12) Simple ifError 1
+      Expected error to be falsy
+      At: <anonymous> (/test/create-mixed-tap.js:40:7)
+      
+    ✔ Simple ifError 2
+    ✖ 14) Error: "x" is 3. Halt and catch fire!
+      Expected error to be falsy
+      At: <anonymous> (/test/create-mixed-tap.js:44:7)
+      
+
+  nested
+
+  (anonymous)
+    ✖ 15) Sub-test match fail
+      Expected "atreides" to match /^A/
+      At: Test.<anonymous> (/test/create-mixed-tap.js:53:8)
+      
+    ✖ 16) Sub-test doesNotMatch fail
+      Expected "'Hark0nnen'" to not match /[0-9]/
+      At: Test.<anonymous> (/test/create-mixed-tap.js:54:8)
+      
+    ✔ Sub-test match pass
+    ✔ Sub-test doesNotMatch pass
+
+  Delayed sub-test
+    ✔ Delayed sub-test pass
+    ✖ 20) Delayed sub-test fail
+      Explicit fail
+      At: Timeout._onTimeout (/test/create-mixed-tap.js:63:10)
+      
+
+  throws
+    ✖ 21) A failing throws
+      Expected to throw
+      At: Test.<anonymous> (/test/create-mixed-tap.js:71:5)
+      
+    ✖ 22) A failing doesNotThrow
+      Expected to not throw, received "Spice"
+      At: Test.<anonymous> (/test/create-mixed-tap.js:75:5)
+      
+
+  TODO some TODO tests
+    TODO Tests todo aren't really tests
+    TODO Test the actual library
+
+  Failed tests: There were 13 failures
+
+    ✖ 2) should be strictly equal
+    ✖ 6) An Array failure
+    ✖ 7) An Object failure
+    ✖ 9) A failing Boolean
+    ✖ 11) A failing !Boolean
+    ✖ 12) Simple ifError 1
+    ✖ 14) Error: "x" is 3. Halt and catch fire!
+    ✖ 15) Sub-test match fail
+    ✖ 16) Sub-test doesNotMatch fail
+    ✖ 20) Delayed sub-test fail
+    ✖ 21) A failing throws
+    ✖ 22) A failing doesNotThrow
+
+  total:     24
+  passing:   11
+  failing:   13
+  skipped:   1
+  todo:      2
+  1.597 s
+

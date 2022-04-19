@@ -1,0 +1,74 @@
+
+  Object deepEqual fail
+    ✖ 1) Single dimension array failure
+      @@ -1,5 +1,6 @@
+       Array [
+         "foo",
+         "bar",
+      -  "foobar baz",
+      +  "baz",
+      +  "thing",
+       ]
+      At: Test.<anonymous> (/test/create-diff-tap.js:4:5)
+      
+    ✖ 2) A small object deepEqual failure
+      @@ -1,8 +1,10 @@
+       Object {
+      -  "a": "bar",
+      +  "a": "foo",
+         "b": Array [
+      -    12,
+      +    11,
+           9,
+         ],
+      -  "c": "foobar",
+      +  "c": Object {
+      +    "foo": "bar",
+      +  },
+       }
+      At: Test.<anonymous> (/test/create-diff-tap.js:9:5)
+      
+    ✖ 3) Object with fn deepEqual failure will be diffed as a string
+      @@ -1,1 +1,1 @@
+      -"{ name: 'Duncan', house: 'Atreides', fight: [Function: fight] }"
+      +"{ name: 'Gurney', house: 'Atreides', play: [Function: play] }"
+      At: Test.<anonymous> (/test/create-diff-tap.js:14:5)
+      
+    ✖ 4) Shallow TAP output cannot be diffed, but it is a failure
+      Expected did not match actual.
+      At: Test.<anonymous> (/test/create-diff-tap.js:28:5)
+      
+
+  Deeply nested object failures
+    ✖ 5) Nested JSON diffs are expressed as (c)hunks
+      @@ -4,6 +4,7 @@
+             "children": Array [
+               Object {
+                 "children": Array [
+      +            "Daughter",
+                 ],
+                 "id": "Me",
+               },
+      @@ -12,7 +13,6 @@
+           },
+           Object {
+             "children": Array [
+      -        "Son",
+             ],
+             "id": "Aunt",
+           },
+      At: Test.<anonymous> (/test/create-diff-tap.js:72:5)
+      
+
+  Failed tests: There were 5 failures
+
+    ✖ 1) Single dimension array failure
+    ✖ 2) A small object deepEqual failure
+    ✖ 3) Object with fn deepEqual failure will be diffed as a string
+    ✖ 4) Shallow TAP output cannot be diffed, but it is a failure
+    ✖ 5) Nested JSON diffs are expressed as (c)hunks
+
+  total:     5
+  failing:   5
+  500 ms
+

@@ -1,30 +1,20 @@
 name: Node CI
 
-# Push tests pushes; PR tests merges
 on: [ push, pull_request ]
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
-
-  # Test the build
   build:
-    # Setup
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 14.x, 16.x ]
-        os: [ ubuntu-latest ] # TODO: add windows-latest
+        node-version: [ 12.x, 14.x, 16.x, 18.x ]
 
-    # Go
     steps:
     - name: Check out repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
 
@@ -42,8 +32,6 @@ jobs:
 
     - name: Test
       run: npm test
-      env:
-        CI: true
 
     - name: Notify
       uses: sarisia/actions-status-discord@v1
@@ -55,22 +43,17 @@ jobs:
         color: 0x222222
         username: GitHub Actions
 
-  # ----- Only git tag testing + package publishing beyond this point ----- #
-
-  # Publish to package registries
   publish:
-    # Setup
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
-    # Go
     steps:
       - name: Check out repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
@@ -78,7 +61,6 @@ jobs:
       - name: Install
         run: npm i
 
-      # Publish to npm
       - name: Publish @RC to npm
         if: contains(github.ref, 'RC')
         run: npm publish --tag RC
@@ -86,7 +68,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @latest to npm
-        if: contains(github.ref, 'RC') == false #'!contains()'' doesn't work lol
+        if: contains(github.ref, 'RC') == false
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
