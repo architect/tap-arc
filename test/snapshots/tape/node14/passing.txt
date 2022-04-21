@@ -1,0 +1,43 @@
+
+  basic arithmetic
+    ✔ should be strictly equal
+    ✔ should be strictly equal
+
+  deep equality
+    ✔ should be deeply equivalent
+    ✔ should be deeply equivalent
+
+  comparing booleans
+    ✔ should be truthy
+
+  negatives
+    ✔ should not be strictly equal
+    ✔ should not be deeply equivalent
+    ✔ should be falsy
+
+  empty map
+
+  map with elements
+    ✔ (unnamed assert)
+    ✔ (unnamed assert)
+
+  more info
+    ✔ basic arithmetic still works
+    ✔ inequalities are as we might expect
+
+  asynchronous results
+    ✔ should be strictly equal
+    ✔ should be strictly equal
+
+  nested
+
+  (anonymous)
+    ✔ should be strictly equal
+
+  (anonymous)
+    ✔ (unnamed assert)
+
+  total:     16
+  passing:   16
+  1.497 s
+

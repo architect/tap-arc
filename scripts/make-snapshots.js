@@ -2,8 +2,8 @@ const { exec } = require('child_process')
 const { scripts } = require('../package.json')
 const fs = require('fs')
 
-const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
-const producers = ['native, tape']
+const NODE_MAJOR_VERSION = Number.parseInt(process.versions.node.split('.')[0])
+const producers = [ 'node', 'tape' ]
 const commands = Object.keys(scripts).filter((key) => key.indexOf('tap-arc:') === 0)
 
 async function main () {
@@ -22,17 +22,22 @@ async function main () {
     }
   }
 
-  for (const command of commands) {
-    const [ _, args = '' ] = command.split(':').slice(1)
-    const [ producer, name ] = _.split('-')
-    const fileName = `test/snapshots/${producer}/node${NODE_MAJOR_VERSION}/${name}${args}.txt`
+  for (const fullCommand of commands) {
+    const [ command, flags = '' ] = fullCommand.split(':').slice(1)
+    const [ producer, name ] = command.split('-')
+    const fileName = `test/snapshots/${producer}/node${NODE_MAJOR_VERSION}/${name}${flags}.txt`
 
-    exec(
-      `npm run --silent ${command} > ${fileName}`,
-      () => {
-        console.log(`Snapped "${command}" to ${fileName}`)
-      }
-    )
+    if (
+      producer !== 'node'
+      || NODE_MAJOR_VERSION >= 18 && producer === 'node'
+    ) {
+      exec(
+        `npm run --silent ${fullCommand} > ${fileName}`,
+        () => {
+          console.log(`Snapped "${command}" to ${fileName}`)
+        }
+      )
+    }
   }
 }
 

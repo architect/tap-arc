@@ -30,10 +30,12 @@
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "make-snapshots": "node scripts/make-snapshots.js",
-    "native:simple": "node test/fixtures/native/create-simple-tap.mjs",
+    "node:passing": "node test/fixtures/node/create-passing-tap.mjs",
+    "node:simple": "node test/fixtures/node/create-simple-tap.mjs",
     "slow": "npm run --silent tape:slow-pass | ./index.js",
-    "tap-arc:native-simple": "npm run --silent native:simple | ./index.js",
-    "tap-arc:native-simple:-v": "npm run --silent native:simple | ./index.js -v",
+    "tap-arc:node-passing": "npm run --silent node:passing | ./index.js",
+    "tap-arc:node-simple": "npm run --silent node:simple | ./index.js",
+    "tap-arc:node-simple:-v": "npm run --silent node:simple | ./index.js -v",
     "tap-arc:tape-diff:-v": "npm run --silent tape:diff | ./index.js -v",
     "tap-arc:tape-diff": "npm run --silent tape:diff | ./index.js",
     "tap-arc:tape-empty": "npm run --silent tape:empty | ./index.js",
@@ -50,9 +52,9 @@
     "tape:passing": "tape test/fixtures/tape/create-passing-tap.js",
     "tape:simple": "tape test/fixtures/tape/create-simple-tap.js",
     "tape:slow-pass": "tape test/fixtures/tape/create-slow-passing-tap.js",
-    "native": "node test/native.test.mjs | ./index.js",
+    "node": "node test/node.test.js | ./index.js",
     "tape": "tape test/tape.test.js | ./index.js",
-    "test": "npm run lint:check && npm run tape && npm run native"
+    "test": "npm run lint:check && npm run tape && npm run node"
   },
   "dependencies": {
     "json5": "^2.2.1",

@@ -7,7 +7,7 @@ const { scripts } = require('../package.json')
 const NODE_MAJOR_VERSION = Number.parseInt(process.versions.node.split('.')[0])
 
 const commands = Object.keys(scripts)
-  .filter((k) => k.indexOf('tap-arc:tape-') === 0)
+  .filter((k) => k.indexOf('tap-arc:node-') === 0)
   .map((c) => c.split(':').slice(1))
 
 function trimNLines (text, n) {
@@ -22,11 +22,11 @@ for (const fullCommand of commands) {
   const [ name ] = command.split('-').slice(1)
 
   test(`"${commandName}" tap-arc output matches snapshot`, (t) => {
-    const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/tape/node${NODE_MAJOR_VERSION}/${name}${flags}.txt`)
+    const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/node/node${NODE_MAJOR_VERSION}/${name}${flags}.txt`)
     const [ trimmedSnapshot ] = trimNLines(fullSnapshot.toString(), 3)
 
     exec(
-      `npx tape ${__dirname}/fixtures/tape/create-${name}-tap.js | ${__dirname}/../index.js ${flags}`,
+      `node ${__dirname}/fixtures/node/create-${name}-tap.mjs | ${__dirname}/../index.js ${flags}`,
       (error, stdout, stderr) => {
         const strippedOut = stripAnsi(stdout)
         const [ trimmedOut, durationLines ] = trimNLines(strippedOut, 3)
@@ -39,7 +39,7 @@ for (const fullCommand of commands) {
           t.equal(error.code, 1, 'exit code is 1')
         }
 
-        if (command.indexOf('error') < 0)
+        if (command.indexOf('error') < 0 && stderr.indexOf('ExperimentalWarning:') < 0)
           t.notOk(stderr, `"${commandName}" stderr should be empty`)
 
         t.equal(trimmedOut, trimmedSnapshot, `"${commandName}" output matches snapshot`)
@@ -53,11 +53,11 @@ for (const fullCommand of commands) {
 
 test('passing tests do not error', (t) => {
   exec(
-    `npx tape ${__dirname}/fixtures/tape/create-passing-tap.js | ${__dirname}/../index.js`,
+    `node ${__dirname}/fixtures/node/create-passing-tap.mjs | ${__dirname}/../index.js`,
     (error, stdout, stderr) => {
       const strippedOut = stripAnsi(stdout)
       t.notOk(error, 'error should be undefined')
-      t.notOk(stderr, 'stderror should be empty')
+      t.notOk(stderr.indexOf('ExperimentalWarning:') < 0, 'stderror should be ExperimentalWarning')
       t.ok(strippedOut.indexOf('fail') < 0, '"fail" should not occur in output')
       t.end()
     }

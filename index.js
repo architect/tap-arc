@@ -18,7 +18,7 @@ const {
 } = require('picocolors')
 
 // Log test-group name
-const RESULT_COMMENTS = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok' ]
+const RESULT_COMMENTS = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok', 'duration_ms' ]
 
 const alias = {
   help: [ 'h', 'help' ],
