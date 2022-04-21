@@ -21,7 +21,7 @@ for (const c of commands) {
   const fullCommand = `${command}${flags ? ` ${flags}` : ''}`
 
   test(`"${fullCommand}" tap-arc output matches "${fullCommand}" snapshot`, (t) => {
-    const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/node${NODE_MAJOR_VERSION}/${command}${flags}.txt`)
+    const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/tape/node${NODE_MAJOR_VERSION}/${command}${flags}.txt`)
     const [ trimmedSnapshot ] = trimNLines(fullSnapshot.toString(), 3)
 
     exec(

@@ -158,7 +158,7 @@ parser.on('fail', (fail) => {
   print(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${red(fail.name)}\n`)
 
   if (fail.diag) {
-    const { actual, at, expected, operator, stack } = fail.diag
+    const { actual, at, error, expected, operator, stack } = fail.diag
     let msg = [] // individual lines of output
 
     if ([ 'equal', 'deepEqual' ].includes(operator)) {
@@ -191,15 +191,20 @@ parser.on('fail', (fail) => {
     else if (operator === 'doesNotMatch') {
       msg.push(`Expected "${actual}" to not match ${blue(expected)}`)
     }
-    else if (operator === 'throws' && actual && actual !== 'undefined') {
-      // this combination is ~doesNotThrow
-      msg.push(`Expected to not throw, received "${green(actual)}"`)
-    }
     else if (operator === 'throws') {
-      msg.push('Expected to throw')
+      if (actual && actual !== 'undefined') {
+        // this combination is ~doesNotThrow
+        msg.push(`Expected to not throw, received "${green(actual)}"`)
+      }
+      else {
+        msg.push('Expected to throw')
+      }
     }
     else if (operator === 'error') {
       msg.push(`Expected error to be ${blue('falsy')}`)
+    }
+    else if (operator === 'fail') {
+      msg.push('Explicit fail')
     }
     else if (expected && !actual) {
       msg.push(`Expected ${red(operator)} but got nothing`)
@@ -210,14 +215,12 @@ parser.on('fail', (fail) => {
     else if (expected && actual) {
       msg.push(`Expected ${red(expected)} but got ${green(actual)}`)
     }
-    else if (operator === 'fail') {
-      msg.push('Explicit fail')
-    }
     else if (!expected && !actual) {
-      msg.push(`operator: ${yellow(operator)}`)
+      // console.log(fail)
+      if (operator) msg.push(`operator: ${yellow(operator)}`)
+      if (error) msg.push(`error: ${red(error)}`)
     }
     else {
-      // unlikely
       msg.push(`operator: ${yellow(operator)}`)
       msg.push(`expected: ${green(expected)}`)
       msg.push(`actual: ${red(actual)}`)
