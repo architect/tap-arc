@@ -1,0 +1,28 @@
+    ✔ synchronous passing test
+    ✖ 2) synchronous failing test
+      error: Expected values to be strictly equal:\n\n1 !== 2\n
+      
+    ✔ asynchronous passing test
+    ✖ 4) asynchronous failing test
+      error: Expected values to be strictly equal:\n\n1 !== 2\n
+      
+    ✖ 5) failing test using Promises
+      error: this will cause the test to fail
+      
+    ✔ callback passing test
+    ✖ 7) callback failing test
+      error: callback failure
+      
+
+  Failed tests: There were 4 failures
+
+    ✖ 2) synchronous failing test
+    ✖ 4) asynchronous failing test
+    ✖ 5) failing test using Promises
+    ✖ 7) callback failing test
+
+  total:     7
+  passing:   3
+  failing:   4
+  371 ms
+

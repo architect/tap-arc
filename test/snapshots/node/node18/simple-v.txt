@@ -1,0 +1,49 @@
+    ✔ synchronous passing test
+    ✖ 2) synchronous failing test
+      error: Expected values to be strictly equal:\n\n1 !== 2\n
+      
+      TestContext.<anonymous> (file:///test/fixtures/node/create-simple-tap.mjs:11:10)
+      Test.runInAsyncScope (node:async_hooks:202:9)
+      Test.run (node:internal/test_runner/test:333:20)
+      Test.processPendingSubtests (node:internal/test_runner/test:146:27)
+      Test.postRun (node:internal/test_runner/test:381:19)
+      Test.run (node:internal/test_runner/test:343:10)
+      
+    ✔ asynchronous passing test
+    ✖ 4) asynchronous failing test
+      error: Expected values to be strictly equal:\n\n1 !== 2\n
+      
+      TestContext.<anonymous> (file:///test/fixtures/node/create-simple-tap.mjs:23:10)
+      Test.runInAsyncScope (node:async_hooks:202:9)
+      Test.run (node:internal/test_runner/test:333:20)
+      Test.processPendingSubtests (node:internal/test_runner/test:146:27)
+      Test.postRun (node:internal/test_runner/test:381:19)
+      Test.run (node:internal/test_runner/test:343:10)
+      async Test.processPendingSubtests (node:internal/test_runner/test:146:7)
+      
+    ✖ 5) failing test using Promises
+      error: this will cause the test to fail
+      
+      Immediate.<anonymous> (file:///test/fixtures/node/create-simple-tap.mjs:30:14)
+      process.processImmediate (node:internal/timers:471:21)
+      
+    ✔ callback passing test
+    ✖ 7) callback failing test
+      error: callback failure
+      
+      Immediate.<anonymous> (file:///test/fixtures/node/create-simple-tap.mjs:45:10)
+      process.processImmediate (node:internal/timers:471:21)
+      
+
+  Failed tests: There were 4 failures
+
+    ✖ 2) synchronous failing test
+    ✖ 4) asynchronous failing test
+    ✖ 5) failing test using Promises
+    ✖ 7) callback failing test
+
+  total:     7
+  passing:   3
+  failing:   4
+  350 ms
+

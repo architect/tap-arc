@@ -1,0 +1,8 @@
+    ✔ synchronous passing test
+    ✔ asynchronous passing test
+    ✔ callback passing test
+
+  total:     3
+  passing:   3
+  386 ms
+
