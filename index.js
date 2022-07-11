@@ -6,19 +6,14 @@ const Parser = require('tap-parser')
 const stripAnsi = require('strip-ansi')
 const through = require('through2')
 const { strict } = require('tcompare')
-const {
-  blue,
-  bold,
-  dim,
-  green,
-  italic,
-  red,
-  underline,
-  yellow,
-} = require('picocolors')
+const { blue, bold, dim, green, italic, red, underline, yellow } = require(
+  'picocolors',
+)
 
 // Log test-group name
-const RESULT_COMMENTS = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok' ]
+const RESULT_COMMENTS = [
+  'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok',
+]
 
 const alias = {
   help: [ 'h', 'help' ],
@@ -30,11 +25,12 @@ const options = {
   help: false,
   pessimistic: false,
   verbose: false,
-  ...minimist(process.argv.slice(2), { alias })
+  ...minimist(process.argv.slice(2), { alias }),
 }
 
 if (options.help) {
-  console.log(`
+  console.log(
+    `
 Usage:
   tap-arc <options>
 
@@ -51,7 +47,8 @@ Options:
 
   --no-color
     Output without ANSI escape sequences for colors
-    example: tap-arc --no-color`)
+    example: tap-arc --no-color`,
+  )
   process.exit()
 }
 
@@ -85,16 +82,12 @@ function makeDiff (lhs, rhs) {
     rhs = pRhs
   }
 
-  const compared = strict(
-    lhs,
-    rhs,
-    {
-      includeEnumerable: true,
-      includeGetters: true,
-      pretty: true,
-      sort: true
-    }
-  )
+  const compared = strict(lhs, rhs, {
+    includeEnumerable: true,
+    includeGetters: true,
+    pretty: true,
+    sort: true,
+  })
 
   if (!compared.match) {
     // remove leading header lines
@@ -104,14 +97,18 @@ function makeDiff (lhs, rhs) {
     for (const line of diff) {
       const char0 = line.charAt(0)
 
-      if (char0 === '-')
+      if (char0 === '-') {
         msg.push(red(line))
-      else if (char0 === '+')
+      }
+      else if (char0 === '+') {
         msg.push(green(line))
-      else if (char0 === '@')
+      }
+      else if (char0 === '@') {
         msg.push(italic(dim(line)))
-      else
+      }
+      else {
         msg.push(line)
+      }
     }
   }
   else {
@@ -141,17 +138,24 @@ parser.on('skip', (skip) => {
 parser.on('extra', (extra) => {
   const stripped = stripAnsi(extra).trim()
   const justAnsi = stripped.length === 0 && extra.length > 0
-  if (!justAnsi) print(`${pad(2)}${extra}`)
+  if (!justAnsi) {
+    print(`${pad(2)}${extra}`)
+  }
 })
 
 parser.on('comment', (comment) => {
-  if (!RESULT_COMMENTS.some((c) => comment.startsWith(c, 2)))
+  if (!RESULT_COMMENTS.some((c) => comment.startsWith(c, 2))) {
     print(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ''))}\n`)
+  }
 })
 
 parser.on('todo', (todo) => {
-  if (todo.ok) print(`${pad(2)}${yellow('TODO')} ${dim(todo.name)}\n`)
-  else print(`${pad(2)}${red('TODO')} ${dim(todo.name)}\n`)
+  if (todo.ok) {
+    print(`${pad(2)}${yellow('TODO')} ${dim(todo.name)}\n`)
+  }
+  else {
+    print(`${pad(2)}${red('TODO')} ${dim(todo.name)}\n`)
+  }
 })
 
 parser.on('fail', (fail) => {
@@ -223,7 +227,9 @@ parser.on('fail', (fail) => {
       msg.push(`actual: ${red(actual)}`)
     }
 
-    if (at) msg.push(`${dim(`At: ${at.replace(cwd, '')}`)}`)
+    if (at) {
+      msg.push(`${dim(`At: ${at.replace(cwd, '')}`)}`)
+    }
 
     if (options.verbose && stack) {
       msg.push('')
@@ -257,15 +263,28 @@ parser.on('complete', (result) => {
   }
 
   print(`\n${pad()}total:     ${result.count}\n`)
-  if (result.pass > 0) print(green(`${pad()}passing:   ${result.pass}\n`))
-  if (result.fail > 0) print(red(`${pad()}failing:   ${result.fail}\n`))
-  if (result.skip > 0) print(`${pad()}skipped:   ${result.skip}\n`)
-  if (result.todo > 0) print(`${pad()}todo:      ${result.todo}\n`)
-  if (result.bailout) print(`${pad()}${bold(underline(red('BAILED!')))}\n`)
+  if (result.pass > 0) {
+    print(green(`${pad()}passing:   ${result.pass}\n`))
+  }
+  if (result.fail > 0) {
+    print(red(`${pad()}failing:   ${result.fail}\n`))
+  }
+  if (result.skip > 0) {
+    print(`${pad()}skipped:   ${result.skip}\n`)
+  }
+  if (result.todo > 0) {
+    print(`${pad()}todo:      ${result.todo}\n`)
+  }
+  if (result.bailout) {
+    print(`${pad()}${bold(underline(red('BAILED!')))}\n`)
+  }
 
   tapArc.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`)
 
   process.exit(result.ok && result.count > 0 ? 0 : 1)
 })
 
-process.stdin.pipe(parser).pipe(tapArc).pipe(process.stdout)
+process.stdin
+  .pipe(parser)
+  .pipe(tapArc)
+  .pipe(process.stdout)
