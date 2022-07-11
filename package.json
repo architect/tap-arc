@@ -40,6 +40,7 @@
     "tap-arc:simple:-p": "npm run --silent tape:simple | ./index.js -p",
     "tap-arc:simple:-v": "npm run --silent tape:simple | ./index.js -v",
     "tap-arc:simple": "npm run --silent tape:simple | ./index.js",
+    "tap-arc:throws": "npm run --silent tape:throws | ./index.js",
     "tape:diff": "tape test/create-diff-tap.js",
     "tape:empty": "tape test/create-empty-tap.js",
     "tape:mixed": "tape test/create-mixed-tap.js",
@@ -47,6 +48,7 @@
     "tape:passing": "tape test/create-passing-tap.js",
     "tape:simple": "tape test/create-simple-tap.js",
     "tape:slow-pass": "tape test/create-slow-passing-tap.js",
+    "tape:throws": "tape test/create-throws-tap.js",
     "test": "npm run lint:check && tape test/index.js | ./index.js"
   },
   "dependencies": {

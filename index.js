@@ -195,6 +195,20 @@ parser.on('fail', (fail) => {
     else if (operator === 'doesNotMatch') {
       msg.push(`Expected "${actual}" to not match ${blue(expected)}`)
     }
+    else if (
+      operator === 'throws' &&
+      actual &&
+      actual !== 'undefined' &&
+      expected &&
+      expected !== 'undefined'
+    ) {
+      // this combination is throws with expected/assertion
+      msg.push(
+        `Expected ${red(expected)} to match "${green(
+          actual.message || actual,
+        )}"`,
+      )
+    }
     else if (operator === 'throws' && actual && actual !== 'undefined') {
       // this combination is ~doesNotThrow
       msg.push(`Expected to not throw, received "${green(actual)}"`)
