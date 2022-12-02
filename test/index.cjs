@@ -25,20 +25,22 @@ for (const c of commands) {
     const [ trimmedSnapshot ] = trimNLines(fullSnapshot.toString(), 3)
 
     exec(
-      `npx tape ${__dirname}/create-${command}-tap.js | ${__dirname}/../index.js ${flags}`,
+      `npx tape ${__dirname}/create-${command}-tap.cjs | ${__dirname}/../index.js ${flags}`,
       (error, stdout, stderr) => {
         const strippedOut = stripAnsi(stdout)
         const [ trimmedOut, durationLines ] = trimNLines(strippedOut, 3)
-        if (command.indexOf('pass') >= 0)
+        if (command.indexOf('pass') >= 0) {
           t.notOk(error, `"${fullCommand}" does not create an error`)
+        }
         else {
           // expect exit code == 1 unless named with "pass"
           t.ok(error, `"${fullCommand}" creates an error`)
-          t.equal(error.code, 1, 'exit code is 1')
+          t.equal(error?.code, 1, 'exit code is 1')
         }
 
-        if (command.indexOf('error') < 0)
+        if (command.indexOf('error') < 0) {
           t.notOk(stderr, 'stderr should be empty')
+        }
         t.equal(trimmedOut, trimmedSnapshot, 'output matches snapshot')
         t.match(durationLines.join(''), /[0-9]+\s[ms|s]/, 'contains a duration')
 
@@ -50,7 +52,7 @@ for (const c of commands) {
 
 test('passing tests do not error', (t) => {
   exec(
-    `npx tape ${__dirname}/create-passing-tap.js | ${__dirname}/../index.js`,
+    `npx tape ${__dirname}/create-passing-tap.cjs | ${__dirname}/../index.js`,
     (error, stdout, stderr) => {
       const strippedOut = stripAnsi(stdout)
       t.notOk(error, 'error should be undefined')

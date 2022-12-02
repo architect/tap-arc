@@ -4,14 +4,14 @@ function sleep (ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-test('Immediate assertions', function (t) {
+test('Immediate assertions', (t) => {
   t.plan(2)
 
   t.pass('The first one')
   t.pass('Number 2')
 })
 
-test('Some sleepy tests', async function (t) {
+test('Some sleepy tests', async (t) => {
   t.pass('2 more immediate passing')
   t.pass('Then a line, then sleep 2s...')
 
@@ -27,8 +27,8 @@ test('Some sleepy tests', async function (t) {
   t.end()
 })
 
-test('Some nested sleepy tests', async function (t) {
-  t.test(async function (st) {
+test('Some nested sleepy tests', async (t) => {
+  t.test(async (st) => {
     st.pass('2 more immediate passing')
     st.pass('Then a line, then sleep 2s...')
 
@@ -44,7 +44,7 @@ test('Some nested sleepy tests', async function (t) {
     st.end()
   }, 'Nested tests')
 
-  t.test(async function (st) {
+  t.test(async (st) => {
     st.pass('2 more immediate passing')
     st.pass('Then a line, then sleep 2s...')
 

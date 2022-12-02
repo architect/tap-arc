@@ -1,28 +1,32 @@
 const test = require('tape')
 
-test('Object deepEqual fail', function (t) {
+test('Object deepEqual fail', (t) => {
   t.deepEqual(
     [ 'foo', 'bar', 'baz', 'thing' ],
     [ 'foo', 'bar', 'foobar baz' ],
-    'Single dimension array failure'
+    'Single dimension array failure',
   )
   t.deepEqual(
     { a: 'foo', b: [ 11, 9 ], c: { foo: 'bar' } },
     { b: [ 12, 9 ], a: 'bar', c: 'foobar' },
-    'A small object deepEqual failure'
+    'A small object deepEqual failure',
   )
   t.deepEqual(
     {
       name: 'Gurney',
       house: 'Atreides',
-      play: () => { '🎸' },
+      play: () => {
+        '🎸'
+      },
     },
     {
       name: 'Duncan',
       house: 'Atreides',
-      fight: () => { '⚔️' },
+      fight: () => {
+        '⚔️'
+      },
     },
-    'Object with fn deepEqual failure will be diffed as a string'
+    'Object with fn deepEqual failure will be diffed as a string',
   )
 
   t.deepEqual(
@@ -34,15 +38,15 @@ test('Object deepEqual fail', function (t) {
           children: [
             {
               id: 'Me',
-              children: [ 'Daughter' ]
-            }
-          ]
+              children: [ 'Daughter' ],
+            },
+          ],
         },
         {
           id: 'Aunt',
-          children: []
-        }
-      ]
+          children: [],
+        },
+      ],
     },
     {
       id: 'Grandad',
@@ -52,23 +56,23 @@ test('Object deepEqual fail', function (t) {
           children: [
             {
               id: 'Me',
-              children: []
-            }
-          ]
+              children: [],
+            },
+          ],
         },
         {
           id: 'Aunt',
-          children: []
-        }
-      ]
+          children: [],
+        },
+      ],
     },
-    'Shallow TAP output cannot be diffed, but it is a failure'
+    'Shallow TAP output cannot be diffed, but it is a failure',
   )
 
   t.end()
 })
 
-test('Deeply nested object failures', { objectPrintDepth: 10 }, function (t) {
+test('Deeply nested object failures', { objectPrintDepth: 10 }, (t) => {
   t.deepEqual(
     {
       id: 'Grandad',
@@ -78,15 +82,15 @@ test('Deeply nested object failures', { objectPrintDepth: 10 }, function (t) {
           children: [
             {
               id: 'Me',
-              children: [ 'Daughter' ]
-            }
-          ]
+              children: [ 'Daughter' ],
+            },
+          ],
         },
         {
           id: 'Aunt',
-          children: []
-        }
-      ]
+          children: [],
+        },
+      ],
     },
     {
       id: 'Grandad',
@@ -96,17 +100,17 @@ test('Deeply nested object failures', { objectPrintDepth: 10 }, function (t) {
           children: [
             {
               id: 'Me',
-              children: []
-            }
-          ]
+              children: [],
+            },
+          ],
         },
         {
           id: 'Aunt',
-          children: [ 'Son' ]
-        }
-      ]
+          children: [ 'Son' ],
+        },
+      ],
     },
-    'Nested JSON diffs are expressed as (c)hunks'
+    'Nested JSON diffs are expressed as (c)hunks',
   )
 
   t.end()

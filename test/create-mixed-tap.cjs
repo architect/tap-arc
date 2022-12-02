@@ -1,20 +1,20 @@
 const test = require('tape')
 
-test('basic arithmetic without messages', function (t) {
+test('basic arithmetic without messages', (t) => {
   t.equal(2 + 3, 5)
   t.equal(7 * 8 + 10, 666)
 
   t.end()
 })
 
-test('logging inside a test', function (t) {
+test('logging inside a test', (t) => {
   console.log('Logging from a test can be helpful')
   console.log('\u001B[?25l') // should not print
 
   t.end()
 })
 
-test('deep equality', function (t) {
+test('deep equality', (t) => {
   t.plan(5)
 
   t.deepEqual([ 3, 4, 5 ], [ 3, 4, 2 + 3 ], 'An Array pass')
@@ -24,7 +24,7 @@ test('deep equality', function (t) {
   t.deepEqual({ a: 7, b: [ 8, 9 ] }, { a: 3 + 4, b: [ 4 * 3 ].concat(3 * 3) }, 'An Object failure')
 })
 
-test('comparing booleans', function (t) {
+test('comparing booleans', (t) => {
   t.plan(4)
 
   t.ok(3 > 4 || 5 > 2, 'A passing Boolean')
@@ -33,22 +33,22 @@ test('comparing booleans', function (t) {
   t.notOk(true, 'A failing !Boolean')
 })
 
-test('iterators', function (t) {
+test('iterators', (t) => {
   t.plan(3);
 
-  [ 1, 2 ].map(function (x) {
+  [ 1, 2 ].map((x) => {
     t.ifError(x < 2, `Simple ifError ${x}`)
   });
 
-  [ 3 ].map(function (x) {
+  [ 3 ].map((x) => {
     t.error(new Error(`"x" is ${x}. Halt and catch fire!`))
   })
 
   t.end()
 })
 
-test('nested', function (t) {
-  t.test(function (st) {
+test('nested', (t) => {
+  t.test((st) => {
     st.plan(4)
     st.match('atreides', /^A/, 'Sub-test match fail')
     st.doesNotMatch('Hark0nnen', /[0-9]/, 'Sub-test doesNotMatch fail')
@@ -56,7 +56,7 @@ test('nested', function (t) {
     st.doesNotMatch('Gurney', /^G[a-zA-Z]y$/, 'Sub-test doesNotMatch pass')
   })
 
-  t.test(function (st) {
+  t.test((st) => {
     st.plan(2)
     setTimeout(function () {
       st.pass('Delayed sub-test pass')
@@ -65,7 +65,7 @@ test('nested', function (t) {
   }, 'Delayed sub-test')
 })
 
-test('throws', function (t) {
+test('throws', (t) => {
   t.plan(2)
 
   t.throws(() => {

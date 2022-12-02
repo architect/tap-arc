@@ -1,7 +1,7 @@
 const test = require('tape')
 
 // issue #29 related test case
-test('create various throws TAP output', function (t) {
+test('create various throws TAP output', (t) => {
   // throws without assertion
   t.throws(() => {
     throw new Error('my error')

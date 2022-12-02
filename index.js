@@ -1,18 +1,24 @@
 #!/usr/bin/env node
 
-const JSON5 = require('json5')
-const minimist = require('minimist')
-const Parser = require('tap-parser')
-const stripAnsi = require('strip-ansi')
-const through = require('through2')
-const { strict } = require('tcompare')
-const { blue, bold, dim, green, italic, red, underline, yellow } = require(
-  'picocolors',
-)
+import { Chalk } from 'chalk'
+import { Parser } from 'tap-parser'
+import { strict } from 'tcompare'
+import JSON5 from 'json5'
+import minimist from 'minimist'
+import stripAnsi from 'strip-ansi'
+
+const chalk = new Chalk({ level: 3 })
+const { blue, bold, dim, green, italic, red, underline, yellow } = chalk
 
 // Log test-group name
 const RESULT_COMMENTS = [
-  'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok',
+  'tests ',
+  'pass ',
+  'skip',
+  'todo',
+  'fail ',
+  'failed ',
+  'ok',
 ]
 
 const alias = {
@@ -53,11 +59,11 @@ Options:
 }
 
 const parser = new Parser({ bail: options.pessimistic })
-const tapArc = through()
 const cwd = process.cwd()
 const start = Date.now()
 const OKAY = green('✔')
 const FAIL = red('✖')
+process.stdin.pipe(parser)
 
 function pad (count = 1, char = '  ') {
   return dim(char).repeat(count)
@@ -85,11 +91,14 @@ function makeDiff (lhs, rhs) {
   const compared = strict(lhs, rhs, {
     includeEnumerable: true,
     includeGetters: true,
-    pretty: true,
+    // pretty: true,
     sort: true,
   })
 
-  if (!compared.match) {
+  if (compared.match) {
+    msg.push(`${red('Expected')} did not match ${green('actual')}.`)
+  }
+  else {
     // remove leading header lines
     let diff = compared.diff.split('\n')
     diff = diff.slice(2, diff.length - 1)
@@ -111,15 +120,12 @@ function makeDiff (lhs, rhs) {
       }
     }
   }
-  else {
-    msg.push(`${red('Expected')} did not match ${green('actual')}.`)
-  }
 
   return msg
 }
 
 function print (msg) {
-  tapArc.push(options.color ? msg : stripAnsi(msg))
+  process.stdout.write(msg)
 }
 
 function prettyMs (start) {
@@ -197,10 +203,10 @@ parser.on('fail', (fail) => {
     }
     else if (
       operator === 'throws' &&
-      actual &&
-      actual !== 'undefined' &&
-      expected &&
-      expected !== 'undefined'
+			actual &&
+			actual !== 'undefined' &&
+			expected &&
+			expected !== 'undefined'
     ) {
       // this combination is throws with expected/assertion
       msg.push(
@@ -231,14 +237,14 @@ parser.on('fail', (fail) => {
     else if (operator === 'fail') {
       msg.push('Explicit fail')
     }
-    else if (!expected && !actual) {
-      msg.push(`operator: ${yellow(operator)}`)
-    }
-    else {
+    else if (expected || actual) {
       // unlikely
       msg.push(`operator: ${yellow(operator)}`)
       msg.push(`expected: ${green(expected)}`)
       msg.push(`actual: ${red(actual)}`)
+    }
+    else {
+      msg.push(`operator: ${yellow(operator)}`)
     }
 
     if (at) {
@@ -290,15 +296,10 @@ parser.on('complete', (result) => {
     print(`${pad()}todo:      ${result.todo}\n`)
   }
   if (result.bailout) {
-    print(`${pad()}${bold(underline(red('BAILED!')))}\n`)
+    print(`${pad()}${bold.underline.red('BAILED!')}\n`)
   }
 
-  tapArc.end(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`)
+  console.log(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`)
 
   process.exit(result.ok && result.count > 0 ? 0 : 1)
 })
-
-process.stdin
-  .pipe(parser)
-  .pipe(tapArc)
-  .pipe(process.stdout)

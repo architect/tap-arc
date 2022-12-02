@@ -4,6 +4,7 @@
   "author": "tbeseda",
   "version": "0.3.5",
   "license": "Apache-2.0",
+  "type": "module",
   "main": "index.js",
   "bin": {
     "tap-arc": "index.js"
@@ -41,32 +42,34 @@
     "tap-arc:simple:-v": "npm run --silent tape:simple | ./index.js -v",
     "tap-arc:simple": "npm run --silent tape:simple | ./index.js",
     "tap-arc:throws": "npm run --silent tape:throws | ./index.js",
-    "tape:diff": "tape test/create-diff-tap.js",
-    "tape:empty": "tape test/create-empty-tap.js",
-    "tape:mixed": "tape test/create-mixed-tap.js",
-    "tape:upstream-error": "tape test/create-upstream-error-tap.js",
-    "tape:passing": "tape test/create-passing-tap.js",
-    "tape:simple": "tape test/create-simple-tap.js",
-    "tape:slow-pass": "tape test/create-slow-passing-tap.js",
-    "tape:throws": "tape test/create-throws-tap.js",
-    "test": "npm run lint:check && tape test/index.js | ./index.js"
+    "tape:diff": "tape test/create-diff-tap.cjs",
+    "tape:empty": "tape test/create-empty-tap.cjs",
+    "tape:mixed": "tape test/create-mixed-tap.cjs",
+    "tape:upstream-error": "tape test/create-upstream-error-tap.cjs",
+    "tape:passing": "tape test/create-passing-tap.cjs",
+    "tape:simple": "tape test/create-simple-tap.cjs",
+    "tape:slow-pass": "tape test/create-slow-passing-tap.cjs",
+    "tape:throws": "tape test/create-throws-tap.cjs",
+    "test": "npm run lint:check && tape test/index.cjs | ./index.js"
   },
   "dependencies": {
+    "chalk": "^5.1.2",
     "json5": "^2.2.1",
-    "minimist": "^1.2.6",
-    "picocolors": "^1.0.0",
+    "minimist": "^1.2.7",
     "strip-ansi": "6.0.1",
-    "tap-parser": "^11.0.1",
-    "tcompare": "^5.0.7",
-    "through2": "^4.0.2"
+    "tap-parser": "^12.0.1",
+    "tcompare": "^6.0.0"
   },
   "devDependencies": {
     "@architect/eslint-config": "^2.0.1",
     "@types/node": "^18.0.03",
-    "eslint": "^8.23.0",
-    "tape": "5.6.0"
+    "eslint": "^8.28.0",
+    "tape": "5.6.1"
   },
   "eslintConfig": {
-    "extends": "@architect/eslint-config"
+    "extends": "@architect/eslint-config",
+    "parserOptions": {
+      "sourceType": "module"
+    }
   }
 }
