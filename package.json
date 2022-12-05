@@ -31,7 +31,7 @@
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "make-snapshots": "node scripts/make-snapshots.js",
-    "slow": "npm run --silent tape:slow-pass | ./index.js",
+    "tap-arc:all": "tape test/create-*.cjs | ./index.js",
     "tap-arc:diff:-v": "npm run --silent tape:diff | ./index.js -v",
     "tap-arc:diff": "npm run --silent tape:diff | ./index.js",
     "tap-arc:empty": "npm run --silent tape:empty | ./index.js",
@@ -48,7 +48,6 @@
     "tape:upstream-error": "tape test/create-upstream-error-tap.cjs",
     "tape:passing": "tape test/create-passing-tap.cjs",
     "tape:simple": "tape test/create-simple-tap.cjs",
-    "tape:slow-pass": "tape test/create-slow-passing-tap.cjs",
     "tape:throws": "tape test/create-throws-tap.cjs",
     "test": "npm run lint:check && tape test/index.cjs | ./index.js"
   },
