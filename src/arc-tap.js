@@ -32,7 +32,7 @@ export default function createParser (options) {
   }
 
   function print (msg) {
-    process.stdout.write(msg)
+    console.log(msg)
   }
 
   function prettyMs (start) {
@@ -41,18 +41,18 @@ export default function createParser (options) {
   }
 
   parser.on('pass', (pass) => {
-    print(`${pad(2)}${OKAY} ${dim(pass.name)}\n`)
+    print(`${pad(2)}${OKAY} ${dim(pass.name)}`)
   })
 
   parser.on('skip', (skip) => {
-    print(`${pad(2)}${dim(`SKIP ${skip.name}`)}\n`)
+    print(`${pad(2)}${dim(`SKIP ${skip.name}`)}`)
   })
 
   parser.on('extra', (extra) => {
     const stripped = stripAnsi(extra).trim()
     const justAnsi = stripped.length === 0 && extra.length > 0
     if (!justAnsi) {
-      print(`${pad(2)}${extra}`)
+      print(`${pad(2)}${extra.trim()}`)
     }
   })
 
@@ -67,21 +67,21 @@ export default function createParser (options) {
   ]
   parser.on('comment', (comment) => {
     if (!reservedCommentLeaders.some((c) => comment.startsWith(c, 2))) {
-      print(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ''))}\n`)
+      print(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ''))}`)
     }
   })
 
   parser.on('todo', (todo) => {
     if (todo.ok) {
-      print(`${pad(2)}${yellow('TODO')} ${dim(todo.name)}\n`)
+      print(`${pad(2)}${yellow('TODO')} ${dim(todo.name)}`)
     }
     else {
-      print(`${pad(2)}${red('TODO')} ${dim(todo.name)}\n`)
+      print(`${pad(2)}${red('TODO')} ${dim(todo.name)}`)
     }
   })
 
   parser.on('fail', (fail) => {
-    print(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${red(fail.name)}\n`)
+    print(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${red(fail.name)}`)
 
     if (fail.diag) {
       const { actual, at, expected, operator, stack } = fail.diag
@@ -122,40 +122,40 @@ export default function createParser (options) {
 
       switch (operator) {
       case 'equal': {
-        msg.push(bgRed.white(' equal '))
+        // msg.push(bgRed.white(' equal '))
         break
       }
       case 'deepEqual': {
-        msg.push(bgRed.white(' deepEqual '))
+        // msg.push(bgRed.white(' deepEqual '))
         break
       }
       case 'notEqual': {
-        msg.push(bgRed.white(' notEqual '))
+        // msg.push(bgRed.white(' notEqual '))
         msg.push('Expected values to differ')
         break
       }
       case 'notDeepEqual': {
-        msg.push(bgRed.white(' notDeepEqual '))
+        // msg.push(bgRed.white(' notDeepEqual '))
         msg.push('Expected values to differ')
         break
       }
       case 'ok': {
-        msg.push(bgRed.white(' ok '))
+        // msg.push(bgRed.white(' ok '))
         msg.push(`Expected ${blue('truthy')} but got ${green(actual)}`)
         break
       }
       case 'match': {
-        msg.push(bgRed.white(' match '))
+        // msg.push(bgRed.white(' match '))
         msg.push(`Expected "${actual}" to match ${blue(expected)}`)
         break
       }
       case 'doesNotMatch': {
-        msg.push(bgRed.white(' doesNotMatch '))
+        // msg.push(bgRed.white(' doesNotMatch '))
         msg.push(`Expected "${actual}" to not match ${blue(expected)}`)
         break
       }
       case 'throws': {
-        msg.push(bgRed.white(' throws '))
+        // msg.push(bgRed.white(' throws '))
         if (actual && actual !== 'undefined') {
         // this combination is ~doesNotThrow
           msg.push(`Expected to not throw, received "${green(actual)}"`)
@@ -205,7 +205,6 @@ export default function createParser (options) {
       }
 
       if (options.verbose && stack) {
-        msg.push('')
         stack.split('\n').forEach((s) => {
           msg.push(dim(s.trim().replace(cwd, '')))
         })
@@ -226,33 +225,33 @@ export default function createParser (options) {
       failureSummary += `${pad()}${red('Failed tests:')}`
       failureSummary += ` There ${result.fail > 1 ? 'were' : 'was'} `
       failureSummary += red(result.fail)
-      failureSummary += ` failure${result.fail > 1 ? 's' : ''}\n\n`
+      failureSummary += ` failure${result.fail > 1 ? 's' : ''}\n`
 
       print(failureSummary)
 
       for (const fail of result.failures) {
-        print(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${fail.name}\n`)
+        print(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${fail.name}`)
       }
     }
 
-    print(`\n${pad()}total:     ${result.count}\n`)
+    print(`\n${pad()}total:     ${result.count}`)
     if (result.pass > 0) {
-      print(green(`${pad()}passing:   ${result.pass}\n`))
+      print(green(`${pad()}passing:   ${result.pass}`))
     }
     if (result.fail > 0) {
-      print(red(`${pad()}failing:   ${result.fail}\n`))
+      print(red(`${pad()}failing:   ${result.fail}`))
     }
     if (result.skip > 0) {
-      print(`${pad()}skipped:   ${result.skip}\n`)
+      print(`${pad()}skipped:   ${result.skip}`)
     }
     if (result.todo > 0) {
-      print(`${pad()}todo:      ${result.todo}\n`)
+      print(`${pad()}todo:      ${result.todo}`)
     }
     if (result.bailout) {
-      print(`${pad()}${bold.underline.red('BAILED!')}\n`)
+      print(`${pad()}${bold.underline.red('BAILED!')}`)
     }
 
-    console.log(`${dim(`${pad()}${prettyMs(start)}`)}\n\n`)
+    console.log(`${dim(`${pad()}${prettyMs(start)}`)}\n`)
 
     process.exit(result.ok && result.count > 0 ? 0 : 1)
   })
