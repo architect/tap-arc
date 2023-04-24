@@ -22,6 +22,9 @@ if (options.help) {
   process.exit()
 }
 
-const parser = tapArc(options)
+const parser = tapArc(options, (error, result) => {
+  process.exit(result.ok ? 0 : 1)
+  // process.exit(result.ok && result.count > 0 ? 0 : 1)
+})
 
 process.stdin.pipe(parser)

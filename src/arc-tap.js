@@ -1,259 +1,174 @@
-import { Chalk } from 'chalk'
 import { Parser } from 'tap-parser'
 import stripAnsi from 'strip-ansi'
 import createMakeDiff from './_make-diff.js'
+import createPrinter from './_printer.js'
 
-export default function createParser (options) {
-  const chalk = new Chalk({ level: options.color ? 3 : 0 })
-  const {
-    // bgGreen,
-    bgRed,
-    // bgWhite,
-    bgYellow,
-    blue,
-    bold,
-    dim,
-    green,
-    italic,
-    // orange,
-    red,
-    underline,
-    yellow,
-  } = chalk
-  const makeDiff = createMakeDiff({ red, green, dim: italic.dim })
+export default function createParser (options, callback) {
+  const $ = createPrinter(options)
+  const { print: $$ } = $
+  const makeDiff = createMakeDiff($.diffOptions)
   const parser = new Parser({ bail: options.pessimistic })
   const cwd = process.cwd()
   const start = Date.now()
-  const OKAY = green('✔')
-  const FAIL = red('✖')
 
-  function pad (count = 1, char = '  ') {
-    return dim(char).repeat(count)
-  }
-
-  function print (msg) {
-    console.log(msg)
-  }
-
-  function prettyMs (start) {
-    const ms = Date.now() - start
-    return ms < 1000 ? `${ms} ms` : `${ms / 1000} s`
-  }
-
-  parser.on('pass', (pass) => {
-    print(`${pad(2)}${OKAY} ${dim(pass.name)}`)
+  parser.on('pass', (test) => {
+    $$($.pass(test.name), 2)
   })
 
-  parser.on('skip', (skip) => {
-    print(`${pad(2)}${dim(`SKIP ${skip.name}`)}`)
+  parser.on('skip', (test) => {
+    $$($.skip(test.name), 2)
+  })
+
+  parser.on('todo', (test) => {
+    $$($.todo(test.name, test.ok), 2)
   })
 
   parser.on('extra', (extra) => {
+    // typically `console.log` output from the test or program it tests
     const stripped = stripAnsi(extra).trim()
     const justAnsi = stripped.length === 0 && extra.length > 0
-    if (!justAnsi) {
-      print(`${pad(2)}${extra.trim()}`)
-    }
+    if (!justAnsi) $$(extra.trim())
   })
 
-  const reservedCommentLeaders = [
-    'tests ',
-    'pass ',
-    'skip',
-    'todo',
-    'fail ',
-    'failed ',
-    'ok',
-  ]
+  const reservedCommentPrefixes = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok' ]
   parser.on('comment', (comment) => {
-    if (!reservedCommentLeaders.some((c) => comment.startsWith(c, 2))) {
-      print(`\n${pad()}${underline(comment.trimEnd().replace(/^(# )/, ''))}`)
+    if (!reservedCommentPrefixes.some((c) => comment.startsWith(c, 2))) {
+      // "comment" is a test group title
+      $$(`\n${$.title(comment.trimEnd().replace(/^(# )/, ''))}`)
     }
   })
 
-  parser.on('todo', (todo) => {
-    if (todo.ok) {
-      print(`${pad(2)}${yellow('TODO')} ${dim(todo.name)}`)
-    }
-    else {
-      print(`${pad(2)}${red('TODO')} ${dim(todo.name)}`)
-    }
-  })
+  parser.on('fail', (test) => {
+    $$($.fail(test.name, test.id), 2)
 
-  parser.on('fail', (fail) => {
-    print(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${red(fail.name)}`)
+    if (test.diag) {
+      const { actual, at, expected, operator, stack } = test.diag
+      const I = 4
 
-    if (fail.diag) {
-      const { actual, at, expected, operator, stack } = fail.diag
-      let msg = [] // individual lines of output
-
-      if ([ 'equal', 'deepEqual' ].includes(operator)) {
+      if (operator === 'equal' || operator === 'deepEqual') {
         if (typeof expected === 'string' && typeof actual === 'string') {
-          msg = [ ...msg, ...makeDiff(actual, expected) ]
+          for (const line of makeDiff(actual, expected)) {
+            $$(line, I)
+          }
         }
         else if (typeof expected === 'object' && typeof actual === 'object') {
-        // probably an array
-          msg = [ ...msg, ...makeDiff(actual, expected) ]
+          // probably an array
+          for (const line of makeDiff(actual, expected)) {
+            $$(line, I)
+          }
         }
         else if (typeof expected === 'number' || typeof actual === 'number') {
-          msg.push(`Expected ${red(expected)} but got ${green(actual)}`)
+          $$(`Expected ${$.expected(expected)} but got ${$.actual(actual)}`, I)
         }
         else {
-        // mixed types
-          msg.push(`operator: ${operator}`)
-          msg.push(`expected: ${red(`- ${expected}`)} <${typeof expected}>`)
-          msg.push(`actual: ${green(`+ ${actual}`)} <${typeof actual}>`)
+          // mixed types
+          $$(`operator: ${operator}`, I)
+          $$(`expected: ${$.expected(`- ${expected}`)} <${typeof expected}>`, I)
+          $$(`actual: ${$.actual(`+ ${actual}`)} <${typeof actual}>`, I)
         }
       }
-      else if (
-        operator === 'throws' &&
-			actual &&
-			actual !== 'undefined' &&
-			expected &&
-			expected !== 'undefined'
-      ) {
-      // this combination is throws with expected/assertion
-        msg.push(
-          `Expected ${red(expected)} to match "${green(
-            actual.message || actual,
-          )}"`,
-        )
+      else if (operator === 'throws' && actual && actual !== 'undefined' && expected && expected !== 'undefined') {
+        // this combination is throws with expected/assertion
+        $$(`Expected ${$.expected(expected)} to match "${$.actual(actual.message || actual)}"`, I)
       }
 
       switch (operator) {
       case 'equal': {
-        // msg.push(bgRed.white(' equal '))
         break
       }
       case 'deepEqual': {
-        // msg.push(bgRed.white(' deepEqual '))
         break
       }
       case 'notEqual': {
-        // msg.push(bgRed.white(' notEqual '))
-        msg.push('Expected values to differ')
+        $$('Expected values to differ', I)
         break
       }
       case 'notDeepEqual': {
-        // msg.push(bgRed.white(' notDeepEqual '))
-        msg.push('Expected values to differ')
+        $$('Expected values to differ', I)
         break
       }
       case 'ok': {
-        // msg.push(bgRed.white(' ok '))
-        msg.push(`Expected ${blue('truthy')} but got ${green(actual)}`)
+        $$(`Expected ${$.highlight('truthy')} but got ${$.actual(actual)}`, I)
         break
       }
       case 'match': {
-        // msg.push(bgRed.white(' match '))
-        msg.push(`Expected "${actual}" to match ${blue(expected)}`)
+        $$(`Expected "${actual}" to match ${$.highlight(expected)}`, I)
         break
       }
       case 'doesNotMatch': {
-        // msg.push(bgRed.white(' doesNotMatch '))
-        msg.push(`Expected "${actual}" to not match ${blue(expected)}`)
+        $$(`Expected "${actual}" to not match ${$.highlight(expected)}`, I)
         break
       }
       case 'throws': {
-        // msg.push(bgRed.white(' throws '))
         if (actual && actual !== 'undefined') {
-        // this combination is ~doesNotThrow
-          msg.push(`Expected to not throw, received "${green(actual)}"`)
+          // this combination is ~doesNotThrow
+          $$(`Expected to not throw, received "${$.actual(actual)}"`, I)
         }
         else {
-          msg.push('Expected to throw')
+          $$('Expected to throw', I)
         }
         break
       }
       case 'error': {
-        msg.push(bgRed.white(' error '))
-        msg.push(`Expected error to be ${blue('falsy')}`)
+        $$(`Expected error to be ${$.highlight('falsy')}`, I)
         break
       }
       case 'fail': {
-        msg.push(bgRed.white(' fail '))
-        msg.push('Explicit fail')
+        $$('Explicit fail', I)
         break
       }
 
       default: {
-        msg.push(bgYellow.black(` ${operator} `))
-        if (expected && !actual) {
-          msg.push(`Expected ${red(operator)} but got nothing`)
-        }
-        else if (actual && !expected) {
-          msg.push(`Expected ${blue('falsy')} but got ${green(actual)}`)
-        }
-        if (expected && actual) {
-          msg.push(`Expected ${red(expected)} but got ${green(actual)}`)
-        }
+        if (expected && !actual) $$(`Expected ${$.expected(operator)} but got nothing`, I)
+        else if (actual && !expected) $$(`Expected ${$.highlight('falsy')} but got ${$.actual(actual)}`, I)
+
+        if (expected && actual) $$(`Expected ${$.expected(expected)} but got ${$.actual(actual)}`, I)
         else if (expected || actual) {
-        // unlikely
-          msg.push(`operator: ${yellow(operator)}`)
-          msg.push(`expected: ${green(expected)}`)
-          msg.push(`actual: ${red(actual)}`)
+          // unlikely
+          $$(`operator: ${operator}`, I)
+          $$(`expected: ${$.expected(expected)}`, I)
+          $$(`actual: ${$.actual(actual)}`, I)
         }
         else {
-          msg.push(`operator: ${yellow(operator)}`)
+          $$(`operator: ${operator}`, I)
         }
         break
       }
       }
 
-      if (at) {
-        msg.push(`${dim(`At: ${at.replace(cwd, '')}`)}`)
-      }
+      if (at) $$(`${$.dim(`At: ${at.replace(cwd, '')}`)}`, I)
 
       if (options.verbose && stack) {
         stack.split('\n').forEach((s) => {
-          msg.push(dim(s.trim().replace(cwd, '')))
+          $$($.dim(s.trim().replace(cwd, '')), I)
         })
       }
-
-      msg.push('')
-
-      // final formatting, each entry must be a single line
-      msg = msg.map((line) => `${pad(3)}${line}\n`)
-
-      print(msg.join(''))
     }
   })
 
   parser.on('complete', (result) => {
     if (!result.ok) {
       let failureSummary = '\n'
-      failureSummary += `${pad()}${red('Failed tests:')}`
+      failureSummary += `${$.bad('Failed tests:')}`
       failureSummary += ` There ${result.fail > 1 ? 'were' : 'was'} `
-      failureSummary += red(result.fail)
+      failureSummary += $.bad(result.fail)
       failureSummary += ` failure${result.fail > 1 ? 's' : ''}\n`
 
-      print(failureSummary)
+      $$(failureSummary)
 
-      for (const fail of result.failures) {
-        print(`${pad(2)}${FAIL} ${dim(`${fail.id})`)} ${fail.name}`)
-      }
+      for (const test of result.failures) $$($.fail(test.name, test.id), 2)
     }
 
-    print(`\n${pad()}total:     ${result.count}`)
-    if (result.pass > 0) {
-      print(green(`${pad()}passing:   ${result.pass}`))
-    }
-    if (result.fail > 0) {
-      print(red(`${pad()}failing:   ${result.fail}`))
-    }
-    if (result.skip > 0) {
-      print(`${pad()}skipped:   ${result.skip}`)
-    }
-    if (result.todo > 0) {
-      print(`${pad()}todo:      ${result.todo}`)
-    }
-    if (result.bailout) {
-      print(`${pad()}${bold.underline.red('BAILED!')}`)
-    }
+    $$(`\ntotal:     ${result.count}`)
+    if (result.pass > 0) $$($.good(`passing:   ${result.pass}`))
+    if (result.fail > 0) $$($.bad(`failing:   ${result.fail}`))
+    if (result.skip > 0) $$(`skipped:   ${result.skip}`)
+    if (result.todo > 0) $$(`todo:      ${result.todo}`)
+    if (result.bailout) $$(`${$.bail('BAILED!')}`)
 
-    console.log(`${dim(`${pad()}${prettyMs(start)}`)}\n`)
+    $$(`${$.dim(`${$.prettyMs(start)}`)}\n`)
 
-    process.exit(result.ok && result.count > 0 ? 0 : 1)
+    callback(null, result)
   })
 
   return parser

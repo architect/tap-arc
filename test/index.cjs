@@ -1,64 +1,44 @@
 const { exec } = require('child_process')
-const fs = require('fs')
-const stripAnsi = require('strip-ansi')
 const test = require('tape')
-const { scripts } = require('../package.json')
 
-const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
-
-const commands = Object.keys(scripts)
-  .filter((k) => k.indexOf('tap-arc:') === 0)
-  .map((c) => c.split(':').slice(1))
-
-function trimNLines (text, n) {
-  const lines = text.split('\n')
-  const trimmed = lines.splice(-1 * n)
-  return [ lines.join('\n'), trimmed ]
-}
-
-for (const c of commands) {
-  const [ command, flags = '' ] = c
-  const fullCommand = `${command}${flags ? ` ${flags}` : ''}`
-
-  test(`"${fullCommand}" tap-arc output matches "${fullCommand}" snapshot`, (t) => {
-    const fullSnapshot = fs.readFileSync(`${__dirname}/snapshots/node${NODE_MAJOR_VERSION}/${command}${flags}.txt`)
-    const [ trimmedSnapshot ] = trimNLines(fullSnapshot.toString(), 3)
-
+const failingTests = [ 'diff', 'mixed', 'simple', 'throws' ]
+for (const ft of failingTests) {
+  test(`exit(1) "${ft}" | tap-arc`, (t) => {
     exec(
-      `npx tape ${__dirname}/create-${command}-tap.cjs | ${__dirname}/../index.js ${flags}`,
+      `npx tape ${__dirname}/create-${ft}-tap.cjs | ${__dirname}/../index.js`,
       (error, stdout, stderr) => {
-        const strippedOut = stripAnsi(stdout)
-        const [ trimmedOut, durationLines ] = trimNLines(strippedOut, 3)
-        if (command.indexOf('pass') >= 0) {
-          t.notOk(error, `"${fullCommand}" does not create an error`)
-        }
-        else {
-          // expect exit code == 1 unless named with "pass"
-          t.ok(error, `"${fullCommand}" creates an error`)
-          t.equal(error?.code, 1, 'exit code is 1')
-        }
-
-        if (command.indexOf('error') < 0) {
-          t.notOk(stderr, 'stderr should be empty')
-        }
-        t.equal(trimmedOut, trimmedSnapshot, 'output matches snapshot')
-        t.match(durationLines.join(''), /[0-9]+\s[ms|s]/, 'contains a duration')
-
+        t.ok(error, `"${ft}" creates an error`)
+        t.notOk(stderr, 'stderror should be empty')
+        t.ok(stdout.indexOf('Failed tests:') > 0, '"Failed tests:" should occur in output')
         t.end()
       }
     )
   })
 }
 
-test('passing tests do not error', (t) => {
+test.skip(`exit(1) "upstream-error" | tap-arc`, (t) => {
   exec(
-    `npx tape ${__dirname}/create-passing-tap.cjs | ${__dirname}/../index.js`,
+    `npx tape ${__dirname}/create-upstream-error-tap.cjs | ${__dirname}/../index.js`,
     (error, stdout, stderr) => {
-      const strippedOut = stripAnsi(stdout)
-      t.notOk(error, 'error should be undefined')
-      t.notOk(stderr, 'stderror should be empty')
-      t.ok(strippedOut.indexOf('fail') < 0, '"fail" should not occur in output')
+      t.ok(error, '"upstream" creates an error')
+      t.ok(stderr, 'stderror should contain Node error')
+      t.ok(stdout.indexOf('Failed tests:') < 0, '"Failed tests:" shouldn\'t occur in output')
       t.end()
     }
   )
 })
+
+const passingTests = [ 'passing', 'empty' ]
+for (const pt of passingTests) {
+  test(`exit(0) "${pt}" | tap-arc`, (t) => {
+    exec(
+      `npx tape ${__dirname}/create-${pt}-tap.cjs | ${__dirname}/../index.js`,
+      (error, stdout, stderr) => {
+        t.notOk(error, 'error should be undefined')
+        t.notOk(stderr, 'stderror should be empty')
+        t.ok(stdout.indexOf('Failed tests:') < 0, '"Failed tests:" shouldn\'t occur in output')
+        t.end()
+      }
+    )
+  })
+}

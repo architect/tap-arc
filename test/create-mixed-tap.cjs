@@ -10,6 +10,8 @@ test('basic arithmetic without messages', (t) => {
 test('logging inside a test', (t) => {
   console.log('Logging from a test can be helpful')
   console.log('\u001B[?25l') // should not print
+  console.log('This one is multiline')
+  console.log('there should be no empty lines.')
 
   t.end()
 })

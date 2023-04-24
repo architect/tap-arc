@@ -1,11 +1,11 @@
 # `tap-arc`
 
-> A small (~23kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
+> A small (~25kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
 
 ## Objectives
 
 - minimal, informative spec-like output for all assertions
-- minimal, maintained dependencies -- can't be shipping React to CI
+- minimal, maintained dependencies
 - streaming in and out
 - helpful diffing for failures
 
@@ -13,9 +13,9 @@
 
 ## Installation & Usage
 
-> Compatible with Node.js 12+.
+> Compatible with Node.js 14+.
 
-For a JavaScript project, save `tap-arc` as a development dependency:
+Save `tap-arc` as a development dependency:
 
 ```sh
 npm i -D tap-arc
@@ -63,23 +63,19 @@ Options:
 
 ## Development
 
-The entirety of the reporter lives in `./index.js`.
-
 When building `tap-arc`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "tap-arc:*" commands to test passing and failing TAP.
 
 ```sh
 npm run tap-arc:simple # used to create the screen shot above
 ```
 
-### Snapshot tests
+### Tests
 
-The main library is snapshot tested (`npm test` loads all snapshots to compare to current output). Create snapshots with the `npm run make-snapshots` commands.
+`tap-arc` is tested to output the correct exit code based on your test suite's TAP output. In the process, the boundaries of tap-arc's process are also tested by creating and parsing several types of TAP output.
 
-The snapshots are versioned by Node.js' major version, ie. `node14` and `node16`. But snapshots may vary between minor and patch versions of Node. (Line numbers of Node internals shift, causing changes in stack traces.) GitHub's Actions are set to use the latest Node.js 14.x and 16.x, so when testing and creating snapshots locally, do the same.
+Snapshot testing became too arduous to maintain for the sake of aesthetics.
 
-This is also why `tape` is pinned as a development dependency. Update as needed, but recreate snapshots.
-
-Request: please exclude updated snapshots from commits if the _only_ change is to the duration line. This variance is accounted for in the tests.
+Testing could be improved by unit testing the printer and diff maker.
 
 ## Credit & Inspiration
 

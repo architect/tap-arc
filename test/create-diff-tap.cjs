@@ -72,6 +72,28 @@ test('Object deepEqual fail', (t) => {
   t.end()
 })
 
+test('Multi-line string failures', (t) => {
+  t.equal(/* html*/`
+<html>
+  <head>
+    <title>My Page</title>
+  </head>
+  <body>
+    <web-counter count="42"></web-counter>
+  </body>
+</html>`.trim(),
+  /* html*/`
+<html>
+  <head>
+    <title>My Page</title>
+  </head>
+  <body>
+    <page-title>HTML First!</page-title>
+  </body>
+</html>`.trim(),
+  )
+})
+
 test('Deeply nested object failures', { objectPrintDepth: 10 }, (t) => {
   t.deepEqual(
     {

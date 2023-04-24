@@ -4,45 +4,45 @@ import JSON5 from 'json5'
 /**
  * Create a function to create a diff as a set of strings
  * @param {object} params
- * @param {function} params.green
- * @param {function} params.red
+ * @param {function} params.actual
+ * @param {function} params.expected
  * @param {function} params.dim
  * @returns function
  */
-export default function createMakeDiff ({ green, red, dim }){
+export default function createMakeDiff ({ actual, expected, dim }){
   /**
    * Create a diff as a set of strings
-   * @param {string} actual
-   * @param {string} expected
+   * @param {string} a
+   * @param {string} e
    * @returns [string]
    */
-  return function (actual, expected) {
+  return function (a, e) {
     const msg = []
     let isJson = true
-    let actualJson = actual
-    let expectedJson = expected
+    let actualJson = a
+    let expectedJson = e
 
     try {
-      actualJson = JSON5.parse(actual)
-      expectedJson = JSON5.parse(expected)
+      actualJson = JSON5.parse(a)
+      expectedJson = JSON5.parse(e)
     }
     catch (e) {
       isJson = false
     }
 
     if (isJson) {
-      actual = actualJson
-      expected = expectedJson
+      a = actualJson
+      e = expectedJson
     }
 
-    const compared = strict(actual, expected, {
+    const compared = strict(a, e, {
       includeEnumerable: true,
       includeGetters: true,
       sort: true,
     })
 
     if (compared.match) {
-      msg.push(`${red('Expected')} did not match ${green('actual')}.`)
+      msg.push(`${expected('Expected')} did not match ${actual('actual')}.`)
     }
     else {
       // remove leading header lines
@@ -52,11 +52,11 @@ export default function createMakeDiff ({ green, red, dim }){
       for (const line of diff) {
         switch (line.charAt(0)) {
         case '-': {
-          msg.push(red(line))
+          msg.push(expected(line))
           break
         }
         case '+': {
-          msg.push(green(line))
+          msg.push(actual(line))
           break
         }
         case '@': {

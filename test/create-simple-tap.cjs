@@ -11,6 +11,16 @@ test('Sample passing tests', (t) => {
   t.deepEqual({ a: 7, b: [ 8, 9 ] }, { a: 3 + 4, b: [ 8, 9 ] }, 'A deeply equal object')
 })
 
+test(
+  (t) => {
+    t.pass('A passing TODO')
+    t.fail('A failing TODO')
+    t.end()
+  },
+  { todo: true },
+  'Some tests marked as "todo"'
+)
+
 test('Some failing tests', (t) => {
   t.plan(4)
 
@@ -32,13 +42,3 @@ test('Some failing tests', (t) => {
     st.end()
   }, 'Nested tests')
 })
-
-test(
-  (t) => {
-    t.pass('Passing TODOs are yellow')
-    t.fail('Failing TODOs are red')
-    t.end()
-  },
-  { todo: true },
-  'Some tests marked as "todo"'
-)

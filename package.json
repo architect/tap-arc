@@ -10,14 +10,15 @@
     "tap-arc": "index.js"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "src/"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/architect/tap-arc.git"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "keywords": [
     "test",
@@ -30,8 +31,6 @@
   "scripts": {
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
-    "make-snapshots": "node scripts/make-snapshots.js",
-    "tap-arc:all": "tape test/create-*.cjs | ./index.js",
     "tap-arc:diff:-v": "npm run --silent tape:diff | ./index.js -v",
     "tap-arc:diff": "npm run --silent tape:diff | ./index.js",
     "tap-arc:empty": "npm run --silent tape:empty | ./index.js",
