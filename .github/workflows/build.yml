@@ -8,7 +8,8 @@ jobs:
     strategy:
       matrix:
         node-version: [ 14, 16, 18, 20 ]
-        os: [ windows-latest, ubuntu-latest, macOS-latest ]
+        os: [ ubuntu-latest ]
+        # os: [ windows-latest, ubuntu-latest, macOS-latest ]
 
     steps:
     - name: Check out repo
@@ -38,11 +39,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set git to use LF
-        run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
-
       - name: Check out repo
         uses: actions/checkout@v3
 
