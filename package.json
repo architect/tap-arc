@@ -52,19 +52,19 @@
     "test": "npm run lint:check && tape test/index.js | ./index.js"
   },
   "dependencies": {
-    "json5": "^2.2.1",
-    "minimist": "^1.2.6",
+    "json5": "^2.2.3",
+    "minimist": "^1.2.8",
     "picocolors": "^1.0.0",
     "strip-ansi": "6.0.1",
-    "tap-parser": "^11.0.1",
+    "tap-parser": "^11.0.2",
     "tcompare": "^5.0.7",
     "through2": "^4.0.2"
   },
   "devDependencies": {
-    "@architect/eslint-config": "^2.0.1",
+    "@architect/eslint-config": "^2.1.1",
     "@types/node": "^18.0.03",
-    "eslint": "^8.23.0",
-    "tape": "5.6.0"
+    "eslint": "^8.47.0",
+    "tape": "5.6.6"
   },
   "eslintConfig": {
     "extends": "@architect/eslint-config"
