@@ -1,5 +1,5 @@
-const { exec } = require('node:child_process')
-// const fs = require('node:fs')
+const { exec } = require('child_process')
+// const fs = require('fs')
 const stripAnsi = require('strip-ansi')
 const test = require('tape')
 const { scripts } = require('../package.json')
