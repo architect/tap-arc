@@ -25,6 +25,8 @@ jobs:
 
       - run: npm install
 
+      - run: npm link
+
       - run: npm test
         env:
           CI: true
@@ -48,10 +50,10 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 18
           registry-url: https://registry.npmjs.org/
 
-      - run: npm i
+      - run: npm install
 
       - name: Publish @RC to npm
         if: contains(github.ref, 'RC')
