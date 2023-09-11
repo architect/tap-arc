@@ -29,8 +29,8 @@
     "reporter"
   ],
   "scripts": {
-    "lint": "eslint . --fix",
-    "lint:check": "eslint .",
+    "lint": "eslint \".\" --fix",
+    "lint:check": "eslint \".\"",
     "tap-arc:diff:-v": "npm run --silent tape:diff | ./index.js -v",
     "tap-arc:diff": "npm run --silent tape:diff | ./index.js",
     "tap-arc:empty": "npm run --silent tape:empty | ./index.js",
