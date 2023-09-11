@@ -3,7 +3,6 @@ const test = require('tape')
 
 const reporterPath = `${__dirname}/../index.js`
 
-
 test('exit codes', (t) => {
   const failingTests = [ 'diff', 'mixed', 'simple', 'throws' ]
   for (const ft of failingTests) {
