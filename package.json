@@ -29,8 +29,8 @@
     "reporter"
   ],
   "scripts": {
-    "lint": "cross-env eslint --fix '.'",
-    "lint:check": "cross-env eslint '.'",
+    "lint": "cross-env eslint --fix './'",
+    "lint:check": "cross-env eslint './'",
     "tap-arc:diff:-v": "npm run --silent tape:diff | ./index.js -v",
     "tap-arc:diff": "npm run --silent tape:diff | ./index.js",
     "tap-arc:empty": "npm run --silent tape:empty | ./index.js",
