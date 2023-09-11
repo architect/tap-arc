@@ -48,7 +48,7 @@
     "tape:passing": "cross-env tape test/create-passing-tap.cjs",
     "tape:simple": "cross-env tape test/create-simple-tap.cjs",
     "tape:throws": "cross-env tape test/create-throws-tap.cjs",
-    "test": "npm run lint:check && cross-env tape 'test/index.cjs' | ./index.js"
+    "test": "cross-env tape 'test/index.cjs' | ./index.js"
   },
   "dependencies": {
     "chalk": "^5.3.0",
