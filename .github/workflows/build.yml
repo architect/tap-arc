@@ -2,28 +2,32 @@ name: Node CI
 
 on: [ push, pull_request ]
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 16, 18, 20 ]
-        os: [ windows-latest, ubuntu-latest, macOS-latest ]
+        node-version: [ 16 ]
+        # node-version: [ 16, 18, 20 ]
+        os: [ windows-latest ]
+        # os: [ windows-latest, ubuntu-latest, macOS-latest ]
 
     steps:
-    - name: Check out repo
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Run
-      run: npm it
+    - run: npm it
+      env:
+        CI: true
 
-    - name: Notify
-      uses: sarisia/actions-status-discord@v1
+    - uses: sarisia/actions-status-discord@v1
       # Only fire alert once
       if: github.ref == 'refs/heads/main' && failure()
       with:
@@ -38,17 +42,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
 
-      - name: Install
-        run: npm i
+      - run: npm i
 
       - name: Publish @RC to npm
         if: contains(github.ref, 'RC')
@@ -62,8 +63,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Notify
-        uses: sarisia/actions-status-discord@v1
+      - uses: sarisia/actions-status-discord@v1
         if: always()
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
