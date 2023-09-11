@@ -2,7 +2,7 @@
 import minimist from 'minimist'
 
 import helpText from './src/_help-text.js'
-import tapArc from './src/arc-tap.js'
+import tapArc from './src/tap-arc.js'
 
 const alias = {
   help: [ 'h', 'help' ],
@@ -22,9 +22,8 @@ if (options.help) {
   process.exit()
 }
 
-const parser = tapArc(options, (error, result) => {
+const parser = tapArc(options, (_error, result) => {
   process.exit(result.ok ? 0 : 1)
-  // process.exit(result.ok && result.count > 0 ? 0 : 1)
 })
 
 process.stdin.pipe(parser)

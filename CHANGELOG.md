@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-<!-- ## [Unreleased] -->
+## [Unreleased]
+
+### Changed
+
+- ⚠️ `tap-arc` will no longer exit(1) when test count is 0. Suites may only emit failures, assuming PASS if 0 tests.
 
 ## [0.3.5] - 2022-07-11
 
