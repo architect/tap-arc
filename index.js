@@ -7,12 +7,14 @@ const alias = {
   help: [ 'h', 'help' ],
   pessimistic: [ 'p', 'pessimistic', 'bail' ],
   verbose: [ 'v', 'verbose' ],
+  debug: [ 'd', 'debug' ],
 }
 const options = {
   color: true,
   help: false,
   pessimistic: false,
   verbose: false,
+  debug: false,
   ...minimist(process.argv.slice(2), { alias }),
 }
 

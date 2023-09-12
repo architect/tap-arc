@@ -10,6 +10,8 @@ function prettyMs (start) {
 }
 
 export default function (options, output) {
+  const { color, debug, verbose } = options
+  const d = debug || verbose
   const {
     blue,
     bold,
@@ -20,7 +22,7 @@ export default function (options, output) {
     magenta,
     red,
     yellow,
-  } = new Chalk({ level: options.color ? 3 : 0 })
+  } = new Chalk({ level: color ? 3 : 0 })
 
   const good = green
   const bad = red
@@ -29,37 +31,47 @@ export default function (options, output) {
   const passMark = bold.green(CHECK)
   const failMark = bold.red(CROSS)
   const skipMark = RIGHT
-  const pad = (n = 1, c = '  ') => dim(c).repeat(n)
+
+  function pad (n = 1, c = '  ') {
+    return dim(c).repeat(n)
+  }
 
   return {
     end (start) {
       output.end(`${dim(prettyMs(start))}\n`)
     },
-    print (s, p = 0) {
-      output.write(`${pad(p)}${s}\n`)
+    print (str, p = 0) {
+      output.write(`${pad(p)}${str}\n`)
     },
-    pass (s) {
-      return `${passMark} ${dim(s)}`
+    pass (test) {
+      const { id, name } = test
+      return `${passMark}${d ? ` [${bold.dim(id)}]` : ''} ${dim(name)}`
     },
-    fail (s, id) {
-      return `${failMark} ${id}) ${red(s)}`
+    fail (test) {
+      const { id, name, tapError } = test
+      return tapError
+        ? `${failMark} ${red(tapError)}`
+        : `${failMark} [${bold.dim(id)}] ${red(name)}`
     },
-    skip (s) {
-      return cyan(`${skipMark} ${s}`)
+    skip (test) {
+      const { id, name } = test
+      return cyan(`${skipMark}${d ? ` [${bold.dim(id)}]` : ''} ${name}`)
     },
-    todo (s, pass = true) {
+    todo (test) {
+      const { id, name, ok: pass } = test
       const method = pass ? dim : red
-      return method(`${skipMark} ${s}`)
+      return method(`${skipMark}${d ? ` [${bold.dim(id)}]` : ''} ${name}`)
     },
     diffOptions: { actual, expected, dim: italic.dim },
     pad,
-    good,
-    bad,
-    dim,
-    bail: bold.underline.red,
-    highlight: magenta,
-    title: bold.underline,
-    expected,
     actual,
+    bad,
+    bail: bold.underline.red,
+    dim,
+    expected,
+    good,
+    highlight: magenta,
+    strong: bold,
+    title: bold.underline,
   }
 }

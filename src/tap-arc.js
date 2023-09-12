@@ -1,15 +1,16 @@
 import { PassThrough } from 'stream'
 import { Parser } from 'tap-parser'
-import duplexer from 'duplexer3' // TODO: handwrite a simpelr duplexer
+import duplexer from 'duplexer3' // TODO: handwrite a simpler duplexer
 import stripAnsi from 'strip-ansi'
 import createMakeDiff from './_make-diff.js'
 import createPrinter from './_printer.js'
 
-const reservedCommentPrefixes = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok' ]
+const reservedCommentPrefixes = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok', 'test count' ]
 
 export default function createParser (options) {
+  const { debug, pessimistic, verbose } = options
   const output = new PassThrough()
-  const parser = new Parser({ bail: options.pessimistic })
+  const parser = new Parser({ bail: pessimistic })
   const stream = duplexer(parser, output)
 
   const _ = createPrinter(options, output)
@@ -19,16 +20,21 @@ export default function createParser (options) {
   const cwd = process.cwd()
   const start = Date.now()
 
-  parser.on('pass', (test) => {
-    P(_.pass(test.name), 2)
-  })
+  const counter = {
+    pass: 0,
+    skip: 0,
+    todo: 0,
+    fail: 0,
+  }
 
-  parser.on('skip', (test) => {
-    P(_.skip(test.name), 2)
-  })
-
-  parser.on('todo', (test) => {
-    P(_.todo(test.name, test.ok), 2)
+  parser.on('comment', (comment) => {
+    if (!reservedCommentPrefixes.some((c) => comment.startsWith(c, 2))) {
+      // "comment" is generally a test group name
+      P(`\n${_.title(comment.trimEnd().replace(/^(# )/, ''))}`)
+    }
+    else if (verbose && !debug) {
+      P(`> ${_.dim(comment.trim())}`)
+    }
   })
 
   parser.on('extra', (extra) => {
@@ -38,15 +44,24 @@ export default function createParser (options) {
     if (!justAnsi) P(extra.trim())
   })
 
-  parser.on('comment', (comment) => {
-    if (!reservedCommentPrefixes.some((c) => comment.startsWith(c, 2))) {
-      // "comment" is a test group title
-      P(`\n${_.title(comment.trimEnd().replace(/^(# )/, ''))}`)
-    }
+  parser.on('pass', (test) => {
+    counter.pass++
+    P(_.pass(test), 2)
+  })
+
+  parser.on('skip', (test) => {
+    counter.skip++
+    P(_.skip(test), 2)
+  })
+
+  parser.on('todo', (test) => {
+    counter.todo++
+    P(_.todo(test), 2)
   })
 
   parser.on('fail', (test) => {
-    P(_.fail(test.name, test.id), 2)
+    counter.fail++
+    P(_.fail(test), 2)
 
     if (test.diag) {
       const { actual, at, expected, operator, stack } = test.diag
@@ -145,7 +160,7 @@ export default function createParser (options) {
 
       if (at) P(_.dim(`At: ${at.replace(cwd, '')}`), I)
 
-      if (options.verbose && stack) {
+      if (verbose && stack) {
         stack.split('\n').forEach((s) => {
           P(_.dim(s.trim().replace(cwd, '')), I)
         })
@@ -163,7 +178,7 @@ export default function createParser (options) {
 
       P(failureSummary)
 
-      for (const test of result.failures) P(_.fail(test.name, test.id), 2)
+      for (const test of result.failures) P(_.fail(test), 2)
     }
 
     P(`\ntotal:     ${result.count}`)
@@ -173,8 +188,34 @@ export default function createParser (options) {
     if (result.todo > 0) P(`todo:      ${result.todo}`)
     if (result.bailout) P(_.bail('BAILED!'))
 
+    if (debug) {
+      P('tap-parser result:')
+      P(_.dim(JSON.stringify(result, null, 2)))
+      P('tap-arc internal counters:')
+      P(_.dim(JSON.stringify(counter, null, 2)))
+    }
+
     _.end(start)
   })
+
+  if (verbose) {
+    parser.on('version', (version) => {
+      P(`${_.strong('TAP version:')} ${version}`)
+    })
+    parser.on('plan', (plan) => {
+      const { start, end, comment } = plan
+      P(`${_.strong('Plan:')} start=${start} end=${end} ${comment ? `"${comment}"` : ''}`)
+    })
+  }
+
+  if (debug) {
+    parser.on('line', (line) => {
+      P(_.dim(line.trim()))
+    })
+    // parser.on('assert', (assert) => {
+    //   P(`${_.expected(`${assert.id}`)} ${assert.name}`)
+    // })
+  }
 
   return stream
 }
