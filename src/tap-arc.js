@@ -41,7 +41,7 @@ export default function createParser (options) {
     // typically `console.log` output from the test or program it tests
     const stripped = stripAnsi(extra).trim()
     const justAnsi = stripped.length === 0 && extra.length > 0
-    if (!justAnsi) P(extra.trim())
+    if (!justAnsi) P(extra, 0, 0)
   })
 
   parser.on('pass', (test) => {

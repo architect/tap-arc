@@ -40,8 +40,8 @@ export default function (options, output) {
     end (start) {
       output.end(`${dim(prettyMs(start))}\n`)
     },
-    print (str, p = 0) {
-      output.write(`${pad(p)}${str}\n`)
+    print (str, p = 0, n = 1) {
+      output.write(`${pad(p)}${str}${'\n'.repeat(n)}`)
     },
     pass (test) {
       const { id, name } = test
