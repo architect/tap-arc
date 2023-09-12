@@ -33,12 +33,6 @@ Example `npm test` script:
 
 > 💁  `tap-arc` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
 
-Alternatively, use `tap-arc` globally:
-
-```sh
-npm i -g tap-arc
-```
-
 ### `tap-arc --help`
 
 ```
@@ -63,17 +57,25 @@ Options:
 
 ## Development
 
-When building `tap-arc`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "tap-arc:*" commands to test passing and failing TAP.
+When building `tap-arc`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "tap-arc.*" commands to test passing and failing TAP.
 
 ```sh
-npm run tap-arc:simple # used to create the screen shot above
+npm run tap-arc.simple # used to create the screen shot above
 ```
+
+### Tip!
+
+Use
+
+```sh
+echo $?
+```
+
+to see previous exit code.
 
 ### Tests
 
 `tap-arc` is tested to output the correct exit code based on your test suite's TAP output. In the process, the boundaries of tap-arc's process are also tested by creating and parsing several types of TAP output.
-
-Snapshot testing became too arduous to maintain for the sake of aesthetics.
 
 Testing could be improved by unit testing the printer and diff maker.
 

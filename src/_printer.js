@@ -4,7 +4,12 @@ const RIGHT = '▸'
 const CHECK = '✓'
 const CROSS = '✗'
 
-export default function (options) {
+function prettyMs (start) {
+  const ms = Date.now() - start
+  return ms < 1000 ? `${ms} ms` : `${ms / 1000} s`
+}
+
+export default function (options, output) {
   const {
     blue,
     bold,
@@ -15,7 +20,6 @@ export default function (options) {
     magenta,
     red,
     yellow,
-
   } = new Chalk({ level: options.color ? 3 : 0 })
 
   const good = green
@@ -28,8 +32,11 @@ export default function (options) {
   const pad = (n = 1, c = '  ') => dim(c).repeat(n)
 
   return {
+    end (start) {
+      output.end(`${dim(prettyMs(start))}\n`)
+    },
     print (s, p = 0) {
-      console.log(`${pad(p)}${s}`)
+      output.write(`${pad(p)}${s}\n`)
     },
     pass (s) {
       return `${passMark} ${dim(s)}`
@@ -54,9 +61,5 @@ export default function (options) {
     title: bold.underline,
     expected,
     actual,
-    prettyMs (start) {
-      const ms = Date.now() - start
-      return ms < 1000 ? `${ms} ms` : `${ms / 1000} s`
-    },
   }
 }

@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import minimist from 'minimist'
-
 import helpText from './src/_help-text.js'
 import tapArc from './src/tap-arc.js'
 
@@ -22,8 +21,11 @@ if (options.help) {
   process.exit()
 }
 
-const parser = tapArc(options, (_error, result) => {
-  process.exit(result.ok ? 0 : 1)
+const parser = tapArc(options)
+// @ts-ignore - DuplexWrapper is not typed
+parser.on('end', () => {
+  if (!parser._writable.results.ok) process.exit(1)
 })
 
-process.stdin.pipe(parser)
+// @ts-ignore
+process.stdin.pipe(parser).pipe(process.stdout)
