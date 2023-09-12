@@ -1,4 +1,5 @@
 import { exec } from 'child_process'
+import { join } from 'path'
 import { Readable } from 'stream'
 import test from 'tape'
 import tapArc from '../src/tap-arc.js'
@@ -8,11 +9,12 @@ const __dirname = new URL('.', import.meta.url).pathname
 test('streams and exit codes', (t) => {
   const failingTests = [ 'diff', 'mixed', 'simple', 'throws' ]
   for (const ft of failingTests) {
-    t.test(`exit(1) "${ft}" | tap-arc`, (t) => {
+    const filename = `create-${ft}-tap.cjs`
+    t.test(`exit(1) "${filename}" | tap-arc`, (t) => {
       exec(
-        `npx tape ${__dirname}/create-${ft}-tap.cjs | npx tap-arc`,
+        `npx tape ${join(__dirname, filename)} | npx tap-arc`,
         (error, stdout, stderr) => {
-          t.ok(error, `"${ft}" creates an error`)
+          t.ok(error, `"${filename}" creates an error`)
           t.notOk(stderr, 'stderror should be empty')
           t.ok(stdout.indexOf('Failed tests:') > 0, '"Failed tests:" should occur in output')
           t.end()
@@ -23,9 +25,10 @@ test('streams and exit codes', (t) => {
 
   const passingTests = [ 'passing', 'empty' ]
   for (const pt of passingTests) {
-    t.test(`exit(0) "${pt}" | tap-arc`, (t) => {
+    const filename = `create-${pt}-tap.cjs`
+    t.test(`exit(0) "${filename}" | tap-arc`, (t) => {
       exec(
-        `npx tape ${__dirname}/create-${pt}-tap.cjs | npx tap-arc`,
+        `npx tape ${join(__dirname, filename)} | npx tap-arc`,
         (error, stdout, stderr) => {
           t.notOk(error, 'error should be undefined')
           t.notOk(stderr, 'stderror should be empty')
