@@ -1,6 +1,6 @@
 # `tap-arc`
 
-> A small (~25kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
+> A small [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
 
 ## Objectives
 
@@ -13,7 +13,7 @@
 
 ## Installation & Usage
 
-> Compatible with Node.js 16+.
+Compatible with Node.js 16+.
 
 Save `tap-arc` as a development dependency:
 
@@ -31,7 +31,7 @@ Example `npm test` script:
 }
 ```
 
-> 💁  `tap-arc` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
+> 💁  `tap-arc` will format output from any tap reporter. [`tape`](https://github.com/ljharb/tape) is our favorite and was used for testing.
 
 ### `tap-arc --help`
 
@@ -44,7 +44,7 @@ Parses TAP data from stdin, and outputs a "spec-like" formatted result.
 Options:
 
   -v | --verbose
-    Output full stack trace
+    Output full stack trace, TAP version, and plan
 
   -p | --pessimistic | --bail
     Immediately exit upon encountering a failure
@@ -63,15 +63,15 @@ When building `tap-arc`, it's helpful to try various TAP outputs. See `package.j
 npm run tap-arc.simple # used to create the screen shot above
 ```
 
-### Tip!
+### Tips
 
-Use
+To see previous exit code, run:
 
 ```sh
 echo $?
 ```
 
-to see previous exit code.
+`./test/smoke.js` contains the bare minimum usage of `tap-parser` with `process.stdin`.
 
 ### Tests
 
@@ -81,6 +81,6 @@ Testing could be improved by unit testing the printer and diff maker.
 
 ## Credit & Inspiration
 
-- [tap-spec](https://github.com/scottcorgan/tap-spec) ol' reliable, but a bit stale and npm vulnerabilities
+- [tap-spec](https://github.com/scottcorgan/tap-spec) ol' reliable, but a bit stale and vulnerable
 - [tap-difflet](https://github.com/namuol/tap-difflet) inspired output and diffing, also vulnerable
-- [tap-min](https://github.com/derhuerst/tap-min) helpful approaches to streaming and exit codes
+- [tap-min](https://github.com/derhuerst/tap-min) helpful approaches to streaming and exit codes, used to report `tap-arc`'s TAP
