@@ -10,7 +10,7 @@ test('streams and exit codes', (t) => {
     t.test(`exit(1) "${filename}" | tap-arc`, (t) => {
       t.plan(3)
       exec(
-        `npx tape ${join('.', 'test', filename)} | npx tap-arc`,
+        `npx tape ${join('.', 'test', filename)} | node index.js`,
         (error, stdout, stderr) => {
           t.ok(error, `"${filename}" creates an error`)
           t.notOk(stderr, 'stderror should be empty')
@@ -25,7 +25,7 @@ test('streams and exit codes', (t) => {
     t.test(`exit(0) "${filename}" | tap-arc`, (t) => {
       t.plan(3)
       exec(
-        `npx tape ${join('.', 'test', filename)} | npx tap-arc`,
+        `npx tape ${join('.', 'test', filename)} | node index.js`,
         (error, stdout, stderr) => {
           t.notOk(error, 'error should be undefined')
           t.notOk(stderr, 'stderror should be empty')
@@ -39,7 +39,7 @@ test('streams and exit codes', (t) => {
   t.test(`exit(1) "${filename}" | tap-arc`, { todo: true }, (t) => {
     t.plan(2)
     exec(
-      `npx tape ${join('.', 'test', filename)} | npx tap-arc`,
+      `npx tape ${join('.', 'test', filename)} | node index.js`,
       (error, stdout, stderr) => {
         t.ok(error, `"${filename}" creates an error`)
         t.notOk(stderr, 'stderror should be empty')
