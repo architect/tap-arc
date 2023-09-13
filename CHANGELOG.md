@@ -10,6 +10,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - ⚠️ `tap-arc` will no longer exit(1) when test count is 0. Suites may only emit failures, assuming PASS if 0 tests.
 
+## [0.3.6] - 2023-08-18
+
+### Fixed
+
+- dependency vulnerabilities in `json5`
+
+### Changed
+
+- update other dependencies
+
+### Notes
+
+- v1 (a rewrite) has been in progress for a while. shifts in the Node TAP ecosystem are settling.
+- snapshot tests have been disabled. this approach, while super accurate, is unmaintainable.
+
 ## [0.3.5] - 2022-07-11
 
 ### Fixed

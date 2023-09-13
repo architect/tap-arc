@@ -19,8 +19,6 @@ jobs:
 
       - run: npm install
 
-      # - run: npm link
-
       - run: npm test
 
       - uses: sarisia/actions-status-discord@v1
