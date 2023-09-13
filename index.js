@@ -26,7 +26,12 @@ if (options.help) {
 const parser = tapArc(options)
 // @ts-ignore - DuplexWrapper is not typed
 parser.on('end', () => {
-  if (!parser._writable.results.ok) process.exit(1)
+  const { results } = parser._writable
+  if (!results.ok) process.exit(1)
+  if (
+    results.count === 0 &&
+    results.plan.comment.indexOf('no tests found') >= 0
+  ) process.exit(1)
 })
 
 // @ts-ignore

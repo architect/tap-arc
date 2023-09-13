@@ -36,14 +36,14 @@ test('streams and exit codes', (t) => {
   }
 
   const filename = 'create-upstream-error-tap.cjs'
-  t.test(`exit(1) "${filename}" | tap-arc`, { todo: true }, (t) => {
-    t.plan(2)
+  t.test(`exit(1) "${filename}" | tap-arc`, (t) => {
+    t.plan(3)
     exec(
       `npx tape ${join('.', 'test', filename)} | node index.js`,
       (error, stdout, stderr) => {
         t.ok(error, `"${filename}" creates an error`)
-        t.notOk(stderr, 'stderror should be empty')
-        t.end()
+        t.ok(stderr, 'stderror should not be empty')
+        t.ok(stdout.indexOf('total:     0') > 0, '"total: 0" should occur in output')
       }
     )
   })
