@@ -49,7 +49,7 @@
     "tape.simple": "tape test/create-simple-tap.cjs",
     "tape.throws": "tape test/create-throws-tap.cjs",
     "tape.upstream-error": "tape test/create-upstream-error-tap.cjs",
-    "tape": "tape test/index.js | node index.js",
+    "tape": "tape test/index.js | tap-min",
     "test": "npm run lint && npm run tape"
   },
   "dependencies": {
@@ -65,6 +65,7 @@
     "@architect/eslint-config": "^2.1.2",
     "@types/node": "^16.18.50",
     "eslint": "^8.49.0",
+    "tap-min": "^3.0.0",
     "tape": "5.6.6"
   },
   "eslintConfig": {
