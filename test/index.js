@@ -55,25 +55,10 @@ const TAP = {
     ok: 'ok 1 should be truthy',
     notOk: 'not ok 2 should be falsy',
   },
-  OUT: [
-    '\x1B[1m\x1B[4mcomment\x1B[24m\x1B[22m',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[32m✓\x1B[39m\x1B[22m \x1B[2mshould be truthy\x1B[22m',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m 2) \x1B[31mshould be falsy\x1B[39m',
-    '',
-    '\x1B[1m\x1B[4mtest count(2) != plan(null)\x1B[24m\x1B[22m',
-    '',
-    '\x1B[31mFailed tests:\x1B[39m There were \x1B[31m2\x1B[39m failures',
-    '',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m 2) \x1B[31mshould be falsy\x1B[39m',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m undefined) \x1B[31mundefined\x1B[39m',
-    '',
-    'total:     2',
-    '\x1B[32mpassing:   1\x1B[39m',
-    '\x1B[31mfailing:   2\x1B[39m',
-  ],
+  OUT: `\x1B[1m\x1B[4mcomment\x1B[24m\x1B[22m\n\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[32m✓\x1B[39m\x1B[22m \x1B[2mshould be truthy\x1B[22m\n\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m [2] \x1B[31mshould be falsy\x1B[39m\n\n\x1B[31mFailed tests:\x1B[39m There were \x1B[31m2\x1B[39m failures\n\n\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m [2] \x1B[31mshould be falsy\x1B[39m\n\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m \x1B[31mno plan\x1B[39m\n\ntotal:     2\n\x1B[32mpassing:   1\x1B[39m\n\x1B[31mfailing:   2\x1B[39m`,
 }
 
-test('basic reporting', { todo: true }, (t) => {
+test('basic reporting', (t) => {
   t.plan(1)
   const parser = tapArc({
     color: true,
@@ -89,7 +74,7 @@ test('basic reporting', { todo: true }, (t) => {
   })
   parser.on('end', () => {
     output = output.trim().split('\n').slice(0, -1).join('\n') // remove timer
-    t.equal(output, TAP.OUT.join('\n'), 'should print expected output')
+    t.equal(output, TAP.OUT, 'should print expected output')
     t.end()
   })
 
