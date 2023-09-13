@@ -2,10 +2,6 @@ name: Node CI
 
 on: [ push, pull_request ]
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -26,8 +22,6 @@ jobs:
       - run: npm link
 
       - run: npm test
-        env:
-          CI: true
 
       - uses: sarisia/actions-status-discord@v1
         # Only fire alert once

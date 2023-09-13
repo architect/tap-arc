@@ -1,6 +1,6 @@
 import { PassThrough } from 'stream'
 import { Parser } from 'tap-parser'
-import duplexer from 'duplexer3' // TODO: handwrite a simpler duplexer
+import duplexer from 'duplexer3' // TODO: write a custom, simpler duplexer
 import stripAnsi from 'strip-ansi'
 import createMakeDiff from './_make-diff.js'
 import createPrinter from './_printer.js'
@@ -31,9 +31,6 @@ export default function createParser (options) {
     if (!reservedCommentPrefixes.some((c) => comment.startsWith(c, 2))) {
       // "comment" is generally a test group name
       P(`\n${_.title(comment.trimEnd().replace(/^(# )/, ''))}`)
-    }
-    else if (verbose && !debug) {
-      P(`> ${_.dim(comment.trim())}`)
     }
   })
 
@@ -190,9 +187,9 @@ export default function createParser (options) {
 
     if (debug) {
       P('tap-parser result:')
-      P(_.dim(JSON.stringify(result, null, 2)))
+      P(JSON.stringify(result, null, 2))
       P('tap-arc internal counters:')
-      P(_.dim(JSON.stringify(counter, null, 2)))
+      P(JSON.stringify(counter, null, 2))
     }
 
     _.end(start)
@@ -210,11 +207,8 @@ export default function createParser (options) {
 
   if (debug) {
     parser.on('line', (line) => {
-      P(_.dim(line.trim()))
+      P(line.trim())
     })
-    // parser.on('assert', (assert) => {
-    //   P(`${_.expected(`${assert.id}`)} ${assert.name}`)
-    // })
   }
 
   return stream

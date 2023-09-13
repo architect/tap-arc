@@ -1,6 +1,6 @@
 import { Chalk } from 'chalk'
 
-const RIGHT = '▸'
+const RIGHT = '↦'
 const CHECK = '✓'
 const CROSS = '✗'
 
@@ -24,8 +24,6 @@ export default function (options, output) {
     yellow,
   } = new Chalk({ level: color ? 3 : 0 })
 
-  const good = green
-  const bad = red
   const expected = yellow
   const actual = blue
   const passMark = bold.green(CHECK)
@@ -45,31 +43,31 @@ export default function (options, output) {
     },
     pass (test) {
       const { id, name } = test
-      return `${passMark}${d ? ` [${bold.dim(id)}]` : ''} ${dim(name)}`
+      return `${passMark}${d ? ` [${id}]` : ''} ${dim(name)}`
     },
     fail (test) {
       const { id, name, tapError } = test
       return tapError
         ? `${failMark} ${red(tapError)}`
-        : `${failMark} [${bold.dim(id)}] ${red(name)}`
+        : `${failMark} [${id}] ${red(name)}`
     },
     skip (test) {
       const { id, name } = test
-      return cyan(`${skipMark}${d ? ` [${bold.dim(id)}]` : ''} ${name}`)
+      return cyan(`${skipMark}${d ? ` [${id}]` : ''} ${name}`)
     },
     todo (test) {
       const { id, name, ok: pass } = test
       const method = pass ? dim : red
-      return method(`${skipMark}${d ? ` [${bold.dim(id)}]` : ''} ${name}`)
+      return method(`${skipMark}${d ? ` [${id}]` : ''} ${name}`)
     },
     diffOptions: { actual, expected, dim: italic.dim },
     pad,
     actual,
-    bad,
+    bad: red,
     bail: bold.underline.red,
     dim,
     expected,
-    good,
+    good: green,
     highlight: magenta,
     strong: bold,
     title: bold.underline,

@@ -82,7 +82,7 @@ test('throws', (t) => {
 })
 
 test('some TODO tests', { todo: true }, (t) => {
-  t.ok(true, "Tests todo aren't really tests")
+  t.pass("Tests todo aren't really tests")
   t.fail('Test the actual library')
   t.end()
 })
