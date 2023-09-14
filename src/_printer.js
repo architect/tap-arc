@@ -9,7 +9,7 @@ function prettyMs (start) {
   return ms < 1000 ? `${ms} ms` : `${ms / 1000} s`
 }
 
-export default function (options, output) {
+export default function (options) {
   const { color, debug, verbose } = options
   const d = debug || verbose
   const {
@@ -35,12 +35,6 @@ export default function (options, output) {
   }
 
   return {
-    end (start) {
-      output.end(`${dim(prettyMs(start))}\n`)
-    },
-    print (str, p = 0, n = 1) {
-      output.write(`${pad(p)}${str}${'\n'.repeat(n)}`)
-    },
     pass ({ id, name }) {
       return `${passMark}${d ? ` [${id}]` : ''} ${dim(name)}`
     },
@@ -56,6 +50,7 @@ export default function (options, output) {
     },
     diffOptions: { actual, expected, dim: italic.dim },
     pad,
+    prettyMs,
     actual,
     bad: red,
     realBad: bold.underline.red,

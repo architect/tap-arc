@@ -12,10 +12,13 @@ export default function createParser (options) {
   const output = new PassThrough()
   const parser = new Parser({ bail: pessimistic })
   const stream = duplexer(parser, output)
-
-  const _ = createPrinter(options, output)
-  const { diffOptions, print: P } = _
+  const _ = createPrinter(options)
+  const { diffOptions, prettyMs, pad } = _
   const makeDiff = createMakeDiff(diffOptions)
+
+  function P (str, p = 0, n = 1) {
+    output.write(`${pad(p)}${str}${'\n'.repeat(n)}`)
+  }
 
   const cwd = process.cwd()
   const start = Date.now()
@@ -207,7 +210,7 @@ export default function createParser (options) {
       P(JSON.stringify(counter, null, 2))
     }
 
-    _.end(start)
+    output.end(`${_.dim(prettyMs(start))}\n`)
   })
 
   if (verbose) {
