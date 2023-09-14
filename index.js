@@ -8,13 +8,18 @@ const alias = {
   pessimistic: [ 'p', 'pessimistic', 'bail' ],
   verbose: [ 'v', 'verbose' ],
   debug: [ 'd', 'debug' ],
+  failBadCount: [ 'fail-bad-count' ],
 }
-const options = {
+export const defaultOptions = {
   color: true,
   help: false,
   pessimistic: false,
+  failBadCount: false,
   verbose: false,
   debug: false,
+}
+const options = {
+  ...defaultOptions,
   ...minimist(process.argv.slice(2), { alias }),
 }
 
@@ -27,7 +32,15 @@ const parser = tapArc(options)
 // @ts-ignore - DuplexWrapper is not typed
 parser.on('end', () => {
   const { results } = parser._writable
-  if (!results.ok) process.exit(1)
+
+  if (!results.ok) {
+    if (
+      results.badCount &&
+      results.failures.length === 0 &&
+      !options.failBadCount
+    ) process.exit(0)
+    else process.exit(1)
+  }
   if (
     results.count === 0 &&
     results.plan.comment.indexOf('no tests found') >= 0

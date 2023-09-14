@@ -14,8 +14,8 @@ export default function createParser (options) {
   const stream = duplexer(parser, output)
 
   const _ = createPrinter(options, output)
-  const { print: P } = _
-  const makeDiff = createMakeDiff(_.diffOptions)
+  const { diffOptions, print: P } = _
+  const makeDiff = createMakeDiff(diffOptions)
 
   const cwd = process.cwd()
   const start = Date.now()
@@ -167,23 +167,38 @@ export default function createParser (options) {
 
   parser.on('complete', (result) => {
     if (!result.ok) {
-      let failureSummary = '\n'
-      failureSummary += _.bad('Failed tests:')
-      failureSummary += ` There ${result.fail > 1 ? 'were' : 'was'} `
-      failureSummary += _.bad(result.fail)
-      failureSummary += ` failure${result.fail > 1 ? 's' : ''}\n`
+      if (
+        result.failures[0] &&
+        result.failures[0].tapError &&
+        result.failures[0].tapError.startsWith('incorrect number of tests')
+      ) {
+        // custom failure was created by tap-parser
+        result.badCount = true // persisted to CLI process handler
+        result.failures.shift()
+        result.fail--
+        P(_.realBad(`\nExpected ${result.plan.end || '?'} assertions, parsed ${result.count || '?'}`))
+      }
 
-      P(failureSummary)
+      if (result.failures.length > 0) {
+        const singular = result.fail === 1
+        let failureSummary = '\n'
+        failureSummary += _.bad('Failed tests:')
+        failureSummary += ` There ${singular ? 'was' : 'were'} `
+        failureSummary += _.bad(result.fail)
+        failureSummary += ` failure${singular ? '' : 's'}\n`
 
-      for (const test of result.failures) P(_.fail(test), 2)
+        P(failureSummary)
+
+        for (const test of result.failures) P(_.fail(test), 2)
+      }
     }
 
     P(`\ntotal:     ${result.count}`)
+    if (result.bailout) P(_.realBad('BAILED!'))
     if (result.pass > 0) P(_.good(`passing:   ${result.pass}`))
     if (result.fail > 0) P(_.bad(`failing:   ${result.fail}`))
     if (result.skip > 0) P(`skipped:   ${result.skip}`)
     if (result.todo > 0) P(`todo:      ${result.todo}`)
-    if (result.bailout) P(_.bail('BAILED!'))
 
     if (debug) {
       P('tap-parser result:')

@@ -41,22 +41,16 @@ export default function (options, output) {
     print (str, p = 0, n = 1) {
       output.write(`${pad(p)}${str}${'\n'.repeat(n)}`)
     },
-    pass (test) {
-      const { id, name } = test
+    pass ({ id, name }) {
       return `${passMark}${d ? ` [${id}]` : ''} ${dim(name)}`
     },
-    fail (test) {
-      const { id, name, tapError } = test
-      return tapError
-        ? `${failMark} ${red(tapError)}`
-        : `${failMark} [${id}] ${red(name)}`
+    fail ({ id, name }) {
+      return `${failMark} [${id}] ${red(name)}`
     },
-    skip (test) {
-      const { id, name } = test
+    skip ({ id, name }) {
       return cyan(`${skipMark}${d ? ` [${id}]` : ''} ${name}`)
     },
-    todo (test) {
-      const { id, name, ok: pass } = test
+    todo ({ id, name, ok: pass }) {
       const method = pass ? dim : red
       return method(`${skipMark}${d ? ` [${id}]` : ''} ${name}`)
     },
@@ -64,7 +58,7 @@ export default function (options, output) {
     pad,
     actual,
     bad: red,
-    bail: bold.underline.red,
+    realBad: bold.underline.red,
     dim,
     expected,
     good: green,
