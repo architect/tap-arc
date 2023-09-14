@@ -2,7 +2,7 @@
   "name": "tap-arc",
   "description": "spec-like TAP reporter",
   "author": "tbeseda",
-  "version": "1.0.0-RC.2",
+  "version": "1.0.0-RC.3",
   "license": "Apache-2.0",
   "type": "module",
   "main": "index.js",
