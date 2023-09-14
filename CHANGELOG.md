@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 <!-- ## [Unreleased] -->
 
+## [1.0.0] - 2023-09-13
+
+A large refactor with updated dependencies that targets very similar output of v0.3.0+. Drastically simplified testing.
+
+### Changed
+
+- Ouput formatting and colors are more readable for red-green colorblind folks (like myself!)
+- Suites with all passing tests but "bad counts" will now PASS. Override with `--fail-bad-count`. See the FAQ in README.
+- ⚠️ `tap-arc` will only exit(1) when test count is 0 if the results plan comment also contains "no tests found" -- unlikely to affect most test reporting pipelines.
+- CI for this library on Windows improved.
+
+## [0.4.0] - 2023-08-21
+
+### Fixed
+
+- dep vulnerabilies
+
 ## [0.3.6] - 2023-08-18
 
 ### Fixed

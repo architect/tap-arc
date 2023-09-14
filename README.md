@@ -1,21 +1,31 @@
-# `tap-arc`
+<h1 align="center"><code>tap-arc</code> 📋</h1>
 
-> A small (~23kB) [TAP](https://testanything.org/) reporter with spec-like output, streaming, and failure diffing.
+<p align="center">
+  A small <a href="https://testanything.org/">TAP</a> reporter with spec-like output, streaming, and failure diffing.<br>
+  <a href="https://www.npmjs.com/package/tap-arc"><strong><code>tap-arc</code> on npmjs.org »</strong></a><br>
+  <br>
+  Contents:
+  <a href="#Installation-and-usage">Install</a>
+  •
+  <a href="#Development">Development</a>
+  •
+  <a href="#FAQ">FAQ</a>
+</p>
 
 ## Objectives
 
 - minimal, informative spec-like output for all assertions
-- minimal, maintained dependencies -- can't be shipping React to CI
+- minimal, maintained dependencies
 - streaming in and out
 - helpful diffing for failures
 
 ![tap-arc output screen shot](./screen-shot.png)
 
-## Installation & Usage
+## Installation and Usage
 
-> Compatible with Node.js 12+.
+Compatible with Node.js v16+ -- v14 also works but is ***not*** recommended.
 
-For a JavaScript project, save `tap-arc` as a development dependency:
+Save `tap-arc` as a development dependency:
 
 ```sh
 npm i -D tap-arc
@@ -31,13 +41,7 @@ Example `npm test` script:
 }
 ```
 
-> 💁  `tap-arc` will format output from any tap reporter. [`tape`](https://github.com/substack/tape) was used for testing.
-
-Alternatively, use `tap-arc` globally:
-
-```sh
-npm i -g tap-arc
-```
+💁  `tap-arc` will format output from any tap reporter. [`tape`](https://github.com/ljharb/tape) is our favorite and was used for testing.
 
 ### `tap-arc --help`
 
@@ -50,7 +54,7 @@ Parses TAP data from stdin, and outputs a "spec-like" formatted result.
 Options:
 
   -v | --verbose
-    Output full stack trace
+    Output full stack trace, TAP version, and plan
 
   -p | --pessimistic | --bail
     Immediately exit upon encountering a failure
@@ -63,26 +67,67 @@ Options:
 
 ## Development
 
-The entirety of the reporter lives in `./index.js`.
-
-When building `tap-arc`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "tap-arc:*" commands to test passing and failing TAP.
+When building `tap-arc`, it's helpful to try various TAP outputs. See `package.json` `"scripts"` for useful "tap-arc.*" commands to test passing and failing TAP.
 
 ```sh
-npm run tap-arc:simple # used to create the screen shot above
+npm run tap-arc.simple # used to create the screen shot above
 ```
 
-### Snapshot tests
+### Dev Tips
 
-The main library is snapshot tested (`npm test` loads all snapshots to compare to current output). Create snapshots with the `npm run make-snapshots` commands.
+1. `./test/smoke.js` contains the bare minimum usage of `tap-parser` with `process.stdin`.  
+Helpful for understanding `tap-parser`'s behavior.
 
-The snapshots are versioned by Node.js' major version, ie. `node14` and `node16`. But snapshots may vary between minor and patch versions of Node. (Line numbers of Node internals shift, causing changes in stack traces.) GitHub's Actions are set to use the latest Node.js 14.x and 16.x, so when testing and creating snapshots locally, do the same.
+2. To see previous exit code, run:
 
-This is also why `tape` is pinned as a development dependency. Update as needed, but recreate snapshots.
+```sh
+echo $?
+```
 
-Request: please exclude updated snapshots from commits if the _only_ change is to the duration line. This variance is accounted for in the tests.
+### Testing
+
+Primarily, `tap-arc` is tested to output the correct exit code based on your test suite's TAP output.
+
+Testing could be improved by unit testing the printer and diff maker.
+
+## FAQ
+
+<details open>
+<summary>"Expected <code>n</code> assertions, but found <code>< n</code>"</summary>
+
+_What happened?_  
+✅ The TAP parser found zero failing tests  
+✅ The final tally from the raw TAP shows `n` of `n` passed  
+🤨 But the TAP plan called for more assertions than were found, counted, and parsed.
+
+💁‍♀️ Currently, when this case is detected, `tap-arc` will exit with a successful status code.  
+This can be overridden with the `--fail-bad-count` flag.
+
+_Why, though_?  
+This has been observed specifically on Windows, where the TAP output is buffered to another stream and not piped to `tap-arc`.  
+Libraries like `mock-fs` tinker with stdout and subsequent TAP output is lost. Try closing those helpers before making an assertion that generates TAP.
+
+</details>
+
+<details>
+<summary>"0 tests found" fails the suite?</summary>
+
+Yes. At least one passing test is required to pass the suite.  
+This helps ensures there wasn't a silent, catastrophic failure in the test suite.
+
+</details>
+
+<details>
+<summary>Why does <code>tap-arc</code> get to decide these things?</summary>
+
+`tap-arc` is responsible for the test suite's exit code. If your entire CI stack is piped to a reporter, it's an important job. So `tap-arc` is a bit skeptical by default to help ensure your suite is passing.
+
+If you'd like to see different behavior from `tap-arc`, please open an issue or PR. We'd love to hear your use case.
+
+</details>
 
 ## Credit & Inspiration
 
-- [tap-spec](https://github.com/scottcorgan/tap-spec) ol' reliable, but a bit stale and npm vulnerabilities
+- [tap-spec](https://github.com/scottcorgan/tap-spec) ol' reliable, but a bit stale and vulnerable
 - [tap-difflet](https://github.com/namuol/tap-difflet) inspired output and diffing, also vulnerable
-- [tap-min](https://github.com/derhuerst/tap-min) helpful approaches to streaming and exit codes
+- [tap-min](https://github.com/derhuerst/tap-min) helpful approaches to streaming and exit codes, used to report `tap-arc`'s TAP
