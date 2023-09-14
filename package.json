@@ -49,7 +49,7 @@
     "tape.simple": "tape test/create-simple-tap.cjs",
     "tape.throws": "tape test/create-throws-tap.cjs",
     "tape.upstream-error": "tape test/create-upstream-error-tap.cjs",
-    "tape": "tape test/index.js | tap-min",
+    "tape": "tape test/**/*-test.js | tap-min",
     "test": "npm run lint && npm run tape"
   },
   "dependencies": {
