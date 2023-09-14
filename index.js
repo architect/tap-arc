@@ -10,7 +10,7 @@ const alias = {
   debug: [ 'd', 'debug' ],
   failBadCount: [ 'fail-bad-count' ],
 }
-export const defaultOptions = {
+const defaultOptions = {
   color: true,
   help: false,
   pessimistic: false,

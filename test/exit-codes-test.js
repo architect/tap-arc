@@ -14,7 +14,10 @@ test('streams and exit codes', (t) => {
         (error, stdout, stderr) => {
           t.ok(error, `"${filename}" creates an error`)
           t.notOk(stderr, 'stderror should be empty')
-          t.ok(stdout.indexOf('Failed tests:') > 0, '"Failed tests:" should occur in output')
+          t.ok(
+            stdout.indexOf('Failed tests:') > 0,
+            '"Failed tests:" should occur in output',
+          )
         }
       )
     })
@@ -29,7 +32,10 @@ test('streams and exit codes', (t) => {
         (error, stdout, stderr) => {
           t.notOk(error, `${filename} exits without error`)
           t.notOk(stderr, 'stderror should be empty')
-          t.ok(stdout.indexOf('Failed tests:') < 0, '"Failed tests:" shouldn\'t occur in output')
+          t.ok(
+            stdout.indexOf('Failed tests:') < 0,
+            '"Failed tests:" shouldn\'t occur in output',
+          )
         }
       )
     })
@@ -48,17 +54,47 @@ test('streams and exit codes', (t) => {
     )
   })
 
-  const filename2 = 'missing-assertions-passing.txt'
-  t.test(`exit(1) "${filename2}" | tap-arc`, (t) => {
+  const badCountPassing = 'missing-assertions-passing.txt'
+  t.test(`exit(0) "${badCountPassing}" | tap-arc`, (t) => {
     t.plan(3)
     exec(
-      `cat ${join(mockPath, filename2)} | node index.js`,
+      `cat ${join(mockPath, badCountPassing)} | node index.js`,
       (error, stdout, stderr) => {
-        t.notOk(error, `"${filename2}" exits without error`)
+        t.notOk(error, `"${badCountPassing}" exits without error`)
         t.notOk(stderr, 'stderror should be empty')
         t.ok(
           stdout.indexOf('Expected 16 assertions, parsed 13') > 0,
           '"Expected 16 assertions, parsed 13" should occur in output',
+        )
+      }
+    )
+  })
+  t.test(`exit(1) "${badCountPassing}" | tap-arc --fail-bad-count`, (t) => {
+    t.plan(3)
+    exec(
+      `cat ${join(mockPath, badCountPassing)} | node index.js --fail-bad-count`,
+      (error, stdout, stderr) => {
+        t.ok(error, `"${badCountFailing}" creates an error`)
+        t.notOk(stderr, 'stderror should be empty')
+        t.ok(
+          stdout.indexOf('Expected 16 assertions, parsed 13') > 0,
+          '"Expected 16 assertions, parsed 13" should occur in output',
+        )
+      }
+    )
+  })
+
+  const badCountFailing = 'missing-assertions-failing.txt'
+  t.test(`exit(1) "${badCountFailing}" | tap-arc`, (t) => {
+    t.plan(3)
+    exec(
+      `cat ${join(mockPath, badCountFailing)} | node index.js`,
+      (error, stdout, stderr) => {
+        t.ok(error, `"${badCountFailing}" creates an error`)
+        t.notOk(stderr, 'stderror should be empty')
+        t.ok(
+          stdout.indexOf('Failed tests:') > 0,
+          '"Failed tests:" should occur in output',
         )
       }
     )
