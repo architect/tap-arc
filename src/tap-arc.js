@@ -1,5 +1,6 @@
+// eslint-disable-next-line import/no-unresolved
+import { Parser } from 'tap-parser' // what's going on with @tapjs packages?
 import { PassThrough } from 'stream'
-import { Parser } from 'tap-parser'
 import duplexer from 'duplexer3' // TODO: write a custom, simpler duplexer
 import stripAnsi from 'strip-ansi'
 import createMakeDiff from './_make-diff.js'
