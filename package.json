@@ -42,6 +42,7 @@
     "tap-arc.simple": "npm run --silent tape.simple | node index.js",
     "tap-arc.throws": "npm run --silent tape.throws | node index.js",
     "tap-arc.upstream-error": "npm run --silent tape.upstream-error | node index.js",
+    "tap-arc.runtime-error": "npm run --silent tape.runtime-error | node index.js",
     "tape.diff": "tape test/mock/create-diff-tap.cjs",
     "tape.empty": "tape test/mock/create-empty-tap.cjs",
     "tape.mixed": "tape test/mock/create-mixed-tap.cjs",
@@ -49,6 +50,7 @@
     "tape.simple": "tape test/mock/create-simple-tap.cjs",
     "tape.throws": "tape test/mock/create-throws-tap.cjs",
     "tape.upstream-error": "tape test/mock/create-upstream-error-tap.cjs",
+    "tape.runtime-error": "tape test/mock/create-runtime-error-tap.js",
     "tape": "tape test/**/*-test.js | tap-min",
     "test": "npm run lint && npm run tape"
   },

@@ -38,8 +38,8 @@ export default function (options) {
     pass ({ id, name }) {
       return `${passMark}${d ? ` [${id}]` : ''} ${dim(name)}`
     },
-    fail ({ id, name }) {
-      return `${failMark} [${id}] ${red(name)}`
+    fail ({ id, name, tapError }) {
+      return `${failMark} ${tapError ? red(`"${tapError}"`) : `[${id}] ${red(name)}`}`
     },
     skip ({ id, name }) {
       return cyan(`${skipMark}${d ? ` [${id}]` : ''} ${name}`)

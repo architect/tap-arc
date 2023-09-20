@@ -170,16 +170,21 @@ export default function createParser (options) {
 
   parser.on('complete', (result) => {
     if (!result.ok) {
-      if (
-        result.failures[0] &&
-        result.failures[0].tapError &&
-        result.failures[0].tapError.startsWith('incorrect number of tests')
-      ) {
-        // custom failure was created by tap-parser
-        result.badCount = true // persisted to CLI process handler
-        result.failures.shift()
-        result.fail--
-        P(_.realBad(`\nExpected ${result.plan.end || '?'} assertions, parsed ${result.count || '?'}`))
+      const tapFailures = result.failures.filter((f) => f.tapError)
+      for (const tapFailure of tapFailures){
+        const { tapError } = tapFailure
+
+        if (tapError.startsWith('incorrect number of tests')) {
+          // custom failure was created by tap-parser
+          P(_.realBad(`\nExpected ${result.plan.end || '?'} assertions, parsed ${result.count || '?'}`))
+          result.badCount = true // persisted to CLI process handler
+          result.failures.shift()
+          result.fail--
+        }
+        else if (tapError.startsWith('no plan'))
+          P(_.realBad(`\nTAP test plan not found`))
+        else
+          P(_.realBad(`\n${tapError}`))
       }
 
       if (result.failures.length > 0) {

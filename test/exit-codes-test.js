@@ -23,6 +23,21 @@ test('streams and exit codes', (t) => {
     })
   }
 
+  for (const ft of [ 'upstream-error', 'runtime-error' ]) {
+    const filename = `create-${ft}-tap.cjs`
+    t.test(`exit(1) "${filename}" | tap-arc`, (t) => {
+      t.plan(3)
+      exec(
+        `npx tape ${join(mockPath, filename)} | node index.js`,
+        (error, stdout, stderr) => {
+          t.ok(error, `"${filename}" creates an error`)
+          t.ok(stderr, 'stderror should not be empty')
+          t.ok(stdout.indexOf('total:     0') > 0, '"total: 0" should occur in output')
+        }
+      )
+    })
+  }
+
   for (const pt of [ 'passing', 'empty' ]) {
     const filename = `create-${pt}-tap.cjs`
     t.test(`exit(0) "${filename}" | tap-arc`, (t) => {
@@ -40,19 +55,6 @@ test('streams and exit codes', (t) => {
       )
     })
   }
-
-  const filename = 'create-upstream-error-tap.cjs'
-  t.test(`exit(1) "${filename}" | tap-arc`, (t) => {
-    t.plan(3)
-    exec(
-      `npx tape ${join(mockPath, filename)} | node index.js`,
-      (error, stdout, stderr) => {
-        t.ok(error, `"${filename}" creates an error`)
-        t.ok(stderr, 'stderror should not be empty')
-        t.ok(stdout.indexOf('total:     0') > 0, '"total: 0" should occur in output')
-      }
-    )
-  })
 
   const badCountPassing = 'missing-assertions-passing.txt'
   t.test(`exit(0) "${badCountPassing}" | tap-arc`, (t) => {
