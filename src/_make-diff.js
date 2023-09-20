@@ -1,4 +1,5 @@
-import { strict } from 'tcompare'
+// eslint-disable-next-line import/no-unresolved
+import { strict } from 'tcompare' // what's going on with @tapjs packages?
 import JSON5 from 'json5'
 
 /**

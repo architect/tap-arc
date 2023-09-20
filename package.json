@@ -60,12 +60,12 @@
     "json5": "^2.2.3",
     "minimist": "^1.2.8",
     "strip-ansi": "^7.1.0",
-    "tap-parser": "^13.0.1",
-    "tcompare": "^6.0.0"
+    "tap-parser": "^15.0.0",
+    "tcompare": "^6.1.0"
   },
   "devDependencies": {
     "@architect/eslint-config": "^2.1.2",
-    "@types/node": "^16.18.50",
+    "@types/node": "^16.18.53",
     "eslint": "^8.49.0",
     "tap-min": "^3.0.0",
     "tape": "5.6.6"
