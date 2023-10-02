@@ -17,9 +17,6 @@
     "type": "git",
     "url": "git+https://github.com/architect/tap-arc.git"
   },
-  "engines": {
-    "node": ">=16"
-  },
   "keywords": [
     "test",
     "tap",
@@ -60,15 +57,15 @@
     "json5": "^2.2.3",
     "minimist": "^1.2.8",
     "strip-ansi": "^7.1.0",
-    "tap-parser": "^15.0.0",
-    "tcompare": "^6.1.0"
+    "tap-parser": "^15.2.0",
+    "tcompare": "^6.4.1"
   },
   "devDependencies": {
     "@architect/eslint-config": "^2.1.2",
     "@types/node": "^16.18.53",
-    "eslint": "^8.49.0",
+    "eslint": "^8.50.0",
     "tap-min": "^3.0.0",
-    "tape": "5.6.6"
+    "tape": "5.7.0"
   },
   "eslintConfig": {
     "extends": "@architect/eslint-config",
