@@ -5,6 +5,7 @@ import tapArc from './src/tap-arc.js'
 
 const alias = {
   help: [ 'h', 'help' ],
+  showDiff: [ 'diff' ],
   pessimistic: [ 'p', 'pessimistic', 'bail' ],
   verbose: [ 'v', 'verbose' ],
   debug: [ 'd', 'debug' ],
@@ -13,6 +14,7 @@ const alias = {
 const defaultOptions = {
   color: true,
   help: false,
+  showDiff: true,
   pessimistic: false,
   failBadCount: false,
   verbose: false,
@@ -31,6 +33,7 @@ if (options.help) {
 const parser = tapArc(options)
 // @ts-ignore - DuplexWrapper is not typed
 parser.on('end', () => {
+  // @ts-ignore
   const { results } = parser._writable
 
   if (!results.ok) {
