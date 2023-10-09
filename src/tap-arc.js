@@ -1,11 +1,12 @@
-// eslint-disable-next-line import/no-unresolved
-import { Parser } from 'tap-parser' // what's going on with @tapjs packages?
+import { Parser } from 'tap-parser'
 import { PassThrough } from 'stream'
 import duplexer from 'duplexer3' // TODO: write a custom, simpler duplexer
+import JSON5 from 'json5'
 import stripAnsi from 'strip-ansi'
 import differ from './_make-diff.js'
 import createPrinter from './_printer.js'
 
+const { parse } = JSON5
 const reservedCommentPrefixes = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok', 'test count' ]
 
 export default function createParser (options) {
@@ -15,7 +16,7 @@ export default function createParser (options) {
   const stream = duplexer(parser, output)
   const _ = createPrinter(options)
   const { prettyMs, pad } = _
-  const { diffArray, diffObject, diffUnknown } = differ(_)
+  const { diffArray, diffObject, diffString } = differ(_)
 
   /**
    * Print a line to the output stream
@@ -72,134 +73,102 @@ export default function createParser (options) {
     P(_.fail(test), 2)
 
     if (test.diag) {
-      const { actual, at, expected, operator, stack } = test.diag
-      const aType = typeof actual
-      const eType = typeof expected
-      const sharedType = aType === eType ? aType : null
+      const { at, operator, stack } = test.diag
+      let { actual, expected } = test.diag
       const indent = 4
 
-      if (operator === 'equal' || operator === 'deepEqual') {
-        if (sharedType === 'number') {
-          // tap-parser parses numbers from TAP output
-          P(`Expected ${_.expected(expected)} but got ${_.actual(actual)}`, indent)
+      function printBoth (e, a) {
+        P(`Actual:   ${JSON.stringify(a)}`, indent)
+        P(`Expected: ${JSON.stringify(e)}`, indent)
+      }
+
+      if (actual === expected) { // shallow test output; can't be diffed
+        P(`${_.expected('Expected')} did not match ${_.actual('actual')}.`, indent)
+        P(_.dim('TAP output cannot be diffed'), indent)
+        P(actual, indent)
+      }
+      else if (operator === 'equal' || operator === 'deepEqual') {
+        // try parsing for JS types
+        if (typeof actual === 'string')
+          try { actual = parse(actual) }
+          catch (_e) { _e }
+        if (typeof expected === 'string')
+          try { expected = parse(expected) }
+          catch (_e) { _e }
+
+        const aType = typeof actual
+        const eType = typeof expected
+        let sharedType = aType === eType ? `${aType}` : null
+        if (sharedType === 'object') {
+          if (Array.isArray(actual) && Array.isArray(expected)) sharedType = 'array'
+          else if (Array.isArray(actual) && !Array.isArray(expected)) sharedType = null
+          else if (!Array.isArray(actual) && Array.isArray(expected)) sharedType = null
         }
-        else if (Array.isArray(expected) && Array.isArray(actual)) {
-          // tap-parser parses arrays from TAP output
-          if (showDiff) {
+
+        if (sharedType) {
+          if ([ 'number', 'bigint', 'boolean', 'symbol', 'function', 'undefined' ].includes(sharedType))
+            P(`Expected ${_.expected(expected)} but got ${_.actual(actual)}`, indent)
+          else if (showDiff && sharedType === 'array')
             diffArray(actual, expected).forEach(line => P(line, indent))
-          }
-          else {
-            P(`Expect: ${_.expected(expected)}`, indent)
-            P(`Actual: ${_.actual(actual)}`, indent)
-          }
-
-        }
-        else if (sharedType === 'object') {
-          // likely impossible to get parsed object from output
-          if (showDiff) {
+          else if (showDiff && sharedType === 'object')
             diffObject(actual, expected).forEach(line => P(line, indent))
-          }
-          else {
-            P(`Expect: ${_.expected(expected)}`, indent)
-            P(`Actual: ${_.actual(actual)}`, indent)
-          }
+          else if (showDiff && sharedType === 'string')
+            diffString(actual, expected).forEach(line => P(line, indent))
+          else
+            printBoth(expected, actual)
         }
-        else if (sharedType === 'string') {
-          // most common case - strings all the way down
-          if (showDiff) {
-            diffUnknown(actual, expected).forEach(line => P(line, indent))
-          }
-          else {
-            P(`Expect: ${_.expected(expected)}`, indent)
-            P(`Actual: ${_.actual(actual)}`, indent)
-          }
-        }
-        else {
-          // mixed types
-          P(`Expect: ${_.expected(expected)} <${eType}>`, indent)
-          P(`Actual: ${_.actual(actual)} <${aType}>`, indent)
+        else { // mixed types
+          printBoth(expected, actual)
         }
       }
-      else if (
-        operator === 'throws'
-        && actual
-        && actual !== 'undefined'
-        && expected
-        && expected !== 'undefined'
-      ) {
-        // this weird combination is throws with expected/assertion
-        P(`Expected ${_.expected(expected)} to match "${_.actual(actual.message || actual)}"`, indent)
-      }
-
-      switch (operator) {
-      case 'equal': {
-        break
-      }
-      case 'deepEqual': {
-        break
-      }
-      case 'notEqual': {
-        P('Expected values to differ', indent)
-        break
-      }
-      case 'notDeepEqual': {
-        P('Expected values to differ', indent)
-        break
-      }
-      case 'ok': {
-        P(`Expected ${_.expected('truthy')} but got ${_.actual(actual)}`, indent)
-        break
-      }
-      case 'match': {
-        P(`Expected "${_.actual(actual)}" to match ${_.expected(expected)}`, indent)
-        break
-      }
-      case 'doesNotMatch': {
-        P(`Expected "${_.actual(actual)}" to not match ${_.expected(expected)}`, indent)
-        break
-      }
-      case 'throws': {
-        if (actual && actual !== 'undefined') {
-          // this combination is usually "doesNotThrow"
-          P(`Expected to not throw, received "${_.actual(actual)}"`, indent)
+      else {
+        switch (operator) {
+        case 'notEqual':
+          P('Expected values to differ', indent)
+          break
+        case 'notDeepEqual':
+          P('Expected values to differ', indent)
+          break
+        case 'ok':
+          P(`Expected ${_.expected('truthy')} but got ${_.actual(actual)}`, indent)
+          break
+        case 'match':
+          P(`Expected "${_.actual(actual)}" to match ${_.expected(expected)}`, indent)
+          break
+        case 'doesNotMatch':
+          P(`Expected "${_.actual(actual)}" to not match ${_.expected(expected)}`, indent)
+          break
+        case 'throws':
+          if (
+            actual
+            && actual !== 'undefined'
+            && expected
+            && expected !== 'undefined'
+          ) // this weird combination is throws with expected/assertion
+            P(`Expected ${_.expected(expected)} to match "${_.actual(actual.message || actual)}"`, indent)
+          else if (actual && actual !== 'undefined') // this combination is usually "doesNotThrow"
+            P(`Expected to not throw, received "${_.actual(actual)}"`, indent)
+          else
+            P('Expected to throw', indent)
+          break
+        case 'error':
+          P(`Expected error to be ${_.expected('falsy')}`, indent)
+          break
+        case 'fail':
+          P('Explicit fail', indent)
+          break
+        default:
+          printBoth(expected, actual)
+          break
         }
-        else {
-          P('Expected to throw', indent)
-        }
-        break
-      }
-      case 'error': {
-        P(`Expected error to be ${_.expected('falsy')}`, indent)
-        break
-      }
-      case 'fail': {
-        P('Explicit fail', indent)
-        break
-      }
-      default: {
-        if (expected && actual) {
-          P(`Expected ${_.expected(expected)} but got ${_.actual(actual)}`, indent)
-        }
-        else if (expected && !actual) {
-          P(`Expected ${_.expected(operator)} but got nothing`, indent)
-        }
-        else if (actual && !expected) {
-          P(`Expected ${_.expected('falsy')} but got ${_.actual(actual)}`, indent)
-        }
-        else {
-          P(`Operator: ${operator}`, indent)
-        }
-        break
-      }
       }
 
       if (at) P(_.dim(`At: ${at.replace(cwd, '')}`), indent)
 
-      if (stack && verbose) {
+      if (stack && verbose)
         stack.split('\n').forEach((s) => {
           P(_.dim(s.trim().replace(cwd, '')), indent)
         })
-      }
     }
   })
 

@@ -178,7 +178,7 @@ test('Deeply nested object failures', { objectPrintDepth: 100 }, (t) => {
         },
       ],
     },
-    'Nested JSON diffs are expressed as (c)hunks',
+    'Nested JSON diffs',
   )
 
   t.end()
