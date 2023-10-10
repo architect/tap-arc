@@ -7,27 +7,27 @@ test('Numbers', (t) => {
 })
 
 test('Array deepEqual failures', (t) => {
-  t.deepEqual( // reported as arrays; diffed as arrays with diffArray
+  t.deepEqual(
     [ 42, 'foo', 'bar', 'baz', true, 'qux', undefined ], // actual
     [ 'foo', 'bar', 'qux', null, NaN, Infinity ], // expected
     'Array: mixed',
   )
 
-  t.deepEqual( // reported as arrays; diffed as arrays with diffArray
+  t.deepEqual(
     [ 'foo', 'bar', ],     // actual
     [ 'foo', 'bar', 666 ], // expected
     'Array: actual missing item',
   )
 
-  t.deepEqual( // reported as arrays; diffed as arrays with diffArray
+  t.deepEqual(
     [ 'foo', 'bar', 666 ], // actual
     [ 'foo', 'bar' ],      // expected
     'Array: actual has extra item',
   )
 
-  t.deepEqual( // reported as strings; parsed as JSON; diffed as JSON
+  t.deepEqual(
     [ [ 'foo', 'bar', 'baz' ], [ 'foo', 'bar', 'qux' ], [ 'foo', 'bar', 'qux' ] ],
-    [ [ 'foo', 'bar', 'qux' ], [ 'foo', 'bar', 'baz' ], [ 'foo', 'bar', [ 'foo', 'bar', 'baz' ] ] ],
+    [ [ 'foo', 'bar', 'baz' ], [ 'foo', 'bar', 'baz' ], [ 'foo', 'bar', [ 'foo', 'bar', 'baz' ] ] ],
     'Array: multi-dimensional',
   )
 
@@ -35,7 +35,7 @@ test('Array deepEqual failures', (t) => {
 })
 
 test('Object deepEqual failures', (t) => {
-  t.deepEqual( // reported as strings; parsed as JSON; diffed as JSON
+  t.deepEqual(
     { a: 'foo', b: [ 11, 9 ], c: { foo: 'bar' } }, // actual
     { b: [ 12, 9 ], a: 'bar', c: 'foobar' },       // expected
     'JSON: A small object deepEqual failure',

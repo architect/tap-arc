@@ -139,6 +139,7 @@ export default function createParser (options) {
           P(`Expected "${_.actual(actual)}" to not match ${_.expected(expected)}`, indent)
           break
         case 'throws':
+          // ? maybe don't handle different edges of "throws"
           if (
             actual
             && actual !== 'undefined'

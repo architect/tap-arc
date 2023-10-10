@@ -28,6 +28,24 @@ export default function ({ actual, expected }){
   }
 
   /**
+   * @param {string} a actual
+   * @param {string} e expected
+   * @returns {string[]} output lines
+   */
+  function diffMultiLine (a, e) {
+    const diff = Diff.diffLines(a, e)
+    const output = []
+
+    for (const d of diff) {
+      if (d.added) output.push(`${expected(d.value)}`)
+      else if (d.removed) output.push(`${actual(d.value)}`)
+      else output.push(d.value)
+    }
+
+    return output.join('').split('\n')
+  }
+
+  /**
    * @param {any[]} a actual
    * @param {any[]} e expected
    * @returns {string[]} output lines
@@ -37,9 +55,9 @@ export default function ({ actual, expected }){
     const diff = Diff.diffArrays(a, e)
 
     for (const d of diff) {
-      if (d.added) d.value.forEach(v => output.push(`  ${expected(v)}`))
-      else if (d.removed) d.value.forEach(v => output.push(`  ${actual(v)}`))
-      else d.value.forEach(v => output.push(`  ${v}`))
+      if (d.added) d.value.forEach(v => output.push(`  ${expected(JSON.stringify(v))},`))
+      else if (d.removed) d.value.forEach(v => output.push(`  ${actual(JSON.stringify(v))},`))
+      else d.value.forEach(v => output.push(`  ${JSON.stringify(v)},`))
     }
 
     output.unshift('[')
@@ -72,8 +90,10 @@ export default function ({ actual, expected }){
    * @returns {string[]} output lines
    */
   function diffString (a, e) {
-    // TODO: determine how to diff long lines
-    return diffLine(a, e)
+    const aLines = a.split('\n')
+    const eLines = e.split('\n')
+    if (aLines.length > 1 || eLines.length > 1) return diffMultiLine(a, e)
+    else return diffLine(a, e)
   }
 
   return { diffArray, diffLine, diffObject, diffString }
