@@ -60,7 +60,7 @@ export default function ({ actual, expected }){
       else d.value.forEach(v => output.push(`  ${JSON.stringify(v)},`))
     }
 
-    output.unshift('[')
+    output.unshift('Array [')
     output.push(']')
 
     return output
@@ -80,6 +80,8 @@ export default function ({ actual, expected }){
       else if (d.removed) output.push(`${actual(d.value)}`)
       else output.push(d.value)
     }
+
+    output[0] = `Object ${output[0]}`
 
     return output.join('').split('\n')
   }

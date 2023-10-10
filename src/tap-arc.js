@@ -82,7 +82,10 @@ export default function createParser (options) {
         P(`Expected: ${JSON.stringify(e)}`, indent)
       }
 
-      if (actual === expected) { // shallow test output; can't be diffed
+      if (actual === 'undefined') actual = undefined
+      if (expected === 'undefined') expected = undefined
+
+      if (actual && expected && actual === expected) { // shallow test output; can't be diffed
         P(`${_.expected('Expected')} did not match ${_.actual('actual')}.`, indent)
         P(_.dim('TAP output cannot be diffed'), indent)
         P(actual, indent)
@@ -139,15 +142,14 @@ export default function createParser (options) {
           P(`Expected "${_.actual(actual)}" to not match ${_.expected(expected)}`, indent)
           break
         case 'throws':
-          // ? maybe don't handle different edges of "throws"
           if (
             actual
-            && actual !== 'undefined'
+            && typeof actual !== 'undefined'
             && expected
-            && expected !== 'undefined'
+            && typeof expected !== 'undefined'
           ) // this weird combination is throws with expected/assertion
             P(`Expected ${_.expected(expected)} to match "${_.actual(actual.message || actual)}"`, indent)
-          else if (actual && actual !== 'undefined') // this combination is usually "doesNotThrow"
+          else if (actual && typeof actual !== 'undefined') // this combination is usually "doesNotThrow"
             P(`Expected to not throw, received "${_.actual(actual)}"`, indent)
           else
             P('Expected to throw', indent)
