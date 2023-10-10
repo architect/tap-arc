@@ -13,6 +13,14 @@ Options:
     Immediately exit upon encountering a failure
     example: tap-arc -p
 
+  --no-diff
+    Do not show diff for failed assertions
+    example: tap-arc --no-diff
+
   --no-color
     Output without ANSI escape sequences for colors
-    example: tap-arc --no-color`
+    example: tap-arc --no-color
+
+  --fail-bad-count
+    Fail when the number of assertions parsed does not match the plan
+    example: tap-arc --fail-bad-count`
