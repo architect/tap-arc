@@ -10,7 +10,7 @@ test('streams and exit codes', (t) => {
     t.test(`exit(1) "${filename}" | tap-arc`, (t) => {
       t.plan(3)
       exec(
-        `npx tape ${join(mockPath, filename)} | node index.js`,
+        `npx tape ${join(mockPath, filename)} | node src/index.js`,
         (error, stdout, stderr) => {
           t.ok(error, `"${filename}" creates an error`)
           t.notOk(stderr, 'stderror should be empty')
@@ -28,7 +28,7 @@ test('streams and exit codes', (t) => {
     t.test(`exit(1) "${filename}" | tap-arc`, (t) => {
       t.plan(3)
       exec(
-        `npx tape ${join(mockPath, filename)} | node index.js`,
+        `npx tape ${join(mockPath, filename)} | node src/index.js`,
         (error, stdout, stderr) => {
           t.ok(error, `"${filename}" creates an error`)
           t.ok(stderr, 'stderror should not be empty')
@@ -43,7 +43,7 @@ test('streams and exit codes', (t) => {
     t.test(`exit(0) "${filename}" | tap-arc`, (t) => {
       t.plan(3)
       exec(
-        `npx tape ${join(mockPath, filename)} | node index.js`,
+        `npx tape ${join(mockPath, filename)} | node src/index.js`,
         (error, stdout, stderr) => {
           t.notOk(error, `${filename} exits without error`)
           t.notOk(stderr, 'stderror should be empty')
@@ -60,7 +60,7 @@ test('streams and exit codes', (t) => {
   t.test(`exit(0) "${badCountPassing}" | tap-arc`, (t) => {
     t.plan(3)
     exec(
-      `cat ${join(mockPath, badCountPassing)} | node index.js`,
+      `cat ${join(mockPath, badCountPassing)} | node src/index.js`,
       (error, stdout, stderr) => {
         t.notOk(error, `"${badCountPassing}" exits without error`)
         t.notOk(stderr, 'stderror should be empty')
@@ -74,7 +74,7 @@ test('streams and exit codes', (t) => {
   t.test(`exit(1) "${badCountPassing}" | tap-arc --fail-bad-count`, (t) => {
     t.plan(3)
     exec(
-      `cat ${join(mockPath, badCountPassing)} | node index.js --fail-bad-count`,
+      `cat ${join(mockPath, badCountPassing)} | node src/index.js --fail-bad-count`,
       (error, stdout, stderr) => {
         t.ok(error, `"${badCountFailing}" creates an error`)
         t.notOk(stderr, 'stderror should be empty')
@@ -90,7 +90,7 @@ test('streams and exit codes', (t) => {
   t.test(`exit(1) "${badCountFailing}" | tap-arc`, (t) => {
     t.plan(3)
     exec(
-      `cat ${join(mockPath, badCountFailing)} | node index.js`,
+      `cat ${join(mockPath, badCountFailing)} | node src/index.js`,
       (error, stdout, stderr) => {
         t.ok(error, `"${badCountFailing}" creates an error`)
         t.notOk(stderr, 'stderror should be empty')

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import minimist from 'minimist'
-import helpText from './src/_help-text.js'
-import tapArc from './src/tap-arc.js'
+import helpText from './_help-text.js'
+import tapArc from './tap-arc.js'
 
 const alias = {
   help: [ 'h', 'help' ],

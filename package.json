@@ -5,12 +5,11 @@
   "version": "1.1.0-RC1",
   "license": "Apache-2.0",
   "type": "module",
-  "main": "index.js",
+  "main": "src/index.js",
   "bin": {
-    "tap-arc": "index.js"
+    "tap-arc": "src/index.js"
   },
   "files": [
-    "index.js",
     "src/"
   ],
   "repository": {
@@ -28,18 +27,18 @@
   "scripts": {
     "lint": "eslint .",
     "lint.fix": "eslint --fix .",
-    "tap-arc": "node index.js",
-    "tap-arc.diff.-v": "npm run --silent tape.diff | node index.js -v",
-    "tap-arc.diff": "npm run --silent tape.diff | node index.js",
-    "tap-arc.empty": "npm run --silent tape.empty | node index.js",
-    "tap-arc.mixed": "npm run --silent tape.mixed | node index.js",
-    "tap-arc.passing": "npm run --silent tape.passing | node index.js",
-    "tap-arc.simple.-p": "npm run --silent tape.simple | node index.js -p",
-    "tap-arc.simple.-v": "npm run --silent tape.simple | node index.js -v",
-    "tap-arc.simple": "npm run --silent tape.simple | node index.js",
-    "tap-arc.throws": "npm run --silent tape.throws | node index.js",
-    "tap-arc.upstream-error": "npm run --silent tape.upstream-error | node index.js",
-    "tap-arc.runtime-error": "npm run --silent tape.runtime-error | node index.js",
+    "tap-arc": "node src/index.js",
+    "tap-arc.diff.-v": "npm run --silent tape.diff | node src/index.js -v",
+    "tap-arc.diff": "npm run --silent tape.diff | node src/index.js",
+    "tap-arc.empty": "npm run --silent tape.empty | node src/index.js",
+    "tap-arc.mixed": "npm run --silent tape.mixed | node src/index.js",
+    "tap-arc.passing": "npm run --silent tape.passing | node src/index.js",
+    "tap-arc.simple.-p": "npm run --silent tape.simple | node src/index.js -p",
+    "tap-arc.simple.-v": "npm run --silent tape.simple | node src/index.js -v",
+    "tap-arc.simple": "npm run --silent tape.simple | node src/index.js",
+    "tap-arc.throws": "npm run --silent tape.throws | node src/index.js",
+    "tap-arc.upstream-error": "npm run --silent tape.upstream-error | node src/index.js",
+    "tap-arc.runtime-error": "npm run --silent tape.runtime-error | node src/index.js",
     "tape.diff": "tape test/mock/create-diff-tap.cjs",
     "tape.empty": "tape test/mock/create-empty-tap.cjs",
     "tape.mixed": "tape test/mock/create-mixed-tap.cjs",
@@ -58,7 +57,7 @@
     "json5": "^2.2.3",
     "minimist": "^1.2.8",
     "strip-ansi": "^7.1.0",
-    "tap-parser": "^15.2.0"
+    "tap-parser": "^15.2.1"
   },
   "devDependencies": {
     "@architect/eslint-config": "^2.1.2",
