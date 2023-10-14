@@ -13,12 +13,12 @@ test('Sample passing tests', (t) => {
 
 test(
   'Some tests marked as "todo"',
+  { todo: true },
   (t) => {
     t.pass('A passing TODO')
     t.fail('A failing TODO')
     t.end()
   },
-  { todo: true }
 )
 
 test('Some failing tests', (t) => {
