@@ -1,0 +1,60 @@
+TAP version 13
+# create various throws TAP output
+ok 1 pass because throw
+not ok 2 fails because no throw
+  ---
+    operator: throws
+    expected: undefined
+    actual:   undefined
+    at: Test.<anonymous> (/Users/tbeseda/dev/architect/tap-arc/test/mock/create-throws-tap.cjs:9:5)
+    stack: |-
+      Error: fails because no throw
+          at Test.assert [as _assert] (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:479:48)
+          at Test.throws (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:846:7)
+          at Test.<anonymous> (/Users/tbeseda/dev/architect/tap-arc/test/mock/create-throws-tap.cjs:9:5)
+          at Test.run (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:113:28)
+          at Immediate.next [as _onImmediate] (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/results.js:157:7)
+          at process.processImmediate (node:internal/timers:476:21)
+  ...
+ok 3 passing match case
+not ok 4 failing no match case
+  ---
+    operator: throws
+    expected: |-
+      '/bad error/'
+    actual: |-
+      { [Error: no good error] message: 'no good error' }
+    at: Test.<anonymous> (/Users/tbeseda/dev/architect/tap-arc/test/mock/create-throws-tap.cjs:16:5)
+    stack: |-
+      Error: no good error
+          at /Users/tbeseda/dev/architect/tap-arc/test/mock/create-throws-tap.cjs:17:11
+          at Test.throws (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:797:3)
+          at Test.<anonymous> (/Users/tbeseda/dev/architect/tap-arc/test/mock/create-throws-tap.cjs:16:5)
+          at Test.run (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:113:28)
+          at Immediate.next [as _onImmediate] (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/results.js:157:7)
+          at process.processImmediate (node:internal/timers:476:21)
+  ...
+ok 5 pass because no throw
+not ok 6 fail because throw
+  ---
+    operator: throws
+    expected: |-
+      undefined
+    actual: |-
+      [Error: my error]
+    at: Test.<anonymous> (/Users/tbeseda/dev/architect/tap-arc/test/mock/create-throws-tap.cjs:24:5)
+    stack: |-
+      Error: my error
+          at /Users/tbeseda/dev/architect/tap-arc/test/mock/create-throws-tap.cjs:25:11
+          at Test.doesNotThrow (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:863:3)
+          at Test.<anonymous> (/Users/tbeseda/dev/architect/tap-arc/test/mock/create-throws-tap.cjs:24:5)
+          at Test.run (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:113:28)
+          at Immediate.next [as _onImmediate] (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/results.js:157:7)
+          at process.processImmediate (node:internal/timers:476:21)
+  ...
+
+1..6
+# tests 6
+# pass  3
+# fail  3
+

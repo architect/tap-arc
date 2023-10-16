@@ -1,0 +1,28 @@
+node:internal/modules/cjs/loader:1080
+  throw err;
+  ^
+
+Error: Cannot find module './this-is-a-fake-path'
+Require stack:
+- /Users/tbeseda/dev/architect/tap-arc/test/mock/create-upstream-error-tap.cjs
+- /Users/tbeseda/dev/architect/tap-arc/node_modules/tape/bin/import-or-require.js
+- /Users/tbeseda/dev/architect/tap-arc/node_modules/tape/bin/tape
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1077:15)
+    at Module._load (node:internal/modules/cjs/loader:922:27)
+    at Module.require (node:internal/modules/cjs/loader:1143:19)
+    at require (node:internal/modules/cjs/helpers:119:18)
+    at Object.<anonymous> (/Users/tbeseda/dev/architect/tap-arc/test/mock/create-upstream-error-tap.cjs:4:19)
+    at Module._compile (node:internal/modules/cjs/loader:1256:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1310:10)
+    at Module.load (node:internal/modules/cjs/loader:1119:32)
+    at Module._load (node:internal/modules/cjs/loader:960:12)
+    at Module.require (node:internal/modules/cjs/loader:1143:19) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/tbeseda/dev/architect/tap-arc/test/mock/create-upstream-error-tap.cjs',
+    '/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/bin/import-or-require.js',
+    '/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/bin/tape'
+  ]
+}
+
+Node.js v18.18.0

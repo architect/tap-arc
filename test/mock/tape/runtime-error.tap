@@ -1,0 +1,28 @@
+TAP version 13
+# runtime error test
+ok 1 foo.bar should be error-ish
+not ok 2 foo should be falsy
+  ---
+    operator: notOk
+    expected: false
+    actual:   {}
+    stack: |-
+      Error: foo should be falsy
+          at Test.assert [as _assert] (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:479:48)
+          at Test.notOK (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:612:7)
+          at Test.<anonymous> (file:///Users/tbeseda/dev/architect/tap-arc/test/mock/create-runtime-error-tap.js:8:5)
+          at Test.run (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:113:28)
+          at Immediate.next [as _onImmediate] (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/results.js:157:7)
+          at process.processImmediate (node:internal/timers:476:21)
+  ...
+file:///Users/tbeseda/dev/architect/tap-arc/test/mock/create-runtime-error-tap.js:9
+  t.ok(foo.bar.baz, 'foo.bar.baz should be truthy') // runtime error
+               ^
+
+TypeError: Cannot read properties of undefined (reading 'baz')
+    at Test.<anonymous> (file:///Users/tbeseda/dev/architect/tap-arc/test/mock/create-runtime-error-tap.js:9:16)
+    at Test.run (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/test.js:113:28)
+    at Immediate.next (/Users/tbeseda/dev/architect/tap-arc/node_modules/tape/lib/results.js:157:7)
+    at process.processImmediate (node:internal/timers:476:21)
+
+Node.js v18.18.0
