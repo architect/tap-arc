@@ -135,4 +135,3 @@ If you'd like to see different behavior from `tap-arc`, please open an issue or 
 
 - [tap-spec](https://github.com/scottcorgan/tap-spec) ol' reliable, but a bit stale and vulnerable
 - [tap-difflet](https://github.com/namuol/tap-difflet) inspired output and diffing, also vulnerable
-- [tap-min](https://github.com/derhuerst/tap-min) helpful approaches to streaming and exit codes, used to report `tap-arc`'s TAP

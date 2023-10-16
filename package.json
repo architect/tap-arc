@@ -47,7 +47,7 @@
     "tape.throws": "tape test/mock/create-throws-tap.cjs",
     "tape.upstream-error": "tape test/mock/create-upstream-error-tap.cjs",
     "tape.runtime-error": "tape test/mock/create-runtime-error-tap.js",
-    "tape": "tape test/**/*-test.js | tap-min",
+    "tape": "tape test/**/*-test.js",
     "test": "npm run lint && npm run tape"
   },
   "dependencies": {
