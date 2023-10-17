@@ -1,22 +1,30 @@
-// eslint-disable-next-line import/no-unresolved
-import { Parser } from 'tap-parser' // what's going on with @tapjs packages?
+import { Parser } from 'tap-parser'
 import { PassThrough } from 'stream'
 import duplexer from 'duplexer3' // TODO: write a custom, simpler duplexer
+import JSON5 from 'json5'
 import stripAnsi from 'strip-ansi'
-import createMakeDiff from './_make-diff.js'
+import differ from './_make-diff.js'
 import createPrinter from './_printer.js'
 
+const { parse } = JSON5
 const reservedCommentPrefixes = [ 'tests ', 'pass ', 'skip', 'todo', 'fail ', 'failed ', 'ok', 'test count' ]
 
 export default function createParser (options) {
-  const { debug, pessimistic, verbose } = options
+  const { debug, pessimistic, showDiff, verbose } = options
   const output = new PassThrough()
   const parser = new Parser({ bail: pessimistic })
   const stream = duplexer(parser, output)
   const _ = createPrinter(options)
-  const { diffOptions, prettyMs, pad } = _
-  const makeDiff = createMakeDiff(diffOptions)
+  const { prettyMs, pad } = _
+  const { diffArray, diffObject, diffString } = differ(_)
 
+  /**
+   * Print a line to the output stream
+   * @param {string} str
+   * @param {number} p padding
+   * @param {number} n newlines
+   * @returns void
+   */
   function P (str, p = 0, n = 1) {
     output.write(`${pad(p)}${str}${'\n'.repeat(n)}`)
   }
@@ -65,114 +73,112 @@ export default function createParser (options) {
     P(_.fail(test), 2)
 
     if (test.diag) {
-      const { actual, at, expected, operator, stack } = test.diag
-      const I = 4
+      const { at, operator, stack } = test.diag
+      let { actual, expected } = test.diag
+      const indent = 4
 
-      if (operator === 'equal' || operator === 'deepEqual') {
-        if (typeof expected === 'string' && typeof actual === 'string') {
-          for (const line of makeDiff(actual, expected)) {
-            P(line, I)
-          }
-        }
-        else if (typeof expected === 'object' && typeof actual === 'object') {
-          // probably an array
-          for (const line of makeDiff(actual, expected)) {
-            P(line, I)
-          }
-        }
-        else if (typeof expected === 'number' || typeof actual === 'number') {
-          P(`Expected ${_.expected(expected)} but got ${_.actual(actual)}`, I)
-        }
-        else {
-          // mixed types
-          P(`operator: ${operator}`, I)
-          P(`expected: ${_.expected(`- ${expected}`)} <${typeof expected}>`, I)
-          P(`actual: ${_.actual(`+ ${actual}`)} <${typeof actual}>`, I)
-        }
-      }
-      else if (operator === 'throws' && actual && actual !== 'undefined' && expected && expected !== 'undefined') {
-        // this combination is throws with expected/assertion
-        P(`Expected ${_.expected(expected)} to match "${_.actual(actual.message || actual)}"`, I)
+      function printBoth (e, a) {
+        P(`Actual:   ${JSON.stringify(a)}`, indent)
+        P(`Expected: ${JSON.stringify(e)}`, indent)
       }
 
-      switch (operator) {
-      case 'equal': {
-        break
+      if (actual === 'undefined') actual = undefined
+      if (expected === 'undefined') expected = undefined
+
+      if (actual && expected && actual === expected) { // shallow test output; can't be diffed
+        P(`${_.expected('Expected')} did not match ${_.actual('actual')}.`, indent)
+        P(_.dim('TAP output cannot be diffed'), indent)
+        P(actual, indent)
       }
-      case 'deepEqual': {
-        break
-      }
-      case 'notEqual': {
-        P('Expected values to differ', I)
-        break
-      }
-      case 'notDeepEqual': {
-        P('Expected values to differ', I)
-        break
-      }
-      case 'ok': {
-        P(`Expected ${_.highlight('truthy')} but got ${_.actual(actual)}`, I)
-        break
-      }
-      case 'match': {
-        P(`Expected "${actual}" to match ${_.highlight(expected)}`, I)
-        break
-      }
-      case 'doesNotMatch': {
-        P(`Expected "${actual}" to not match ${_.highlight(expected)}`, I)
-        break
-      }
-      case 'throws': {
-        if (actual && actual !== 'undefined') {
-          // this combination is ~doesNotThrow
-          P(`Expected to not throw, received "${_.actual(actual)}"`, I)
+      else if (operator === 'equal' || operator === 'deepEqual') {
+        // try parsing for JS types
+        if (typeof actual === 'string')
+          try { actual = parse(actual) }
+          catch (_e) { _e }
+        if (typeof expected === 'string')
+          try { expected = parse(expected) }
+          catch (_e) { _e }
+
+        const aType = typeof actual
+        const eType = typeof expected
+        let sharedType = aType === eType ? `${aType}` : null
+        if (sharedType === 'object') {
+          if (Array.isArray(actual) && Array.isArray(expected)) sharedType = 'array'
+          else if (Array.isArray(actual) && !Array.isArray(expected)) sharedType = null
+          else if (!Array.isArray(actual) && Array.isArray(expected)) sharedType = null
         }
-        else {
-          P('Expected to throw', I)
+
+        if (sharedType) {
+          if ([ 'number', 'bigint', 'boolean', 'symbol', 'function', 'undefined' ].includes(sharedType))
+            P(`Expected ${_.expected(expected)} but got ${_.actual(actual)}`, indent)
+          else if (showDiff && sharedType === 'array')
+            diffArray(actual, expected).forEach(line => P(line, indent))
+          else if (showDiff && sharedType === 'object')
+            diffObject(actual, expected).forEach(line => P(line, indent))
+          else if (showDiff && sharedType === 'string')
+            diffString(actual, expected).forEach(line => P(line, indent))
+          else
+            printBoth(expected, actual)
         }
-        break
+        else { // mixed types
+          printBoth(expected, actual)
+        }
       }
-      case 'error': {
-        P(`Expected error to be ${_.highlight('falsy')}`, I)
-        break
-      }
-      case 'fail': {
-        P('Explicit fail', I)
-        break
+      else {
+        switch (operator) {
+        case 'notEqual':
+          P('Expected values to differ', indent)
+          break
+        case 'notDeepEqual':
+          P('Expected values to differ', indent)
+          break
+        case 'ok':
+          P(`Expected ${_.expected('truthy')} but got ${_.actual(actual)}`, indent)
+          break
+        case 'match':
+          P(`Expected "${_.actual(actual)}" to match ${_.expected(expected)}`, indent)
+          break
+        case 'doesNotMatch':
+          P(`Expected "${_.actual(actual)}" to not match ${_.expected(expected)}`, indent)
+          break
+        case 'throws':
+          if (
+            actual
+            && typeof actual !== 'undefined'
+            && expected
+            && typeof expected !== 'undefined'
+          ) // this weird combination is throws with expected/assertion
+            P(`Expected ${_.expected(expected)} to match "${_.actual(actual.message || actual)}"`, indent)
+          else if (actual && typeof actual !== 'undefined') // this combination is usually "doesNotThrow"
+            P(`Expected to not throw, received "${_.actual(actual)}"`, indent)
+          else
+            P('Expected to throw', indent)
+          break
+        case 'error':
+          P(`Expected error to be ${_.expected('falsy')}`, indent)
+          break
+        case 'fail':
+          P('Explicit fail', indent)
+          break
+        default:
+          printBoth(expected, actual)
+          break
+        }
       }
 
-      default: {
-        if (expected && !actual) P(`Expected ${_.expected(operator)} but got nothing`, I)
-        else if (actual && !expected) P(`Expected ${_.highlight('falsy')} but got ${_.actual(actual)}`, I)
+      if (at) P(_.dim(`At: ${at.replace(cwd, '')}`), indent)
 
-        if (expected && actual) P(`Expected ${_.expected(expected)} but got ${_.actual(actual)}`, I)
-        else if (expected || actual) {
-          // unlikely
-          P(`operator: ${operator}`, I)
-          P(`expected: ${_.expected(expected)}`, I)
-          P(`actual: ${_.actual(actual)}`, I)
-        }
-        else {
-          P(`operator: ${operator}`, I)
-        }
-        break
-      }
-      }
-
-      if (at) P(_.dim(`At: ${at.replace(cwd, '')}`), I)
-
-      if (verbose && stack) {
+      if (stack && verbose)
         stack.split('\n').forEach((s) => {
-          P(_.dim(s.trim().replace(cwd, '')), I)
+          P(_.dim(s.trim().replace(cwd, '')), indent)
         })
-      }
     }
   })
 
   parser.on('complete', (result) => {
     if (!result.ok) {
       const tapFailures = result.failures.filter((f) => f.tapError)
-      for (const tapFailure of tapFailures){
+      for (const tapFailure of tapFailures) {
         const { tapError } = tapFailure
 
         if (tapError.startsWith('incorrect number of tests')) {

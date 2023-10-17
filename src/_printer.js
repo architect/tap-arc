@@ -18,8 +18,6 @@ export default function (options) {
     cyan,
     dim,
     green,
-    italic,
-    magenta,
     red,
     yellow,
   } = new Chalk({ level: color ? 3 : 0 })
@@ -48,7 +46,6 @@ export default function (options) {
       const method = pass ? dim : red
       return method(`${skipMark}${d ? ` [${id}]` : ''} ${name}`)
     },
-    diffOptions: { actual, expected, dim: italic.dim },
     pad,
     prettyMs,
     actual,
@@ -57,7 +54,6 @@ export default function (options) {
     dim,
     expected,
     good: green,
-    highlight: magenta,
     strong: bold,
     title: bold.underline,
   }

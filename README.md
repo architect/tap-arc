@@ -60,9 +60,17 @@ Options:
     Immediately exit upon encountering a failure
     example: tap-arc -p
 
+  --no-diff
+    Do not show diff for failed assertions
+    example: tap-arc --no-diff
+
   --no-color
     Output without ANSI escape sequences for colors
     example: tap-arc --no-color
+
+  --fail-bad-count
+    Fail when the number of assertions parsed does not match the plan
+    example: tap-arc --fail-bad-count
 ```
 
 ## Development
@@ -92,7 +100,7 @@ Testing could be improved by unit testing the printer and diff maker.
 
 ## FAQ
 
-<details open>
+<details>
 <summary>"Expected <code>n</code> assertions, but found <code>< n</code>"</summary>
 
 _What happened?_  

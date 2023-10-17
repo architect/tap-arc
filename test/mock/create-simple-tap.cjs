@@ -12,13 +12,13 @@ test('Sample passing tests', (t) => {
 })
 
 test(
+  'Some tests marked as "todo"',
+  { todo: true },
   (t) => {
     t.pass('A passing TODO')
     t.fail('A failing TODO')
     t.end()
   },
-  { todo: true },
-  'Some tests marked as "todo"'
 )
 
 test('Some failing tests', (t) => {
@@ -28,7 +28,7 @@ test('Some failing tests', (t) => {
   t.equal('Bad dog', 'Good dog')
   t.match('atreides', /^A/, 'Regex: match fail')
 
-  t.test((st) => {
+  t.test('Nested tests', (st) => {
     st.deepEqual(
       [ 'foo', 'bar', 'baz' ],
       [ 'foo', 'bar', 'foobar baz' ],
@@ -36,9 +36,9 @@ test('Some failing tests', (t) => {
     )
     st.deepEqual(
       { a: 'foo', b: [ 42 ], c: 'baz' },
-      { a: 'bar', b: [ 42 ] },
+      { a: 'bar', b: [ 420 ] },
       'A small object deepEqual failure'
     )
     st.end()
-  }, 'Nested tests')
+  })
 })
