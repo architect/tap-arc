@@ -83,10 +83,7 @@ npm run tap-arc.simple # used to create the screen shot above
 
 ### Dev Tips
 
-1. `./test/smoke.js` contains the bare minimum usage of `tap-parser` with `process.stdin`.  
-Helpful for understanding `tap-parser`'s behavior.
-
-2. To see previous exit code, run:
+1. To see previous exit code, run:
 
 ```sh
 echo $?
@@ -101,12 +98,12 @@ Testing could be improved by unit testing the printer and diff maker.
 ## FAQ
 
 <details>
-<summary>"Expected <code>n</code> assertions, but found <code>< n</code>"</summary>
+<summary>"Expected <code>n</code> tests, but found <code>< n</code>"</summary>
 
 _What happened?_  
 ✅ The TAP parser found zero failing tests  
 ✅ The final tally from the raw TAP shows `n` of `n` passed  
-🤨 But the TAP plan called for more assertions than were found, counted, and parsed.
+🤨 But the TAP plan called for more tests than were found, counted, and parsed.
 
 💁‍♀️ Currently, when this case is detected, `tap-arc` will exit with a successful status code.  
 This can be overridden with the `--fail-bad-count` flag.
@@ -138,4 +135,3 @@ If you'd like to see different behavior from `tap-arc`, please open an issue or 
 
 - [tap-spec](https://github.com/scottcorgan/tap-spec) ol' reliable, but a bit stale and vulnerable
 - [tap-difflet](https://github.com/namuol/tap-difflet) inspired output and diffing, also vulnerable
-- [tap-min](https://github.com/derhuerst/tap-min) helpful approaches to streaming and exit codes, used to report `tap-arc`'s TAP
