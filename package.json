@@ -56,13 +56,13 @@
     "json5": "^2.2.3",
     "minimist": "^1.2.8",
     "strip-ansi": "^7.1.0",
-    "tap-reader": "^0.0.9"
+    "tap-reader": "^0.1.0"
   },
   "devDependencies": {
     "@architect/eslint-config": "^2.1.2",
     "@types/node": "^16.18.55",
-    "eslint": "^8.51.0",
-    "tape": "^5.7.1"
+    "eslint": "^8.52.0",
+    "tape": "^5.7.2"
   },
   "eslintConfig": {
     "extends": "@architect/eslint-config",

@@ -116,28 +116,36 @@ const TAP = {
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[32m✓\x1B[39m\x1B[22m \x1B[2mA deeply equal object\x1B[22m',
     '\x1B[1m\x1B[4mSome tests marked as "todo"\x1B[24m\x1B[22m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[36m␣\x1B[39m\x1B[22m \x1B[2mA passing TODO\x1B[22m',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[36m␣\x1B[39m\x1B[22m [7] \x1B[31mA failing TODO\x1B[39m',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mExplicit fail',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2mAt: Test.<anonymous> (/test/mock/create-simple-tap.cjs:19:7)\x1B[22m',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[36m␣\x1B[39m\x1B[22m \x1B[2mA failing TODO\x1B[22m',
     '\x1B[1m\x1B[4mSome failing tests\x1B[24m\x1B[22m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m [8] \x1B[31mshould be strictly equal\x1B[39m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mExpected \x1B[33m666\x1B[39m but got \x1B[34m66\x1B[39m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2mAt: Test.<anonymous> (/test/mock/create-simple-tap.cjs:27:5)\x1B[22m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m [9] \x1B[31mshould be strictly equal\x1B[39m',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mActual:   "Bad dog"',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mExpected: "Good dog"',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[34mBad\x1B[39m\x1B[33mGood\x1B[39m dog',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2mAt: Test.<anonymous> (/test/mock/create-simple-tap.cjs:28:5)\x1B[22m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m [10] \x1B[31mRegex: match fail\x1B[39m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mExpected "\x1B[34matreides\x1B[39m" to match \x1B[33m/^A/\x1B[39m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2mAt: Test.<anonymous> (/test/mock/create-simple-tap.cjs:29:5)\x1B[22m',
     '\x1B[1m\x1B[4mNested tests\x1B[24m\x1B[22m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m [11] \x1B[31mSub-test partial array failure\x1B[39m',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mActual:   ["foo","bar","baz"]',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mExpected: ["foo","bar","foobar baz"]',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mArray [',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m  "foo",',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m  "bar",',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m  \x1B[34m"baz"\x1B[39m,',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m  \x1B[33m"foobar baz"\x1B[39m,',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m]',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2mAt: Test.<anonymous> (/test/mock/create-simple-tap.cjs:32:8)\x1B[22m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m [12] \x1B[31mA small object deepEqual failure\x1B[39m',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mActual:   {"a":"foo","b":[42],"c":"baz"}',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mExpected: {"a":"bar","b":[420]}',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mObject {',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[34m  "a": "foo",\x1B[39m',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[34m\x1B[39m\x1B[33m  "a": "bar",\x1B[39m',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[33m\x1B[39m  "b": [',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[34m    42\x1B[39m',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[34m\x1B[39m\x1B[33m    420\x1B[39m',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[33m\x1B[39m  ],',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[34m  "c": "baz"\x1B[39m',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[34m\x1B[39m}',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2mAt: Test.<anonymous> (/test/mock/create-simple-tap.cjs:37:8)\x1B[22m',
     '\x1B[31mFailed tests:\x1B[39m There were \x1B[31m5\x1B[39m failures',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m [8] \x1B[31mshould be strictly equal\x1B[39m',
@@ -167,9 +175,11 @@ test('basic output formatting', (t) => {
     {
       color: true,
       help: false,
+      showDiff: true,
       pessimistic: false,
       failBadCount: false,
       verbose: false,
+      tap: false,
       debug: false,
     }
   )
@@ -181,6 +191,7 @@ test('basic output formatting', (t) => {
     const actual = chunks.trim().split('\n').slice(0, -1).filter(l => l.length > 0) // remove timer
 
     // console.log({ actual, expected: TAP.OUT })
+    console.log(actual.join('\n') )
 
     t.deepEqual(actual, TAP.OUT, 'should print expected output')
     t.end()
