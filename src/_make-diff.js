@@ -16,15 +16,20 @@ export default function ({ actual, expected }){
    */
   function diffLine (a, e) {
     const diff = Diff.diffWordsWithSpace(a, e)
-    const output = []
+
+    let aLine = 'Actual:   '
+    let eLine = 'Expected: '
 
     for (const d of diff) {
-      if (d.added) output.push(`${expected(d.value)}`)
-      else if (d.removed) output.push(`${actual(d.value)}`)
-      else output.push(d.value)
+      if (d.added) eLine += expected(d.value)
+      else if (d.removed) aLine += actual(d.value)
+      else {
+        eLine += d.value
+        aLine += d.value
+      }
     }
 
-    return output.join('').split('\n')
+    return [ aLine, eLine ]
   }
 
   /**

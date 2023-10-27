@@ -1,4 +1,5 @@
 import { Readable } from 'stream'
+import stripAnsi from 'strip-ansi'
 import test from 'tape'
 import tapArc from '../src/tap-arc.js'
 
@@ -122,7 +123,8 @@ const TAP = {
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mExpected \x1B[33m666\x1B[39m but got \x1B[34m66\x1B[39m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2mAt: Test.<anonymous> (/test/mock/create-simple-tap.cjs:27:5)\x1B[22m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m [9] \x1B[31mshould be strictly equal\x1B[39m',
-    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[34mBad\x1B[39m\x1B[33mGood\x1B[39m dog',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mActual:   \x1B[34mBad\x1B[39m dog',
+    '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mExpected: \x1B[33mGood\x1B[39m dog',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2mAt: Test.<anonymous> (/test/mock/create-simple-tap.cjs:28:5)\x1B[22m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[1m\x1B[31m✗\x1B[39m\x1B[22m [10] \x1B[31mRegex: match fail\x1B[39m',
     '\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22m\x1B[2m  \x1B[22mExpected "\x1B[34matreides\x1B[39m" to match \x1B[33m/^A/\x1B[39m',
@@ -188,12 +190,17 @@ test('basic output formatting', (t) => {
   input.push(null)
 
   parser.on('end', () => {
+    t.plan(2)
+
     const actual = chunks.trim().split('\n').slice(0, -1).filter(l => l.length > 0) // remove timer
 
-    // console.log({ actual, expected: TAP.OUT })
-    console.log(actual.join('\n') )
-
     t.deepEqual(actual, TAP.OUT, 'should print expected output')
-    t.end()
+
+    // this test helps visualize when output differs without the ANSI codes
+    const actualNoAnsi = actual.map(stripAnsi)
+    const expectedNoAnsi = TAP.OUT.map(stripAnsi)
+    // console.log('=========\n', actualNoAnsi.join('\n'), '\n=========')
+
+    t.deepEqual(actualNoAnsi, expectedNoAnsi, 'should print expected output without ANSI codes')
   })
 })
