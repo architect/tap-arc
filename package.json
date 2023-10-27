@@ -2,7 +2,7 @@
   "name": "tap-arc",
   "description": "spec-like TAP reporter",
   "author": "tbeseda",
-  "version": "1.1.0",
+  "version": "1.2.0-RC.2",
   "license": "Apache-2.0",
   "type": "module",
   "main": "src/index.js",
@@ -47,24 +47,22 @@
     "tape.throws": "tape test/mock/create-throws-tap.cjs",
     "tape.upstream-error": "tape test/mock/create-upstream-error-tap.cjs",
     "tape.runtime-error": "tape test/mock/create-runtime-error-tap.js",
-    "tape": "tape test/**/*-test.js | tap-min",
+    "tape": "tape test/**/*-test.js",
     "test": "npm run lint && npm run tape"
   },
   "dependencies": {
     "chalk": "^5.3.0",
     "diff": "^5.1.0",
-    "duplexer3": "^1.0.0",
     "json5": "^2.2.3",
     "minimist": "^1.2.8",
     "strip-ansi": "^7.1.0",
-    "tap-parser": "^15.2.1"
+    "tap-reader": "^0.1.0"
   },
   "devDependencies": {
     "@architect/eslint-config": "^2.1.2",
     "@types/node": "^16.18.55",
-    "eslint": "^8.51.0",
-    "tap-min": "^3.0.0",
-    "tape": "5.7.0"
+    "eslint": "^8.52.0",
+    "tape": "^5.7.2"
   },
   "eslintConfig": {
     "extends": "@architect/eslint-config",
