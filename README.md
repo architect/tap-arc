@@ -14,10 +14,9 @@
 
 ## Objectives
 
-- minimal, informative spec-like output for all assertions
-- minimal, maintained dependencies
-- streaming in and out
+- minimal, informative spec-like output for all assertion types
 - helpful diffing for failures
+- shallow graph of maintained dependencies
 
 ![tap-arc output screen shot](./screen-shot.png)
 
@@ -41,7 +40,8 @@ Example `npm test` script:
 }
 ```
 
-💁  `tap-arc` will format output from any tap reporter. [`tape`](https://github.com/ljharb/tape) is our favorite and was used for testing.
+> [!IMPORTANT]  
+> 💁  `tap-arc` will format output from any tap reporter. [`tape`](https://github.com/ljharb/tape) is our favorite and was used for testing.
 
 ### `tap-arc --help`
 
