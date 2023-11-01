@@ -195,9 +195,8 @@ export default function createParser (input, output, options = {}) {
     reader.on('version', ({ version }) => {
       P(`${_.strong('TAP version:')} ${version}`)
     })
-    reader.on('plan', ({ plan, bad }) => {
-      const [ start, end ] = plan
-      P(`${_.strong('Plan:')} start=${start} end=${end} ${bad ? '(BAD)' : ''}`)
+    reader.on('plan', ({ start, end }) => {
+      P(`${_.strong('Plan:')} start=${start} end=${end}}`)
     })
   }
 

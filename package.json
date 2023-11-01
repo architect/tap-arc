@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@architect/eslint-config": "^2.1.2",
-    "@types/node": "^16.18.55",
+    "@types/node": "^16.18.60",
     "eslint": "^8.52.0",
     "tape": "^5.7.2"
   },
