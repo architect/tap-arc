@@ -8,7 +8,7 @@ import * as Diff from 'diff'
  * @param {function} params.dim
  * @returns function
  */
-export default function ({ actual, expected, expectedHighlight, actualHighlight }){
+export default function ({ actual, expected, expectedHighlight, actualHighlight }) {
   /**
    * @param {string} a actual
    * @param {string} e expected

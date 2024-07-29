@@ -19,7 +19,7 @@ test('streams and exit codes', (t) => {
             stdout.indexOf('Failed tests:') > 0,
             '"Failed tests:" should occur in output',
           )
-        }
+        },
       )
     })
   }
@@ -34,7 +34,7 @@ test('streams and exit codes', (t) => {
           t.notOk(error, `"${filename}" doesn't create an error`)
           t.ok(stderr, 'stderror should not be empty')
           t.ok(stdout.indexOf('total:     0') > 0, '"total: 0" should occur in output')
-        }
+        },
       )
     })
   }
@@ -52,7 +52,7 @@ test('streams and exit codes', (t) => {
             stdout.indexOf('Failed tests:') < 0,
             '"Failed tests:" shouldn\'t occur in output',
           )
-        }
+        },
       )
     })
   }
@@ -71,7 +71,7 @@ test('streams and exit codes', (t) => {
           stripAnsi(stdout).indexOf('Expected 16 tests, parsed 13') > 0,
           '"Expected 16 tests, parsed 13" should occur in output',
         )
-      }
+      },
     )
   })
 
@@ -86,7 +86,7 @@ test('streams and exit codes', (t) => {
           stdout.indexOf('Expected 16 tests, parsed 13') > 0,
           '"Expected 16 tests, parsed 13" should occur in output',
         )
-      }
+      },
     )
   })
 
@@ -101,7 +101,7 @@ test('streams and exit codes', (t) => {
           stdout.indexOf('Failed tests:') > 0,
           '"Failed tests:" should occur in output',
         )
-      }
+      },
     )
   })
 })

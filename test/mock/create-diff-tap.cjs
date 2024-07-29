@@ -14,7 +14,7 @@ test('Array deepEqual failures', (t) => {
   )
 
   t.deepEqual(
-    [ 'foo', 'bar', ],     // actual
+    [ 'foo', 'bar' ],     // actual
     [ 'foo', 'bar', 666 ], // expected
     'Array: actual missing item',
   )
@@ -134,7 +134,7 @@ test('Multi-line string failures', (t) => {
   </body>
 </html>
     `.trim(),
-    'Multi-line string failures are diffed as strings'
+    'Multi-line string failures are diffed as strings',
   )
 
   t.end()

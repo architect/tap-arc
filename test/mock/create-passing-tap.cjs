@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-binary-expression */
 // Adapted from testling's tape guide
 // https://ci.testling.com/guide/tape
 

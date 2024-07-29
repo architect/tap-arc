@@ -52,22 +52,16 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "diff": "^5.1.0",
+    "diff": "^5.2.0",
     "json5": "^2.2.3",
     "minimist": "^1.2.8",
     "strip-ansi": "^7.1.0",
     "tap-reader": "^0.1.0"
   },
   "devDependencies": {
-    "@architect/eslint-config": "^2.1.2",
-    "@types/node": "^16.18.60",
-    "eslint": "^8.52.0",
-    "tape": "^5.7.2"
-  },
-  "eslintConfig": {
-    "extends": "@architect/eslint-config",
-    "parserOptions": {
-      "sourceType": "module"
-    }
+    "@architect/eslint-config": "^3.0.0",
+    "@types/node": "^18",
+    "eslint": "^9.8.0",
+    "tape": "^5.8.1"
   }
 }

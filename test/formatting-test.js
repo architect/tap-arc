@@ -168,7 +168,7 @@ test('basic output formatting', (t) => {
 
   let chunks = ``
   const output = {
-    write (string) { chunks += string }
+    write (string) { chunks += string },
   }
 
   const parser = tapArc(
@@ -183,7 +183,7 @@ test('basic output formatting', (t) => {
       verbose: false,
       tap: false,
       debug: false,
-    }
+    },
   )
 
   for (const line of TAP.IN) input.push(`${line}\n`)

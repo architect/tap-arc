@@ -1,8 +1,9 @@
+/* eslint-disable no-constant-binary-expression */
 const test = require('tape')
 
 test('basic arithmetic without messages', (t) => {
   t.equal(2 + 3, 5)
-  t.equal(7 * 8 + 10, 666)
+  t.equal((7 * 8) + 10, 666)
 
   t.end()
 })

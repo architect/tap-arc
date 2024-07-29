@@ -24,7 +24,7 @@ test(
 test('Some failing tests', (t) => {
   t.plan(4)
 
-  t.equal(7 * 8 + 10, 666)
+  t.equal((7 * 8) + 10, 666)
   t.equal('Bad dog', 'Good dog')
   t.match('atreides', /^A/, 'Regex: match fail')
 
@@ -32,12 +32,12 @@ test('Some failing tests', (t) => {
     st.deepEqual(
       [ 'foo', 'bar', 'baz' ],
       [ 'foo', 'bar', 'foobar baz' ],
-      'Sub-test partial array failure'
+      'Sub-test partial array failure',
     )
     st.deepEqual(
       { a: 'foo', b: [ 42 ], c: 'baz' },
       { a: 'bar', b: [ 420 ] },
-      'A small object deepEqual failure'
+      'A small object deepEqual failure',
     )
     st.end()
   })
