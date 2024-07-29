@@ -8,7 +8,7 @@ import * as Diff from 'diff'
  * @param {function} params.dim
  * @returns function
  */
-export default function ({ actual, expected }){
+export default function ({ actual, expected, expectedHighlight, actualHighlight }){
   /**
    * @param {string} a actual
    * @param {string} e expected
@@ -80,10 +80,39 @@ export default function ({ actual, expected }){
     const output = []
     const diff = Diff.diffJson(a, e)
 
-    for (const d of diff) {
-      if (d.added) output.push(`${expected(d.value)}`)
-      else if (d.removed) output.push(`${actual(d.value)}`)
-      else output.push(d.value)
+    for (let i = 0, len = diff.length; i < len; i++) {
+      const a = diff[i]
+      const b = diff[i + 1]
+      // Diff line if a remove is followed by an add (it's like a 'replace' operation)
+      if (b && a.removed && b.added && a.count === b.count) {
+        const linesA = a.value.split('\n')
+        const linesB = b.value.split('\n')
+        if (linesA.length === linesB.length) {
+          linesA.forEach((lineA, j) => {
+            const lineB = linesB[j]
+            if (j === linesA.length - 1) return
+            const diff = Diff.diffChars(lineA + '\n', lineB + '\n')
+
+            let aLine = ''
+            let eLine = ''
+
+            for (const d of diff) {
+              if (d.added) eLine += expectedHighlight(d.value)
+              else if (d.removed) aLine += actualHighlight(d.value)
+              else {
+                eLine += expected(d.value)
+                aLine += actual(d.value)
+              }
+            }
+            output.push(aLine, eLine)
+          })
+          i++
+          continue
+        }
+      }
+      if (a.added) output.push(`${expected(a.value)}`)
+      else if (a.removed) output.push(`${actual(a.value)}`)
+      else output.push(a.value)
     }
 
     output[0] = `Object ${output[0]}`

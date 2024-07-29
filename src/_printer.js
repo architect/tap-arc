@@ -14,6 +14,8 @@ export default function (output, options) {
   const { color, debug, verbose } = options
   const d = debug || verbose
   const {
+    bgBlue,
+    bgYellow,
     blue,
     bold,
     dim,
@@ -24,7 +26,9 @@ export default function (output, options) {
   } = new Chalk({ level: color ? 3 : 0 })
 
   const expected = yellow
+  const expectedHighlight = bgYellow.bold
   const actual = blue
+  const actualHighlight = bgBlue.bold
   const passMark = bold.green(CHECK)
   const failMark = bold.red(CROSS)
   const skipMark = bold.cyan(RIGHT)
@@ -58,10 +62,12 @@ export default function (output, options) {
     pad,
     prettyMs,
     actual,
+    actualHighlight,
     bad: red,
     realBad: bold.underline.red,
     dim,
     expected,
+    expectedHighlight,
     good: green,
     italic,
     strong: bold,
